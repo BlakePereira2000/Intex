@@ -1,4 +1,4 @@
-{% load static %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
  
     <title>{% block title %} {% endblock %} </title>
   </head>
   <body>
+    {% include 'partials/header.html'%}
     {% include 'partials/nav.html' %}
  
     <div class = "container">
