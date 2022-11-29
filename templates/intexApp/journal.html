@@ -1,12 +1,17 @@
-{% extends 'partials/base.html' %}
+<!DOCTYPE html>
 {% load static %}
-{% block title %}Journal{% endblock title %}
-{% block content %}
-<h1>This is the journal page</h1>
-<body class="form">
-<h1>Form</h1>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal</title>
+</head>
+<body class="form"</body>
+  {% include 'partials/nav.html' %}
+  <h2>Journal</h2>
     <section>
-      {% comment %} <img src="../images/clipboard.png" alt="clipboard"> {% endcomment %}
+      <img src="{% static 'img/clipboard.png' %}" alt="clipboard" class="clipimg">
 
       <div>
         <div class="loading hidden">
@@ -90,83 +95,14 @@
       
       
     </section>
-    <script src="../scripts.js"></script>
-    <script>
-      // enter the URL for your Google Sheet 
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbxpnUvzTrPD39VD_GtrRbnElvLtgNqQaVI61q3PCei4xi_jY04/exec'
-  
-      // add a name attribute to your <form> and enter its value here 
-      const form = document.forms['photo-form']
-  
-      // enter the value of your checkboxes' name attribute
-      const checkboxName = "events"
-  
-      // set these to your loader and message classes
-      const loading = document.querySelector('.loading')
-      const successMessage = document.querySelector('.success-message')
-      const errorMessage = document.querySelector('.error-message')
-  
-      // this will run when the submit button is clicked
-      form.addEventListener('submit', event => {
-        // stops default form handling so we can submit it to Google Sheets instead
-        event.preventDefault()
-  
-        // show the loader and hide form
-        form.classList.add('hidden')
-        loading.classList.remove('hidden')
-  
-        // collect the form values into an object that can be sent to Google Sheets
-        let fd = new FormData(form);
-  
-        /* If more than one checkbox is selected, the form will have multiple keys 
-           (checkbox name). Only the first checkbox value would be entered into 
-           Google Sheets. 
-           To get around this, concat all the selected checkbox values into a single 
-           string and send that value */
-  
-        // grab all the selected values stored as key/value pairs of checkboxName/value
-        let checkBoxValues = fd.getAll(checkboxName)
-  
-        // then delete them from the formData object
-        fd.delete(checkboxName);
-  
-        // create a string
-        let text = ""
-        if (checkBoxValues.length <= 2) {
-          text = checkBoxValues.join(" and ")
-        } else {
-          let end = checkBoxValues.pop();
-          text = checkBoxValues.join(", ");
-          text += ", and " + end;
-        }
-        // add the key/value pair checkboxName/text back to the formData object
-        fd.append(checkboxName, text);
-  
-        // use an asynchronous request to POST your formData object to your Google Sheet
-        fetch(scriptURL, {
-            method: 'POST',
-            body: fd,
-          })
-          // if response ok, show success message and hide loader, else display error
-          .then(response => {
-            loading.classList.add('hidden')
-            if (response.ok) {
-              console.log('Success!', response)
-              successMessage.classList.remove('hidden')
-            } else {
-              console.log("Error",
-                response)
-              errorMessage.classList.remove('hidden')
-            }
-          })
-          // if error, show error message and hide loader
-          .catch(error => {
-            console.error('Error!', error.message)
-            errorMessage.classList.remove('hidden')
-            loading.classList.add('hidden')
-          })
-      })
-    </script>
 </body>
+<footer class="footer py-4">
+  <div class="container">
+      <div class="row align-items-center">
+          <div>Copyright ©National Kidney Foundation 2022</div>
+      </div>
+  </div>
+</footer>
+<!-- Optional JavaScript; choose one of the two! -->
+<script src="{% static 'js/script.js'%}"></script>
 </html>
-{% endblock %}

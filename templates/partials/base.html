@@ -1,4 +1,4 @@
-
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -10,7 +10,7 @@
  
     <title>{% block title %} {% endblock %} </title>
   </head>
-  <body>
+  <body class="home">
     {% include 'partials/header.html'%}
     {% include 'partials/nav.html' %}
  
@@ -19,4 +19,13 @@
  
         {% endblock %}
     </div>
+    <!-- Footer-->
+    <footer class="footer py-4">
+      <div class="container">
+          <div class="row align-items-center">
+              <div>Copyright ©National Kidney Foundation 2022</div>
+          </div>
+      </div>
+  </footer>
     <!-- Optional JavaScript; choose one of the two! -->
+  <script src="{% static 'js/script.js'%}"></script>
