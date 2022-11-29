@@ -1,5 +1,5 @@
 :root {
-  --text-color: #333;
+  --text-color: rgb(28, 27, 27);
   --soft-white: #efebe0;
   --alerts: #ff0800;
   --gray: #3a373fd2;
@@ -27,22 +27,23 @@ body {
   line-height: 1.4;
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1 {
   font-family: var(--heading-font);
   font-weight: 700;
   color: var(--soft-white);
 }
 
 h2 {
-  font-size: 2rem;
+  font-family: var(--heading-font);
+  font-size: 5rem;
+  color: var(--zesty-orange);
+  margin-top: 0rem;
+  margin-bottom: 1rem;
 }
 
 img {
   display: block;
-  width: 100%;
+  width: 10%;
   height: auto;
 }
 
@@ -54,16 +55,17 @@ a {
 section {
   max-width: 50rem;
   align-self: center;
-  margin: 0 1.5rem;
+  margin: 1.5rem;
 }
 
 aside {
   display: block;
-  background-color: var(--gray);
-  color: #fff;
-  margin-top: 6rem;
+  background-color: var(--zesty-orange);
+  color: var(--soft-white);
+  margin-top: 3rem;
+  margin-bottom: 3rem;
   padding: 3rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1.25;
 }
 
@@ -73,43 +75,12 @@ footer {
   color: #fff;
   margin-top: 6rem;
   padding: 3rem;
-  font-size: 2rem;
+  font-size: .75rem;
   line-height: 1.25;
 }
 
 .home main {
   max-width: 80rem;
-}
-
-.hero {
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.2);
-  margin: 0;
-}
-
-.hero-text {
-  color: #fff;
-  padding: 0 1rem 2rem;
-}
-
-.hero-text h1 {
-  font-size: clamp(2rem, 9vw, 8rem);
-  line-height: 1;
-  margin: 0;
-  text-shadow: 1px 1px 2px black;
-}
-
-.hero-text h1 span {
-  color: var(--zesty-orange);
-  mix-blend-mode: difference;
-  /* screen, overlay, multiply, difference... */
 }
 
 .flex-center-bottom {
@@ -293,7 +264,7 @@ nav a[href]:hover {
   color: var(--gray);
   box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
   border: solid 3px transparent;
-  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, #78e4ff, #ff48fa);
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, var(--zesty-orange), var(--zesty-orange));
   background-origin: border-box;
   background-clip: content-box, border-box;
   box-shadow: 2px 1000px 1px #fff inset;
@@ -352,19 +323,25 @@ button {
 }
 
 form button {
-  justify-self: center;
-
-  border: 1px solid var(--gray);
-  color: black;
-  background-color: transparent;
-  font-size: 2rem;
-  padding: 0.3rem 0.5rem;
-
-  transition: background-color 300ms;
+  border-radius: 100rem;
+  padding: 1rem;
+  font-size: 1.25rem;
+  padding: .5rem 3rem;
+  color: var(--gray);
+  box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
+  border: solid 3px transparent;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, var(--zesty-orange), var(--zesty-orange));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #fff inset;
+  cursor: pointer;
 }
 
 form button:hover {
-  background-color: var(--zesty-orange);
+  box-shadow: none;
+  color: white;
+  transition: box-shadow 600ms ease, 
+  color 1000ms ease;
 }
 
 form input:hover,
@@ -522,10 +499,23 @@ input[type="radio"]:checked::after {
   border-radius: 25px;
 }
 
+.big-img {
+  position: relative;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.big-img {
+  background-image: url('../img/doctor.png');
+  min-height: 750px;
+}
+
 .caption {
   position: absolute;
   left: 0;
-  top: 50%;
+  top: 25%;
   width: 100%;
   text-align: center;
   color: #000;
@@ -554,7 +544,7 @@ h2 {
 
 .interrupt {
   color: var(--soft-white);
-  background-color: var(--text-color);
+  background-color: var(--gray);
   text-align:center;
   padding:50px 80px;
   text-align: justify;
@@ -566,7 +556,7 @@ body footer.about-footer {
   color: #fff;
   margin: 0;
   padding: 3rem;
-  font-size: 2rem;
+  font-size: .5rem;
   line-height: 1.25;
 }
 
@@ -781,16 +771,3 @@ body footer.about-footer {
   }
 }
 
-@media (min-aspect-ratio: 16/9) {
-  .video-foreground {
-    height: 300%;
-    top: -100%;
-  }
-}
-
-@media (max-aspect-ratio: 16/9) {
-  .video-foreground {
-    width: 300%;
-    left: -100%;
-  }
-}
