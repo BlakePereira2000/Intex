@@ -13,15 +13,6 @@
   box-sizing: border-box;
 }
 
-.header {
-  padding: 0px;
-  text-align: center;
-  background: var(--zesty-orange);
-  color: white;
-  font-size: 30px;
-  font-family: 'Times New Roman', Times, serif;
-}
-
 .hidden {
   display: none;
 }
@@ -42,7 +33,7 @@ h3,
 h4 {
   font-family: var(--heading-font);
   font-weight: 700;
-  color: var(--gray);
+  color: var(--soft-white);
 }
 
 h2 {
@@ -88,24 +79,6 @@ footer {
 
 .home main {
   max-width: 80rem;
-}
-
-
-
-.video-background {
-  background: #000;
-  position: absolute;
-  inset: 0;
-  z-index: -99;
-}
-
-.video-foreground,
-.video-background iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .hero {
@@ -159,29 +132,6 @@ footer {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.mute {
-  border-radius: 100rem;
-  padding: 1rem;
-  font-size: 1.25rem;
-  padding: .5rem 3rem;
-  color: var(--gray);
-  box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
-  border: solid 3px transparent;
-  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, #78e4ff, #ff48fa);
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-  box-shadow: 2px 1000px 1px #fff inset;
-  cursor: pointer;
-}
-
-.mute:hover {
-  box-shadow: none;
-  color: white;
-  transition: box-shadow 600ms ease, 
-  color 1000ms ease;
-}
-
-
 /* main menu paste*/
 .main-menu .menu-icon {
   position: fixed;
@@ -224,7 +174,7 @@ footer {
 }
 
 .menu-show svg line {
-  stroke: red;
+  stroke: var(--alerts);
   stroke-width: 7px;
 }
 
@@ -572,25 +522,6 @@ input[type="radio"]:checked::after {
   border-radius: 25px;
 }
 
-.big-img, .big-img2 {
-  position: relative;
-  opacity: 0.65;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.big-img {
-  background-image: url('../images/donny.webp');
-  min-height: 1050px;
-}
-
-.big-img2 {
-  background-image: url('../images/logo.png');
-  min-height: 800px;
-}
-
 .caption {
   position: absolute;
   left: 0;
@@ -637,6 +568,16 @@ body footer.about-footer {
   padding: 3rem;
   font-size: 2rem;
   line-height: 1.25;
+}
+
+
+.header {
+  padding: 0px;
+  text-align: center;
+  background: var(--zesty-orange);
+  color: var(--soft-white);
+  font-size: 30px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 @media (min-width: 601px) {
