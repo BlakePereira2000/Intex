@@ -22,3 +22,6 @@ def userPageView(request):
 
 def foodsPageView(request):
     return render(request, 'intexApp/myfoods.html')
+
+def loginPageView(request):
+    return render(request, 'intexApp/login.html')
