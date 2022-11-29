@@ -1,11 +1,12 @@
 {% extends 'partials/base.html' %}
+{% load static %}
 {% block title %}Form{% endblock title %}
 {% block content %}
 <h1>This page can be used to input people's crap</h1>
 <body class="form">
 <h1>Form</h1>
     <section>
-      <img src="../images/clipboard.png" alt="clipboard">
+      {% comment %} <img src="../images/clipboard.png" alt="clipboard"> {% endcomment %}
 
       <div>
         <div class="loading hidden">
