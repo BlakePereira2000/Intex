@@ -5,41 +5,15 @@
 
 body {
   margin: 0;
+  background-color: white;
 }
 
-/* Style the header */
-.header {
-  background-color: #f1f1f1;
-  padding: 20px;
-  text-align: center;
-}
-
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* Change color on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+p {text-align: center;}
 
 /* Create three equal columns that floats next to each other */
 .column {
   float: left;
-  width: 33.33%;
+  width: 50%;
   padding: 15px;
 }
 
@@ -56,34 +30,78 @@ body {
     width: 100%;
   }
 }
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 10px;
+    background-color: lightgray;
+    padding: 10px;
+  }
+  .grid-container > div {
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+  }
+  input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  input[type=submit] {
+
+  }
+  div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
 </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 </head>
 <body>
 
 {% include 'partials/header.html'%}
 
-<div class="topnav">
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-</div>
-
 <div class="row">
   <div class="column">
-    <h2>Column</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+    <p>Kidney Konnect + allows people with Chronic Kidney Disease (CKD) to track their daily food intake, be aware of their daily nutrients, and receive recommendations about how to better care for their body.
+    </p>
+    {% load static %} <img class ='center' src="{% static "img/download.png" %}">
   </div>
   
   <div class="column">
-    <h2>Column</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+    <div class="grid-container">
+        <div class="item1">Login
+            <br><br>
+            <form action="/action_page.php"> <!-- enter the page for login stuff-->
+                <label for="fname">First name:</label><input type="text" id="fname" name="fname" value="John">
+                <label for="lname">Last name:</label><input type="text" id="lname" name="lname" value="Doe">
+                <br><br>
+                <input type="submit" value="Login" class= 'button'>
+            </form> 
+        </div>
+        <div class="item2">First Time User?
+            <br><br>
+            <input type="button" value="Sign Up" class='button'>
+        </div>
+      </div>
   </div>
-  
-  <div class="column">
-    <h2>Column</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
-  </div>
-</div>
 
 </body>
 </html>
