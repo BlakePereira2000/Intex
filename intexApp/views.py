@@ -1,30 +1,63 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 
 # Create your views here.
-def indexPageView(request):
-    context = {
+loggedIn = False
 
-    }
-    return render(request, 'intexApp/index.html', context)
+def indexPageView(request):
+    if (loggedIn):
+        context = {
+
+        }
+        return render(request, 'intexApp/index.html', context)
+    else:
+        return redirect('login')
+
 
 def aboutPageView(request):
-    return render(request, 'intexApp/about.html')
+    if (loggedIn):
+        context = {
+
+        }
+        return render(request, 'intexApp/about.html')
+    else:
+        return redirect('login')
+
 
 def journalPageView(request):
-    return render(request, 'intexApp/journal.html')
+    if (loggedIn):
+        context = {
+
+        }
+        return render(request, 'intexApp/journal.html')
+    else:
+        return redirect('login')
+
 
 def reportPageView(request):
-    return render(request, 'intexApp/report.html')
+    if (loggedIn): 
+        return render(request, 'intexApp/report.html')
+    else:
+        return redirect('login')
+
 
 def userPageView(request):
-    return render(request, 'intexApp/user.html')
+    if (loggedIn): 
+        return render(request, 'intexApp/user.html')
+    else:
+        return redirect('login')
+
 
 def foodsPageView(request):
-    return render(request, 'intexApp/myfoods.html')
+    if (loggedIn): 
+        return render(request, 'intexApp/myfoods.html')
+    else:
+        return redirect('login')
+
 
 def loginPageView(request):
     return render(request, 'intexApp/login.html')
 
 def signupPageView(request):
     return render(request, 'intexApp/signup.html')
+
