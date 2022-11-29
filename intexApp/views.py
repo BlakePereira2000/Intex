@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 
 # Create your views here.
-loggedIn = False
+loggedIn = True
 
 def indexPageView(request):
     if (loggedIn):
