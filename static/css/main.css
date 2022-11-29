@@ -2,8 +2,8 @@
   --text-color: #333;
   --soft-white: #f5f1e8;
   --copper: #954E4C;
-  --purple-nurple: #753BBD;
-  --light-blue: #00A9E0;
+  --gray: #71667f;
+  --yellow-mellow: #dbb700;
   --body-font: "Inter", sans-serif;
   --heading-font: "Playfair Display", serif;
   --checkbox-size: 28px;
@@ -33,7 +33,7 @@ h3,
 h4 {
   font-family: var(--heading-font);
   font-weight: 700;
-  color: var(--purple-nurple);
+  color: var(--gray);
 }
 
 h2 {
@@ -47,7 +47,7 @@ img {
 }
 
 a {
-  color: var(--purple-nurple);
+  color: var(--gray);
   text-decoration: none;
 }
 
@@ -59,7 +59,7 @@ section {
 
 aside {
   display: block;
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   color: #fff;
   margin-top: 6rem;
   padding: 3rem;
@@ -69,7 +69,7 @@ aside {
 
 footer {
   display: block;
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   color: #fff;
   margin-top: 6rem;
   padding: 3rem;
@@ -125,7 +125,7 @@ footer {
 }
 
 .hero-text h1 span {
-  color: var(--light-blue);
+  color: var(--yellow-mellow);
   mix-blend-mode: difference;
   /* screen, overlay, multiply, difference... */
 }
@@ -155,7 +155,7 @@ footer {
   padding: 1rem;
   font-size: 1.25rem;
   padding: .5rem 3rem;
-  color: var(--purple-nurple);
+  color: var(--gray);
   box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
   border: solid 3px transparent;
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, #78e4ff, #ff48fa);
@@ -238,7 +238,7 @@ nav {
   right: 0;
   bottom: 0;
 
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   display: flex;
 
   transform: translateX(-100vw);
@@ -273,7 +273,7 @@ nav a:not([href]) {
 
 
 nav a[href]:hover {
-  color: var(--light-blue);
+  color: var(--yellow-mellow);
 }
 
 
@@ -331,7 +331,7 @@ nav a[href]:hover {
   padding: 1rem;
   font-size: 1.25rem;
   padding: .5rem 3rem;
-  color: var(--purple-nurple);
+  color: var(--gray);
   box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
   border: solid 3px transparent;
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, #78e4ff, #ff48fa);
@@ -395,7 +395,7 @@ button {
 form button {
   justify-self: center;
 
-  border: 1px solid var(--purple-nurple);
+  border: 1px solid var(--gray);
   color: black;
   background-color: transparent;
   font-size: 2rem;
@@ -405,7 +405,7 @@ form button {
 }
 
 form button:hover {
-  background-color: var(--light-blue);
+  background-color: var(--yellow-mellow);
 }
 
 form input:hover,
@@ -444,14 +444,14 @@ input[type="checkbox"]:hover,
 input[type="checkbox"]:focus,
 input[type="radio"]:hover,
 input[type="radio"]:focus {
-  border: 2px solid var(--purple-nurple);
-  box-shadow: 0 0 2px var(--purple-nurple);
+  border: 2px solid var(--gray);
+  box-shadow: 0 0 2px var(--gray);
   outline: none;
 }
 
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-  border-color: var(--purple-nurple);
+  border-color: var(--gray);
 }
 
 input[type="checkbox"]:checked:hover,
@@ -462,7 +462,7 @@ input[type="checkbox"]:checked:focus {
 }
 
 input[type="checkbox"]:checked {
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
 }
 
 input[type="checkbox"]:checked::after,
@@ -485,7 +485,7 @@ input[type="checkbox"]:checked::after {
 input[type="radio"]::after {
   width: calc(var(--checkbox-size) - 8px);
   height: calc(var(--checkbox-size) - 8px);
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   border-radius: 50%;
 
   transform: scale(0);
@@ -514,7 +514,7 @@ input[type="radio"]:checked::after {
 .loader div {
   width: 30px;
   height: 30px;
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   animation: cube-grid 1300ms infinite ease-in-out;
 }
 
@@ -622,7 +622,7 @@ h2 {
 
 body footer.about-footer {
   display: block;
-  background-color: var(--purple-nurple);
+  background-color: var(--gray);
   color: #fff;
   margin: 0;
   padding: 3rem;
@@ -693,7 +693,7 @@ body footer.about-footer {
       padding: 1rem;
       font-size: 1.4rem;
 
-      color: var(--purple-nurple);
+      color: var(--gray);
     }
     
     nav a:not([href]) {
@@ -707,14 +707,14 @@ body footer.about-footer {
       height: 3px;
       margin-left: -6px;
       margin-top: 6px;
-      background-color: var(--light-blue);
+      background-color: var(--yellow-mellow);
       transform: scale(0);
       transition: transform 200ms ease-in, color 300ms ease-in;
       transform-origin: right;
     }
     
     nav a[href]:hover {
-      color: var(--light-blue);
+      color: var(--yellow-mellow);
     }
     
     nav a[href]:hover::after {

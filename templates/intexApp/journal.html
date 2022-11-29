@@ -1,0 +1,172 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}Journal{% endblock title %}
+{% block content %}
+<h1>This is the journal page</h1>
+<body class="form">
+<h1>Form</h1>
+    <section>
+      {% comment %} <img src="../images/clipboard.png" alt="clipboard"> {% endcomment %}
+
+      <div>
+        <div class="loading hidden">
+          <div class="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+      </div>
+
+        <p class="success-message hidden">Form successfully submitted!</p>
+        <p class="error-message hidden">There was an error!</p>
+      </div>
+
+      <form name="photo-form">
+
+        <label for="name">Full name</label>
+        <input type="text" name="name" id="name" required>
+
+        <label for="email">Email address</label>
+        <input type="email" name="email" id="email" required>
+    
+        <label for="phone">Phone number</label>
+        <input type="tel" name="phone" id="phone">
+
+        <label for="date">Project Date</label>
+        <input type="date" name="date" id="date">
+
+        <fieldset>
+          <legend>Which of the following events would you liked 
+            photographed? (Check all that apply)</legend>
+
+            <input type="checkbox" id="wedding" name="events" value="wedding">
+            <label for="wedding">Wedding</label>
+      
+            <input type="checkbox" id="engage" name="events" value="engage">
+            <label for="engage">Engagement</label>
+      
+            <input type="checkbox" id="bridal" name="events" value="bridal">
+            <label for="bridal">Bridals</label>
+      
+            <input type="checkbox" id="portrait" name="events" value="portrait">
+            <label for="portrait">Portrait</label>
+      
+            <input type="checkbox" id="grad" name="events" value="grad">
+            <label for="grad">Graduation</label>
+
+            <input type="checkbox" id="family" name="events" value="family">
+            <label for="family">Family Portraits</label>
+      
+          </fieldset>
+      
+          <fieldset>
+            <legend>How did you hear about me?</legend>
+      
+            <input type="radio" name="hear" id="nba" value="nba">
+            <label for="nba">NBA</label>
+      
+            <input type="radio" name="hear" id="ad" value="ad">
+            <label for="ad">Ad</label>
+      
+            <input type="radio" name="hear" id="friend" value="friend">
+            <label for="friend">Friend</label>
+      
+            <input type="radio" name="hear" id="other" value="other">
+            <label for="other">Other</label>
+          </fieldset>
+
+          <label for="info">What other details would you like me to know about your shoot?</label>
+          <textarea name="info" id="info" rows="10" placeholder="woof woof bark bark"></textarea>
+
+          <button type="submit">Submit</button>
+      </form>
+
+      
+      
+    </section>
+    <script src="../scripts.js"></script>
+    <script>
+      // enter the URL for your Google Sheet 
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxpnUvzTrPD39VD_GtrRbnElvLtgNqQaVI61q3PCei4xi_jY04/exec'
+  
+      // add a name attribute to your <form> and enter its value here 
+      const form = document.forms['photo-form']
+  
+      // enter the value of your checkboxes' name attribute
+      const checkboxName = "events"
+  
+      // set these to your loader and message classes
+      const loading = document.querySelector('.loading')
+      const successMessage = document.querySelector('.success-message')
+      const errorMessage = document.querySelector('.error-message')
+  
+      // this will run when the submit button is clicked
+      form.addEventListener('submit', event => {
+        // stops default form handling so we can submit it to Google Sheets instead
+        event.preventDefault()
+  
+        // show the loader and hide form
+        form.classList.add('hidden')
+        loading.classList.remove('hidden')
+  
+        // collect the form values into an object that can be sent to Google Sheets
+        let fd = new FormData(form);
+  
+        /* If more than one checkbox is selected, the form will have multiple keys 
+           (checkbox name). Only the first checkbox value would be entered into 
+           Google Sheets. 
+           To get around this, concat all the selected checkbox values into a single 
+           string and send that value */
+  
+        // grab all the selected values stored as key/value pairs of checkboxName/value
+        let checkBoxValues = fd.getAll(checkboxName)
+  
+        // then delete them from the formData object
+        fd.delete(checkboxName);
+  
+        // create a string
+        let text = ""
+        if (checkBoxValues.length <= 2) {
+          text = checkBoxValues.join(" and ")
+        } else {
+          let end = checkBoxValues.pop();
+          text = checkBoxValues.join(", ");
+          text += ", and " + end;
+        }
+        // add the key/value pair checkboxName/text back to the formData object
+        fd.append(checkboxName, text);
+  
+        // use an asynchronous request to POST your formData object to your Google Sheet
+        fetch(scriptURL, {
+            method: 'POST',
+            body: fd,
+          })
+          // if response ok, show success message and hide loader, else display error
+          .then(response => {
+            loading.classList.add('hidden')
+            if (response.ok) {
+              console.log('Success!', response)
+              successMessage.classList.remove('hidden')
+            } else {
+              console.log("Error",
+                response)
+              errorMessage.classList.remove('hidden')
+            }
+          })
+          // if error, show error message and hide loader
+          .catch(error => {
+            console.error('Error!', error.message)
+            errorMessage.classList.remove('hidden')
+            loading.classList.add('hidden')
+          })
+      })
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -11,5 +11,14 @@ def indexPageView(request):
 def aboutPageView(request):
     return render(request, 'intexApp/about.html')
 
-def formPageView(request):
-    return render(request, 'intexApp/form.html')
+def journalPageView(request):
+    return render(request, 'intexApp/journal.html')
+
+def reportPageView(request):
+    return render(request, 'intexApp/report.html')
+
+def userPageView(request):
+    return render(request, 'intexApp/user.html')
+
+def foodsPageView(request):
+    return render(request, 'intexApp/myfoods.html')
