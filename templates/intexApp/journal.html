@@ -21,9 +21,11 @@
   <div class="row">
     <div class="column">
       <p id="demo"></p>
-      <input type="date" id="theDate" name="date" onchange='change()'>
-      <form action='{% url 'journal' %}' method='GET' id='form_submit'>
-        <input type='text' value={{selected_date}} id="submitDate"  name='selected_date'>
+      
+
+      <form action="{% url 'journal' %}" method='GET' id='form_submit'>
+        <input type="date" id="theDate" name="selected_date" onchange='change()'>
+        <input type='text' value={{selected_date}} id="submitDate"  name=''>
         <input type='submit' >
       </form>
     </div>
