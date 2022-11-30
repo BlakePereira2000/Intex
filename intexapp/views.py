@@ -3,6 +3,7 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
+from datetime import date
 
 # Create your views here.
 global loggedIn
@@ -69,8 +70,18 @@ def reportPageView(request):
 
 def userPageView(request):
     global loggedIn
-    if (loggedIn): 
-        return render(request, 'intexApp/user.html')
+    if (loggedIn):
+        user_id = 1
+        user = User.objects.get(id=user_id)
+        age = date.today().year - (user.dob).year - ((date.today().month, date.today().day) < ((user.dob).month, (user.dob).day))
+        gender = user.gender
+        context = {
+            'user' : user,
+            'age' : age,
+            'gender' : gender
+        }
+        return render(request, 'intexApp/user.html', context)
+
     else:
         return redirect('login')
 
