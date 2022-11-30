@@ -63,17 +63,30 @@ def aboutPageView(request):
 def journalPageView(request):
     global loggedIn
     if (loggedIn):
-        context = {
 
+        if request.POST.get('selected_date') is None:
+            selected_date = date.today()
+        else:
+            selected_date = request.POST.get('selected_date')
+        # Determine the journal we are looking at
+        journal_were_looking_at = Daily_Journal.objects.get(date= selected_date)
+        journalID = journal_were_looking_at.id
+
+        # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+        foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+        context = {
+            'foods_in_day' : foods_in_day,
+            'journalID_in_use' : journalID
         }
-        return render(request, 'intexApp/journal.html')
+        return render(request, 'intexApp/journal.html',context)
     else:
         return redirect('login')
 
 
 # Access "add food to journal" page
 def add_food_to_dayPageView(request):
-
+    
     return render(request,'intexApp/add_food_to_day.html')
 
 
@@ -92,12 +105,16 @@ def food_db_searchView(request):
 
 # Using the food ID, make a new record of the food in the day
 def save_food_to_dayView(request):
-    grams = 5
-    dj_in_use = Daily_Journal.objects.get(id=1)
+    grams = request.POST.get('grams')
+    dj_in_use = Daily_Journal.objects.get(id=1) # hardcoded to 1. It should be the journal that is being used.
     dj_in_use.daily_foods.add(request.POST.get('chosenFood'), through_defaults={'grams':grams})
-    return render(request,'intexApp/journal.html')
+    return redirect('journal')
 
 
+
+
+
+################### Report Views #####################
 def reportPageView(request):
     global loggedIn
     if (loggedIn):
