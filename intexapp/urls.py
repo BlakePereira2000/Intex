@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import indexPageView, aboutPageView,journalPageView, reportPageView, savesignupView
 from .views import userPageView, foodsPageView, loginPageView, signupPageView, authenticate,logoutView, apiSearchPageView, addNewFoodPageView
+from .views import add_food_to_dayPageView,food_db_searchView, save_food_to_dayView
 
 urlpatterns = [
     path('', indexPageView, name='index'),
@@ -16,4 +17,7 @@ urlpatterns = [
     path('apisearch/', apiSearchPageView, name='apisearch'),
     path('addNewFood/', addNewFoodPageView, name='addNewFood'),
     path('savesignup/', savesignupView, name='savesignup'),
+    path('add_food_to_day/', add_food_to_dayPageView, name='add_food_to_day'),
+    path('food_db_search/', food_db_searchView, name='food_db_search'),
+    path('save_food_to_day/', save_food_to_dayView, name='save_food_to_day'),
 ]

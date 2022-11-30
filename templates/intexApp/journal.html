@@ -12,7 +12,7 @@
   <h2>Journal</h2>
     <section>
       <img src="{% static 'img/clipboard.png' %}" alt="clipboard" class="clipimg">
-
+      <a href="{% url 'add_food_to_day'%}">Add food to day</a>
       <div>
         <div class="loading hidden">
           <div class="loader">
@@ -37,63 +37,6 @@
         <label for="name">Full name</label>
         <input type="text" name="name" id="name" required>
 
-        <label for="email">Email address</label>
-        <input type="email" name="email" id="email" required>
-    
-        <label for="phone">Phone number</label>
-        <input type="tel" name="phone" id="phone">
-
-        <label for="date">Project Date</label>
-        <input type="date" name="date" id="date">
-
-        <fieldset>
-          <legend>Which of the following events would you liked 
-            photographed? (Check all that apply)</legend>
-
-            <input type="checkbox" id="wedding" name="events" value="wedding">
-            <label for="wedding">Wedding</label>
-      
-            <input type="checkbox" id="engage" name="events" value="engage">
-            <label for="engage">Engagement</label>
-      
-            <input type="checkbox" id="bridal" name="events" value="bridal">
-            <label for="bridal">Bridals</label>
-      
-            <input type="checkbox" id="portrait" name="events" value="portrait">
-            <label for="portrait">Portrait</label>
-      
-            <input type="checkbox" id="grad" name="events" value="grad">
-            <label for="grad">Graduation</label>
-
-            <input type="checkbox" id="family" name="events" value="family">
-            <label for="family">Family Portraits</label>
-      
-          </fieldset>
-      
-          <fieldset>
-            <legend>How did you hear about me?</legend>
-      
-            <input type="radio" name="hear" id="nba" value="nba">
-            <label for="nba">NBA</label>
-      
-            <input type="radio" name="hear" id="ad" value="ad">
-            <label for="ad">Ad</label>
-      
-            <input type="radio" name="hear" id="friend" value="friend">
-            <label for="friend">Friend</label>
-      
-            <input type="radio" name="hear" id="other" value="other">
-            <label for="other">Other</label>
-          </fieldset>
-
-          <label for="info">What other details would you like me to know about your shoot?</label>
-          <textarea name="info" id="info" rows="10" placeholder="woof woof bark bark"></textarea>
-
-          <button type="submit">Submit</button>
-      </form>
-
-      
-      
     </section>
 </body>
 <footer class="footer py-4">
