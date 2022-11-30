@@ -153,84 +153,79 @@ def reportPageView(request):
         else:
             selectedDate = request.POST.get('selected_date')
 
-        if request.method == 'GET':
 
-            #Get the date selected  from the calendar
-            #selectedDate = request.GET['selected_date']
+        #Get the date selected  from the calendar
+        #selectedDate = request.GET['selected_date']
 
-            #Gather all of the records in Daily Journal
-            dailyJournals = Daily_Journal.objects.all()
-            journalId = 0
+        #Gather all of the records in Daily Journal
+        dailyJournals = Daily_Journal.objects.all()
+        journalId = 0
 
-            #for every object in dail journals check if the selected date is equal to the
-            #date the journal was written, if it is save that journal id
-            for dailyJournal in dailyJournals:
-                if str(dailyJournal.date) == str(selectedDate):
-                    journalId = dailyJournal.id
+        #for every object in dail journals check if the selected date is equal to the
+        #date the journal was written, if it is save that journal id
+        for dailyJournal in dailyJournals:
+            if str(dailyJournal.date) == str(selectedDate):
+                journalId = dailyJournal.id
 
-            #gather all of the objects from the food in day table, create an empty food in days list
-            foodInDays = Food_in_Day.objects.all()
-            foodInDayList = []
+        #gather all of the objects from the food in day table, create an empty food in days list
+        foodInDays = Food_in_Day.objects.all()
+        foodInDayList = []
 
-            #go through every object in the food in days table, if the journal id for that food in
-            #day entry matches the one we have saved then add that food object to the food in days list
-            for foodInDay in foodInDays:
-                if foodInDay.journal_id == journalId:
-                    foodInDayList.append(foodInDay)
+        #go through every object in the food in days table, if the journal id for that food in
+        #day entry matches the one we have saved then add that food object to the food in days list
+        for foodInDay in foodInDays:
+            if foodInDay.journal_id == journalId:
+                foodInDayList.append(foodInDay)
 
-            #Gather all of the food objects and create an empty food list
-            foods = Food.objects.all()
-            foodsList = []
+        #Gather all of the food objects and create an empty food list
+        foods = Food.objects.all()
+        foodsList = []
 
-            #go through all of the objects in the food in day list, inside of that go through
-            #all of the food objects one by one, if the food id of that food is in the food in day
-            #list that we have already filtered, then add that food object to the food list
-            for foodInDay in foodInDayList:
-                for food in foods:
-                    if food.id == foodInDay.food_id:
-                        newFoodObject = {
-                            'name': food.food_name,
-                            'protein': food.protein,
-                            'phosphorus': food.phosphorus,
-                            'potassium': food.potassium,
-                            'sodium': food.sodium,
-                            'water': food.water,
-                            'numGrams': foodInDay.grams
-                        }
-                        foodsList.append(newFoodObject)
+        #go through all of the objects in the food in day list, inside of that go through
+        #all of the food objects one by one, if the food id of that food is in the food in day
+        #list that we have already filtered, then add that food object to the food list
+        for foodInDay in foodInDayList:
+            for food in foods:
+                if food.id == foodInDay.food_id:
+                    newFoodObject = {
+                        'name': food.food_name,
+                        'protein': food.protein,
+                        'phosphorus': food.phosphorus,
+                        'potassium': food.potassium,
+                        'sodium': food.sodium,
+                        'water': food.water,
+                        'numGrams': foodInDay.grams
+                    }
+                    foodsList.append(newFoodObject)
 
-            #initializes all of the nutrient count variables
-            sodiumCount = 0
-            proteinCount = 0
-            potassiumCount = 0
-            phosphorusCount = 0
-            waterCount = 0
+        #initializes all of the nutrient count variables
+        sodiumCount = 0
+        proteinCount = 0
+        potassiumCount = 0
+        phosphorusCount = 0
+        waterCount = 0
 
-            for foodItem in foodsList:
-                sodium = foodItem['sodium'] * foodItem['numGrams']
-                protein = foodItem['protein'] * foodItem['numGrams']
-                phosphorus = foodItem['phosphorus'] * foodItem['numGrams']
-                potassium = foodItem['potassium'] * foodItem['numGrams']
-                water = foodItem['water'] * foodItem['numGrams']
-                sodiumCount += sodium
-                proteinCount += protein
-                potassiumCount += potassium
-                phosphorusCount += phosphorus
-                waterCount += water
+        for foodItem in foodsList:
+            sodium = foodItem['sodium'] * foodItem['numGrams']
+            protein = foodItem['protein'] * foodItem['numGrams']
+            phosphorus = foodItem['phosphorus'] * foodItem['numGrams']
+            potassium = foodItem['potassium'] * foodItem['numGrams']
+            water = foodItem['water'] * foodItem['numGrams']
+            sodiumCount += sodium
+            proteinCount += protein
+            potassiumCount += potassium
+            phosphorusCount += phosphorus
+            waterCount += water
 
-            context = {
-            'sodiumCount': sodiumCount,
-            'proteinCount': proteinCount,
-            'potassiumCount': potassiumCount,
-            'phosphorusCount': phosphorusCount,
-            'waterCount': waterCount,
-            'selectedDate': selectedDate
-            }
+        context = {
+        'sodiumCount': sodiumCount,
+        'proteinCount': proteinCount,
+        'potassiumCount': potassiumCount,
+        'phosphorusCount': phosphorusCount,
+        'waterCount': waterCount,
+        'selectedDate': selectedDate
+        }
 
-        else:
-            context = {
-                'selectedDate': selectedDate
-            }
         return render(request, 'intexApp/report.html', context)
     else:
         return redirect('login')
@@ -395,45 +390,54 @@ def apiSearchPageView(request):
 
         # Iterates over food items
         for foodItem in rawItemList:
-            
-            # This object contains the necessary food information retrieved from the API. 
-            # Each food item that has all 5 target nutrients gets added to a list further down.
-            foodItemObject = {
-                'name': foodItem['description'].replace("'", ""),
-                'protein': '',
-                'phosphorus': '',
-                'potassium': '',
-                'sodium': '',
-                'water': '',
-            }
-            
-            #Keeps track of number of target nutrients in each food item
-            nutrientCount = 0
 
-            # Iterates over nutrients in a food item
-            for nutrient in foodItem['foodNutrients']:
-
-                # If the nutrient is one of the target nutrients
-                if nutrient['nutrientName'] in 'Protein':
-                    nutrientCount += 1
-                    foodItemObject['protein'] = format(nutrient['value']/100, '.6f')
-                elif nutrient['nutrientName'] in 'Phosphorus, P':
-                    nutrientCount += 1
-                    foodItemObject['phosphorus'] = format((nutrient['value']/100)/1000, '.6f')
-                elif nutrient['nutrientName'] in 'Potassium, K':
-                    nutrientCount += 1
-                    foodItemObject['potassium'] = format((nutrient['value']/100)/1000, '.6f')
-                elif nutrient['nutrientName'] in 'Sodium, Na':
-                    nutrientCount += 1
-                    foodItemObject['sodium'] = format((nutrient['value']/100)/1000, '.6f')
-                elif nutrient['nutrientName'] in 'Water':
-                    nutrientCount += 1
-                    foodItemObject['water'] = format(nutrient['value']/100, '.6f')
+            # Makes sure foods with duplicate names don't get added.
+            duplicateFood = False
+            for validItem in validItemList:
+                # If the name of the current food is the same as any in the valid list
+                if foodItem['description'].replace("'", "") == validItem['name']:
+                    duplicateFood = True
             
-            # If the current food item contains all 5 of the target nutrients, add food object to the list.
-            if nutrientCount == 5 :
-                ResultCount += 1
-                validItemList.append(foodItemObject)
+            # If this food's name is unique
+            if duplicateFood == False:
+                # This object contains the necessary food information retrieved from the API. 
+                # Each food item that has all 5 target nutrients gets added to a list further down.
+                foodItemObject = {
+                    'name': foodItem['description'].replace("'", ""),
+                    'protein': '',
+                    'phosphorus': '',
+                    'potassium': '',
+                    'sodium': '',
+                    'water': '',
+                }
+                
+                #Keeps track of number of target nutrients in each food item
+                nutrientCount = 0
+
+                # Iterates over nutrients in a food item
+                for nutrient in foodItem['foodNutrients']:
+
+                    # If the nutrient is one of the target nutrients
+                    if nutrient['nutrientName'] in 'Protein':
+                        nutrientCount += 1
+                        foodItemObject['protein'] = format(nutrient['value']/100, '.6f')
+                    elif nutrient['nutrientName'] in 'Phosphorus, P':
+                        nutrientCount += 1
+                        foodItemObject['phosphorus'] = format((nutrient['value']/100)/1000, '.6f')
+                    elif nutrient['nutrientName'] in 'Potassium, K':
+                        nutrientCount += 1
+                        foodItemObject['potassium'] = format((nutrient['value']/100)/1000, '.6f')
+                    elif nutrient['nutrientName'] in 'Sodium, Na':
+                        nutrientCount += 1
+                        foodItemObject['sodium'] = format((nutrient['value']/100)/1000, '.6f')
+                    elif nutrient['nutrientName'] in 'Water':
+                        nutrientCount += 1
+                        foodItemObject['water'] = format(nutrient['value']/100, '.6f')
+                
+                # If the current food item contains all 5 of the target nutrients, add food object to the list.
+                if nutrientCount == 5 :
+                    ResultCount += 1
+                    validItemList.append(foodItemObject)
         
         data = Food.objects.all()
 
