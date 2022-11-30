@@ -1,8 +1,27 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
+from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 
 # Create your views here.
 loggedIn = True
+
+def authenticate(request):
+    user = request.POST.get('user')
+    password = request.POST.get('password')
+    print
+    authUser = User.objects.get(username=user,password=password)
+    print(authUser)
+    try:
+        print(authUser)
+        
+        return redirect('index')
+    except:
+        context = {
+            'message': 'User not found'
+            }
+        return render(request,'intexApp/login.html', context)
+
+
 
 def indexPageView(request):
     if (loggedIn):

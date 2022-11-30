@@ -96,9 +96,11 @@ p {text-align: center;}
     <div class="grid-container">
       <div class="item1">Login
           <br><br>
-          <form action="/action_page.php"> <!-- enter the page for login stuff-->
-              <label for="fname">First name:</label><input type="text" id="fname" name="fname" value="John">
-              <label for="lname">Last name:</label><input type="text" id="lname" name="lname" value="Doe">
+          <div style="color:red;font-weight:bold;"><h3>{{message}}</h3></div>
+          <form action="{% url 'authenticate' %}" method='POST'> <!-- enter the page for login stuff-->
+            {% csrf_token %}
+              <label for="user">Username</label><input type="text" id="user" name="user" placeholder="Enter username here">
+              <label for="password">Password</label><input type="text" id="password" name="password" placeholder="Enter password here">
               <br><br>
               <input type="submit" value="Login" class= 'button'>
           </form> 
