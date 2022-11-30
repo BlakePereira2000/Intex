@@ -3,28 +3,52 @@
 {% block title %}My Foods{% endblock title %}
 {% block content %}
 
-
-<p>This is the my foods page. Currently testing the api food search...</p>
+ 
+<p>This is the my foods page. Currently testing the api food search and the adding foods to database thingie...</p>
 
 <form name="form" method="get" action="{% url 'apisearch' %}">
-    <label for="search_string">Food search</label>
-    <input type="text" name='search_string' id='search_string' required>
-    <label for="num_grams">Number of grams</label>
-    <input type="number" name='num_grams' id='num_grams' required>
-    <button type="submit">Submit</button>
+    <label for="search_string">Search for a food</label>
+    <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' required>
+    <button type="submit">Search</button>
 </form>
 
-<p>
-    Your search:
-    {{originalSearchString}} <br>
-    Modified search string:
-    {{searchString}} <br>
-    Number of results:
-    {{FoodCount}} <br>
-    Number of grams:
-    {{num_grams}} <br>
-</p>
-{% for item in fullItemList %}
+{% if originalSearchString != null %}
+
+    Your search: <b>{{originalSearchString}}</b>.  
+    Modified search string: <b>{{searchString}}</b>.  
+    Number of results: <b>{{ResultCount}}</b>.  
+
+    
+    <form name="form" method="get" action="{% url 'addNewFood' %}">
+    {% for item in validItemList %}
+        <label for="$0">{{item.name}}</label>
+        <input type="radio" class="radio" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>
+    {% endfor %}
+    <button type="submit">Add food</button>
+    </form>
+{% endif %}
+
+
+{% if chosenItemObject != null %}
+    Chosen item thingie (theoretically, this info will be added to the user's database): <b>{{chosenItemObject}}</b>
+{% endif %}
+
+
+{% endblock %}
+
+
+<!-- This for loop displays test information
+
+
+Serving size:
+{{num_grams}} <br>
+
+
+<label for="num_grams">Serving size (grams)</label>
+<input type="number" value="{{num_grams}}" name='num_grams' id='num_grams' placeholder="100">
+<button type="submit">Submit</button>
+
+{% for item in validItemList %}
 <p>
 <b>{{item.name}}</b> <br>
 Protein per {{num_grams}} gram(s): <b>{{item.protein}} g</b><br>
@@ -35,4 +59,4 @@ Water per {{num_grams}} gram(s): <b>{{item.water}} ml</b>
 </p>
 {% endfor %} 
 
-{% endblock %}
+-->

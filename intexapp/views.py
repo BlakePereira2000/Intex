@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
+import json
 
 # Create your views here.
 global loggedIn
@@ -91,16 +92,15 @@ def signupPageView(request):
 def apiSearchPageView(request):
     if (loggedIn): 
 
+        # Gets search string from user input
         originalSearchString = request.GET['search_string']
-        numGrams = request.GET['num_grams']
-        #context = {'yourSearch': searchString}
 
         # Cleans string and adds '+' before each word. The '+' ensures that the results contain all words entered.
         # See https://fdc.nal.usda.gov/help.html#bkmk-2 under section 'Using Search Operators' for more information
         searchString = originalSearchString.strip()
         searchString = '+' + searchString.replace(" "," +")
 
-        # Initializes API parameters. dataType refers to the databases available through the API.
+        # Initializes API parameters. dataType refers to the different databases available through the API.
         apiParameters = {
             'api_key': 'TDwP6ToHXnd2lb2a9AroNzd9562GkXW3f63SXuKr',
             'query': searchString,
@@ -111,20 +111,20 @@ def apiSearchPageView(request):
         response = requests.get("https://api.nal.usda.gov/fdc/v1/foods/search", params=apiParameters)
 
         # foodslist contains all the food items found in the search
-        foodsList = response.json()['foods'] 
+        rawItemList = response.json()['foods'] 
 
         # Keeps track of valid results
-        FoodCount = 0
+        ResultCount = 0
 
-        fullItemList = []
+        validItemList = []
 
         # Iterates over food items
-        for foodItem in foodsList:
+        for foodItem in rawItemList:
             
-            # This string will contain the name and nutrient information for each valid food item
-            foodItemString = foodItem['description'] + '\n'
+            # This object contains the necessary food information retrieved from the API. 
+            # Each food item that has all 5 target nutrients gets added to a list further down.
             foodItemObject = {
-                'name': foodItem['description'],
+                'name': foodItem['description'].replace("'", ""),
                 'protein': '',
                 'phosphorus': '',
                 'potassium': '',
@@ -141,37 +141,62 @@ def apiSearchPageView(request):
                 # If the nutrient is one of the target nutrients
                 if nutrient['nutrientName'] in 'Protein':
                     nutrientCount += 1
-                    foodItemObject['protein'] = format(nutrient['value']/100*float(numGrams), '.2f')
-                    #foodItemString += '     ' + nutrient['nutrientName'] + ': ' + str(nutrient['value']) + ' ' + nutrient['unitName'] + '\n'
+                    foodItemObject['protein'] = format(nutrient['value']/100, '.4f')
                 elif nutrient['nutrientName'] in 'Phosphorus, P':
                     nutrientCount += 1
-                    foodItemObject['phosphorus'] = format((nutrient['value']/100)*float(numGrams), '.2f')
+                    foodItemObject['phosphorus'] = format((nutrient['value']/100), '.4f')
                 elif nutrient['nutrientName'] in 'Potassium, K':
                     nutrientCount += 1
-                    foodItemObject['potassium'] = format(nutrient['value']/100*float(numGrams), '.2f')
+                    foodItemObject['potassium'] = format(nutrient['value']/100, '.4f')
                 elif nutrient['nutrientName'] in 'Sodium, Na':
                     nutrientCount += 1
-                    foodItemObject['sodium'] = format(nutrient['value']/100*float(numGrams), '.2f')
+                    foodItemObject['sodium'] = format(nutrient['value']/100, '.4f')
                 elif nutrient['nutrientName'] in 'Water':
                     nutrientCount += 1
-                    foodItemObject['water'] = format(nutrient['value']/100*float(numGrams), '.2f')
+                    foodItemObject['water'] = format(nutrient['value']/100, '.4f')
             
-            # If the food item contains all 5 of the target nutrients
+            # If the current food item contains all 5 of the target nutrients, add food object to the list.
             if nutrientCount == 5 :
-                FoodCount += 1
-                fullItemList.append(foodItemObject)
-        
+                ResultCount += 1
+                validItemList.append(foodItemObject)
 
         context = {
-            'num_grams': numGrams,
-            'FoodCount': FoodCount,
-            'fullItemList': fullItemList,
+            'ResultCount': ResultCount,
+            'validItemList': validItemList,
             'originalSearchString': originalSearchString,
             'searchString': searchString,
         }
 
+        return render(request, 'intexApp/myfoods.html', context)
+    else:
+        return redirect('login')
 
+
+
+
+
+def addNewFoodPageView (request):
+    if (loggedIn): 
+
+        # Gets chosen item from user-selected radio button. Somewhere along the way the item was changed to a string, 
+        # so this jumbled mess converts it back to dictionary/object
+        chosenFoodItem = json.loads(str(request.GET["chosenItem"]).replace("'", "\""))
+        
+        # Instead of returning the object to the myfoods page, this part will create a new Food object in the database
+        context = {
+            'chosenItemObject': chosenFoodItem
+        }
 
         return render(request, 'intexApp/myfoods.html', context)
     else:
         return redirect('login')
+
+
+
+''' for adding food to journal from database
+# Gets number of grams from user input. If empty, default is 100 g
+        numGrams = request.GET['num_grams']
+        if numGrams == '':
+            numGrams = 100
+
+'''
