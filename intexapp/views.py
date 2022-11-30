@@ -3,6 +3,7 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
+from datetime import date
 
 # Create your views here.
 
@@ -108,8 +109,18 @@ def reportPageView(request):
 
 def userPageView(request):
     global loggedIn
-    if (loggedIn): 
-        return render(request, 'intexApp/user.html')
+    if (loggedIn):
+        user_id = 1
+        user = User.objects.get(id=user_id)
+        age = date.today().year - (user.dob).year - ((date.today().month, date.today().day) < ((user.dob).month, (user.dob).day))
+        gender = user.gender
+        context = {
+            'user' : user,
+            'age' : age,
+            'gender' : gender
+        }
+        return render(request, 'intexApp/user.html', context)
+
     else:
         return redirect('login')
 
@@ -117,7 +128,12 @@ def userPageView(request):
 def foodsPageView(request):
     global loggedIn
     if (loggedIn): 
-        return render(request, 'intexApp/myfoods.html')
+
+        data = Food.objects.all()
+        context = {
+            "userFoods" : data,
+        }
+        return render(request, 'intexApp/myfoods.html', context)
     else:
         return redirect('login')
 
@@ -254,12 +270,15 @@ def apiSearchPageView(request):
             if nutrientCount == 5 :
                 ResultCount += 1
                 validItemList.append(foodItemObject)
+        
+        data = Food.objects.all()
 
         context = {
             'ResultCount': ResultCount,
             'validItemList': validItemList,
             'originalSearchString': originalSearchString,
             'searchString': searchString,
+            'userFoods' : data,
         }
 
         return render(request, 'intexApp/myfoods.html', context)
@@ -273,14 +292,33 @@ def apiSearchPageView(request):
 def addNewFoodPageView (request):
     global loggedIn
     if (loggedIn): 
+        successfulSave = False
+        newFoodName = ''
 
-        # Gets chosen item from user-selected radio button. Somewhere along the way the item was changed to a string, 
-        # so this jumbled mess converts it back to dictionary/object
-        chosenFoodItem = json.loads(str(request.GET["chosenItem"]).replace("'", "\""))
-        
-        # Instead of returning the object to the myfoods page, this part will create a new Food object in the database
+        if request.method == 'POST':
+            chosenFoodItem= request.POST.get('chosenItem')
+            chosenFoodItem = json.loads(str(chosenFoodItem).replace("'", "\""))
+            
+            new_food = Food()
+
+            new_food.food_name = chosenFoodItem['name']
+            new_food.protein = chosenFoodItem['protein']
+            new_food.phosphorus = chosenFoodItem['phosphorus']
+            new_food.potassium = chosenFoodItem['potassium']
+            new_food.sodium = chosenFoodItem['sodium']
+            new_food.water = chosenFoodItem['water']
+
+            new_food.save()
+
+            successfulSave = True
+            newFoodName = chosenFoodItem['name']
+
+        data = Food.objects.all()
+
         context = {
-            'chosenItemObject': chosenFoodItem
+            'userFoods': data,
+            'saved': successfulSave,
+            'foodName': newFoodName
         }
 
         return render(request, 'intexApp/myfoods.html', context)

@@ -100,7 +100,7 @@ p {text-align: center;}
           <form action="{% url 'authenticate' %}" method='POST'> <!-- enter the page for login stuff-->
             {% csrf_token %}
               <label for="user">Username</label><input type="text" id="user" name="user" placeholder="Enter username here">
-              <label for="password">Password</label><input type="text" id="password" name="password" placeholder="Enter password here">
+              <label for="password">Password</label><input type="password" id="password" name="password" placeholder="Enter password here">
               <br><br>
               <input type="submit" value="Login" class= 'button'>
           </form> 
