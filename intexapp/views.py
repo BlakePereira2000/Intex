@@ -87,9 +87,60 @@ def loginPageView(request):
     return render(request, 'intexApp/login.html')
 
 def signupPageView(request):
-    return render(request, 'intexApp/signup.html')
+    comorbidityList = Comorbidity.objects.all()
+    context = {
+        'comorbidityList' : comorbidityList
+    }
+    return render(request, 'intexApp/signup.html',context)
+
+def savesignupView(request):
+    #Check to see if the form method is a get or post
+    if request.method == 'POST':
+        # Create a new user object from the model
+        new_user = User()
+        
+        same_user = User.objects.filter(username=request.POST.get('username'))
+        if same_user is not None:
+            context = {
+            'message': 'Username already in use',
+
+            }
+            #### if username already in use, basically reload the page in the same way that 
+            # 'signup' view does. Redirect to signup
+            return redirect(request, 'signup')
+
+
+        else:
+            #Store the data from the form to the new object's attributes (like columns)
+            new_user.first_name = request.POST.get('fname')
+            new_user.last_name = request.POST.get('lname')
+            new_user.username = request.POST.get('username')
+            new_user.password = request.POST.get('password')
+            new_user.password = request.POST.get('password')
+            new_user.dob = request.POST.get('dob')
+            new_user.gender = request.POST.get('gender')
+            new_user.weight = request.POST.get('weight')
+            new_user.height = request.POST.get('height')
+            new_user.stage = request.POST.get('stage')
+            # Save the new user
+            new_user.save()
+            print(request.POST.get('comorbidity1'))
+            print(request.POST.get('comorbidity2'))
+            print(request.POST.get('comorbidity3'))
+
+            # Add the comorbidities. Control for duplicates not required because 'add()' won't allow duplicates
+            if request.POST.get('comorbidity1') is not None:
+                new_user.comorbidities.add(request.POST.get('comorbidity1'))
+            if request.POST.get('comorbidity2') is not None:
+                new_user.comorbidities.add(request.POST.get('comorbidity2'))                    
+            if request.POST.get('comorbidity3') is not None:
+                new_user.comorbidities.add(request.POST.get('comorbidity3'))
+
+
+            return render(request, 'intexApp/index.html')
 
 def apiSearchPageView(request):
+    global loggedIn
     if (loggedIn): 
 
         # Gets search string from user input
@@ -176,6 +227,7 @@ def apiSearchPageView(request):
 
 
 def addNewFoodPageView (request):
+    global loggedIn
     if (loggedIn): 
 
         # Gets chosen item from user-selected radio button. Somewhere along the way the item was changed to a string, 
