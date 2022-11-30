@@ -3,27 +3,35 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 
 # Create your views here.
-loggedIn = True
+global loggedIn
+loggedIn = False
 
 def authenticate(request):
     user = request.POST.get('user')
     password = request.POST.get('password')
-    print
-    authUser = User.objects.get(username=user,password=password)
-    print(authUser)
+    print(user)
+    print(password)
     try:
-        print(authUser)
-        
-        return redirect('index')
+        authUser = User.objects.get(username=user,password=password)
+        print(authUser.dob)
+        global loggedIn
+        loggedIn = True
+        return render(request, 'intexApp/index.html')
     except:
         context = {
             'message': 'User not found'
             }
         return render(request,'intexApp/login.html', context)
 
+def logoutView(request):
+    global loggedIn 
+    loggedIn = False
+    return render(request,'intexApp/login.html')
+
 
 
 def indexPageView(request):
+    global loggedIn
     if (loggedIn):
         context = {
 
@@ -34,16 +42,12 @@ def indexPageView(request):
 
 
 def aboutPageView(request):
-    if (loggedIn):
-        context = {
+    return render(request, 'intexApp/about.html')
 
-        }
-        return render(request, 'intexApp/about.html')
-    else:
-        return redirect('login')
 
 
 def journalPageView(request):
+    global loggedIn
     if (loggedIn):
         context = {
 
@@ -54,6 +58,7 @@ def journalPageView(request):
 
 
 def reportPageView(request):
+    global loggedIn
     if (loggedIn): 
         return render(request, 'intexApp/report.html')
     else:
@@ -61,6 +66,7 @@ def reportPageView(request):
 
 
 def userPageView(request):
+    global loggedIn
     if (loggedIn): 
         return render(request, 'intexApp/user.html')
     else:
@@ -68,6 +74,7 @@ def userPageView(request):
 
 
 def foodsPageView(request):
+    global loggedIn
     if (loggedIn): 
         return render(request, 'intexApp/myfoods.html')
     else:
