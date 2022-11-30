@@ -2,15 +2,24 @@
 {% load static %}
 {% block title %}My Foods{% endblock title %}
 {% block content %}
+<p>
+User's saved foods:<br>
+{% for foodItem in userFoods %}
+<b>--- {{foodItem.food_name}}</b><br>
+{% endfor %}
+</p>
 
- 
-<p>This is the my foods page. Currently testing the api food search and the adding foods to database thingie...</p>
+<p>Api food search and database adding below. This will move to the journal page eventually:</p>
 
 <form name="form" method="get" action="{% url 'apisearch' %}">
     <label for="search_string">Search for a food</label>
     <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' required>
     <button type="submit">Search</button>
 </form>
+
+{% if saved == True %}
+<b>{{foodName}}</b> has been added to your foods!
+{% endif %}
 
 {% if originalSearchString != null %}
 
@@ -19,19 +28,18 @@
     Number of results: <b>{{ResultCount}}</b>.  
 
     
-    <form name="form" method="get" action="{% url 'addNewFood' %}">
+    <form name="form" method="post" action="{% url 'addNewFood' %}">
+    {% csrf_token %}
     {% for item in validItemList %}
-        <label for="$0">{{item.name}}</label>
+        <label for="chosenItem">{{item.name}}</label>
         <input type="radio" class="radio" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>
     {% endfor %}
     <button type="submit">Add food</button>
     </form>
+
 {% endif %}
 
 
-{% if chosenItemObject != null %}
-    Chosen item thingie (theoretically, this info will be added to the user's database): <b>{{chosenItemObject}}</b>
-{% endif %}
 
 
 {% endblock %}
