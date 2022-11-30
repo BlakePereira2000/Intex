@@ -112,7 +112,6 @@ footer {
   height: 60px;
   background-color: rgba(255, 255, 255, .6);
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -568,6 +567,8 @@ body footer.about-footer {
   color: var(--soft-white);
   font-size: 30px;
   font-family: 'Times New Roman', Times, serif;
+  border-style: solid;
+  border-color: white white black;
 }
 
 @media (min-width: 601px) {

@@ -7,94 +7,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Journal</title>
 </head>
-<body class="form"</body>
+<body class="form">
+  {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-  <h2>Journal</h2>
-    <section>
-      <img src="{% static 'img/clipboard.png' %}" alt="clipboard" class="clipimg">
 
-      <div>
-        <div class="loading hidden">
-          <div class="loader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-      </div>
-
-        <p class="success-message hidden">Form successfully submitted!</p>
-        <p class="error-message hidden">There was an error!</p>
-      </div>
-
-      <form name="photo-form">
-
-        <label for="name">Full name</label>
-        <input type="text" name="name" id="name" required>
-
-        <label for="email">Email address</label>
-        <input type="email" name="email" id="email" required>
+  <div class="row">
+    <div class="column">
+      <p id="demo"></p>
+      <input type="date" id="theDate" name="date" onchange='change()'>
+    </div>
     
-        <label for="phone">Phone number</label>
-        <input type="tel" name="phone" id="phone">
+    <div class="column">
+      <h3 id = 'middleDate' style = 'border-style: ridge; border-radius: 5px;'></h3>
+      <!-- (A) HTML LIST -->
+        <ol id="demoA">
+          <li>First</li>
+          <li>Second</li>
+        </ol>
+        
+        <!-- (B) JAVASCRIPT ADD -->
+        <script>
+        function addItem () {
+          // (B1) CREATE NEW LIST ITEM
+          var item = document.createElement("li");
+          item.innerHTML = "New";
 
-        <label for="date">Project Date</label>
-        <input type="date" name="date" id="date">
-
-        <fieldset>
-          <legend>Which of the following events would you liked 
-            photographed? (Check all that apply)</legend>
-
-            <input type="checkbox" id="wedding" name="events" value="wedding">
-            <label for="wedding">Wedding</label>
-      
-            <input type="checkbox" id="engage" name="events" value="engage">
-            <label for="engage">Engagement</label>
-      
-            <input type="checkbox" id="bridal" name="events" value="bridal">
-            <label for="bridal">Bridals</label>
-      
-            <input type="checkbox" id="portrait" name="events" value="portrait">
-            <label for="portrait">Portrait</label>
-      
-            <input type="checkbox" id="grad" name="events" value="grad">
-            <label for="grad">Graduation</label>
-
-            <input type="checkbox" id="family" name="events" value="family">
-            <label for="family">Family Portraits</label>
-      
-          </fieldset>
-      
-          <fieldset>
-            <legend>How did you hear about me?</legend>
-      
-            <input type="radio" name="hear" id="nba" value="nba">
-            <label for="nba">NBA</label>
-      
-            <input type="radio" name="hear" id="ad" value="ad">
-            <label for="ad">Ad</label>
-      
-            <input type="radio" name="hear" id="friend" value="friend">
-            <label for="friend">Friend</label>
-      
-            <input type="radio" name="hear" id="other" value="other">
-            <label for="other">Other</label>
-          </fieldset>
-
-          <label for="info">What other details would you like me to know about your shoot?</label>
-          <textarea name="info" id="info" rows="10" placeholder="woof woof bark bark"></textarea>
-
-          <button type="submit">Submit</button>
-      </form>
-
-      
-      
-    </section>
+          // (B2) APPEND TO LIST
+          document.getElementById("demoA").appendChild(item);
+        }
+        </script>
+        <input type="button" value="Add Item" onclick="addItem()"/>
+    </div>
+    
+    <div class="column">
+      <h2>Column</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+    </div>
+  </div>
+  
 </body>
 <footer class="footer py-4">
   <div class="container">
@@ -106,3 +56,60 @@
 <!-- Optional JavaScript; choose one of the two! -->
 <script src="{% static 'js/script.js'%}"></script>
 </html>
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<style>
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 15px;
+    border-color: black;
+    border-style: solid;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }</style>
+  <script>
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;
+
+    document.getElementById('theDate').value = today;
+    document.getElementById("demo").innerHTML = formatDate(today);
+
+    function change(){
+      today = document.getElementById('theDate').value;
+      document.getElementById("demo").innerHTML = formatDate(today);
+    }
+    function formatDate(today){
+    var month = today.slice(5,7);
+    var year = today.slice(0,4);
+    var day = today.slice(8);
+    if (month == 01) monthName = 'January';
+    else if (month == 02) monthName = 'February';
+    else if (month == 03) monthName = 'March';
+    else if (month == 04) monthName = 'April';
+    else if (month == 05) monthName = 'May';
+    else if (month == 06) monthName = 'June';
+    else if (month == 07) monthName = 'July';
+    else if (month == 08) monthName = 'August';
+    else if (month == 09) monthName = 'September';
+    else if (month == 10) monthName = 'October';
+    else if (month == 11) monthName = 'November';
+    else if (month == 12) monthName = 'December';
+
+    var displayDate = monthName + ' ' + day + ' ' + year;
+    document.getElementById("middleDate").innerHTML = displayDate
+
+    return (displayDate);
+    }
+  </script>
