@@ -11,6 +11,7 @@
   {% include 'partials/header.html'%}
   {% include 'partials/nav.html' %}
   <h2>User</h2>
+  <h3>Update Your Info</h3>
   <a href="{%url 'logout'%}">Log out</a>
     <section>
 
@@ -33,62 +34,40 @@
         <p class="error-message hidden">There was an error!</p>
       </div>
 
-      <form name="photo-form">
-
+      <form method="POST" name="photo-form" action="{% url 'update_user' %}">
+        {% csrf_token %}
         <label for="first_name">First Name</label>
-        <input type="text" name="first_name" id="first_name" required>
+        <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
 
         <label for="last_name">Last Name</label>
-        <input type="last_name" name="last_name" id="last_name" required>
+        <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required>
+
+        <label for="gender">Gender</label>
+        <span name="gender" id="gender">{{ gender }}</span>
     
         <label for="weight">Weight</label>
-        <input type="floatformat" name="weight" id="weight">
+        <input type="number" name="weight" id="weight" step=".1" value="{{ user.weight }}" required>
 
-        <label for="date">Project Date</label>
-        <input type="date" name="date" id="date">
+        <label for="height">Height</label>
+        <input type="number" name="height" id="height" step=".1" value="{{ user.height }}" required>
 
-        <fieldset>
-          <legend>Which of the following events would you liked 
-            photographed? (Check all that apply)</legend>
+        <label for="age">Age</label>
+        <span name="age" id="age">{{ age }}</span>
 
-            <input type="checkbox" id="wedding" name="events" value="wedding">
-            <label for="wedding">Wedding</label>
-      
-            <input type="checkbox" id="engage" name="events" value="engage">
-            <label for="engage">Engagement</label>
-      
-            <input type="checkbox" id="bridal" name="events" value="bridal">
-            <label for="bridal">Bridals</label>
-      
-            <input type="checkbox" id="portrait" name="events" value="portrait">
-            <label for="portrait">Portrait</label>
-      
-            <input type="checkbox" id="grad" name="events" value="grad">
-            <label for="grad">Graduation</label>
-
-            <input type="checkbox" id="family" name="events" value="family">
-            <label for="family">Family Portraits</label>
-      
-          </fieldset>
-      
-          <fieldset>
-            <legend>How did you hear about me?</legend>
-      
-            <input type="radio" name="hear" id="nba" value="nba">
-            <label for="nba">NBA</label>
-      
-            <input type="radio" name="hear" id="ad" value="ad">
-            <label for="ad">Ad</label>
-      
-            <input type="radio" name="hear" id="friend" value="friend">
-            <label for="friend">Friend</label>
-      
-            <input type="radio" name="hear" id="other" value="other">
-            <label for="other">Other</label>
-          </fieldset>
-
-          <label for="info">What other details would you like me to know about your shoot?</label>
-          <textarea name="info" id="info" rows="10" placeholder="woof woof bark bark"></textarea>
+        <label for="stage">Stage of Kidney Disease</label>
+        <select name="stage" id="stage" required>
+          {% if user.stage == 1 %}
+          <option value="1">1</option>
+          {% elif user.stage == 2 %}
+          <option value="2">2</option>
+          {% elif user.stage == 3 %}
+          <option value="3">3</option>
+          {% elif user.stage == 4 %}
+          <option value="4">4</option>
+          {% else %}
+          <option value="5">Dialisis</option>
+          {% endif %}
+        </select>
 
           <button type="submit">Submit</button>
       </form>
