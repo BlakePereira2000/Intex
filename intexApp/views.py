@@ -5,7 +5,7 @@ import requests
 
 # Create your views here.
 global loggedIn
-loggedIn = False
+loggedIn = True
 
 def authenticate(request):
     user = request.POST.get('user')
