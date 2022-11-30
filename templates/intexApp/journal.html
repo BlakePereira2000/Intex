@@ -11,17 +11,43 @@
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
   
-  <a href="{% url 'add_food_to_day'%}">Add food to day</a>
+  <form action="{% url 'add_food_to_day'%}" method="get">
+    <button type='submit'>Add food to day</button>
+    <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
+  </form>
+
 
 
   <div class="row">
     <div class="column">
       <p id="demo"></p>
       <input type="date" id="theDate" name="date" onchange='change()'>
+      
     </div>
     
     <div class="column">
       <h3 id = 'middleDate' style = 'border-style: ridge; border-radius: 5px;'></h3>
+    
+      {% comment %} Results Table {% endcomment %}
+      <table>
+        <th>
+          <tr>
+            <td>Food ID</td>
+            <td>Food Name</td>
+            <td>Grams</td>
+          </tr>
+        </th>
+        
+        {% for food in foods_in_day %}
+        <tr>
+          <td>{{food.food.id}}</td>
+          <td>{{food.food.food_name}}</td>
+          <td>{{food.grams}}</td>
+        </tr>
+        {% endfor %}
+
+      </table>
+      
       <!-- (A) HTML LIST -->
         <ol id="demoA">
           <li>First</li>

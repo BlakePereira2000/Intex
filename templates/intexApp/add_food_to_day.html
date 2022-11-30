@@ -16,7 +16,12 @@
                     <label for="chosenFood">{{food.food_name}}</label>
                     <input type="radio" class="radio" value="{{food.id}}" name="chosenFood" id="{{food.food_name}}" checked/>
                 {% endfor %}
-                <button type="submit">Add food</button>
+                <label for="grams">How many grams?</label>
+                <input type="number" name='grams' step='.1' >
+                <button type="submit">Add food to day</button>
+            </form>
+            <form action="{% url 'foods' %}" method="get">
+                <button type="submit">Don't see your food? Add it to your food collection</button>
             </form>
         </div>
     </div>
