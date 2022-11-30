@@ -26,7 +26,7 @@ class Comorbidity(models.Model):
 class User(models.Model):
     first_name = models.CharField(max_length=25, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
-    dob = models.DateField(auto_now=True, auto_now_add=False, blank=False)
+    dob = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     weight = models.DecimalField(max_digits=8, decimal_places=2,blank=False)
     height = models.DecimalField(max_digits=8, decimal_places=2,blank=False)
     gender = models.CharField(max_length=1, blank=False)
