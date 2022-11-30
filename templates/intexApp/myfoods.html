@@ -2,5 +2,69 @@
 {% load static %}
 {% block title %}My Foods{% endblock title %}
 {% block content %}
- <p>This is the my foods page</p>
+<p>
+User's saved foods:<br>
+{% for foodItem in userFoods %}
+<b>--- {{foodItem.food_name}}</b><br>
+{% endfor %}
+</p>
+
+<p>Api food search and database adding below. This will move to the journal page eventually:</p>
+
+<form name="form" method="get" action="{% url 'apisearch' %}">
+    <label for="search_string">Search for a food</label>
+    <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' required>
+    <button type="submit">Search</button>
+</form>
+
+{% if saved == True %}
+<b>{{foodName}}</b> has been added to your foods!
+{% endif %}
+
+{% if originalSearchString != null %}
+
+    Your search: <b>{{originalSearchString}}</b>.  
+    Modified search string: <b>{{searchString}}</b>.  
+    Number of results: <b>{{ResultCount}}</b>.  
+
+    
+    <form name="form" method="post" action="{% url 'addNewFood' %}">
+    {% csrf_token %}
+    {% for item in validItemList %}
+        <label for="chosenItem">{{item.name}}</label>
+        <input type="radio" class="radio" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>
+    {% endfor %}
+    <button type="submit">Add food</button>
+    </form>
+
+{% endif %}
+
+
+
+
 {% endblock %}
+
+
+<!-- This for loop displays test information
+
+
+Serving size:
+{{num_grams}} <br>
+
+
+<label for="num_grams">Serving size (grams)</label>
+<input type="number" value="{{num_grams}}" name='num_grams' id='num_grams' placeholder="100">
+<button type="submit">Submit</button>
+
+{% for item in validItemList %}
+<p>
+<b>{{item.name}}</b> <br>
+Protein per {{num_grams}} gram(s): <b>{{item.protein}} g</b><br>
+Phosphorus per {{num_grams}} gram(s): <b>{{item.phosphorus}} mg</b><br>
+Potassium per {{num_grams}} gram(s): <b>{{item.potassium}} mg</b><br>
+Sodium per {{num_grams}} gram(s): <b>{{item.sodium}} mg</b><br>
+Water per {{num_grams}} gram(s): <b>{{item.water}} ml</b>
+</p>
+{% endfor %} 
+
+-->
