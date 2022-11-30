@@ -385,19 +385,19 @@ def apiSearchPageView(request):
                 # If the nutrient is one of the target nutrients
                 if nutrient['nutrientName'] in 'Protein':
                     nutrientCount += 1
-                    foodItemObject['protein'] = format(nutrient['value']/100, '.4f')
+                    foodItemObject['protein'] = format(nutrient['value']/100, '.6f')
                 elif nutrient['nutrientName'] in 'Phosphorus, P':
                     nutrientCount += 1
-                    foodItemObject['phosphorus'] = format((nutrient['value']/100), '.4f')
+                    foodItemObject['phosphorus'] = format((nutrient['value']/100)/1000, '.6f')
                 elif nutrient['nutrientName'] in 'Potassium, K':
                     nutrientCount += 1
-                    foodItemObject['potassium'] = format(nutrient['value']/100, '.4f')
+                    foodItemObject['potassium'] = format((nutrient['value']/100)/1000, '.6f')
                 elif nutrient['nutrientName'] in 'Sodium, Na':
                     nutrientCount += 1
-                    foodItemObject['sodium'] = format(nutrient['value']/100, '.4f')
+                    foodItemObject['sodium'] = format((nutrient['value']/100)/1000, '.6f')
                 elif nutrient['nutrientName'] in 'Water':
                     nutrientCount += 1
-                    foodItemObject['water'] = format(nutrient['value']/100, '.4f')
+                    foodItemObject['water'] = format(nutrient['value']/100, '.6f')
             
             # If the current food item contains all 5 of the target nutrients, add food object to the list.
             if nutrientCount == 5 :
