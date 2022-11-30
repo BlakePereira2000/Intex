@@ -4,12 +4,13 @@
 {% block content %}
     <p>This is the reports page</p>
     <!--Calendar option for the user to choose the day of the report-->
-    <form name = 'form' method = 'get' action = "{% url 'report' %}">
+    <form name = 'form' method = 'post' action = "{% url 'report' %}">
+        {% csrf_token %}
         <label for="selected_date">Journal Date</label>
-        <input type="date" value = {{'2022-11-30'}} name="selected_date" id="selected_date">
+        <input type="date" value = {{selectedDate}} name="selected_date" id="selected_date">
         <button type = 'submit'>Select Date</button>
     </form>
-    This is your selected date {{selectedDate}}
+    This is the selected date: <b>{{selectedDate}}</b>. Default should be today's date. 
     <div class = "col-md-8">
         <canvas id="myChart" width="600" height="200"></canvas>
         <script>

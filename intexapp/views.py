@@ -129,7 +129,10 @@ def reportPageView(request):
     if (loggedIn):
 
         # sets default to avoid errors
-        selectedDate = '2022-11-30'
+        if request.POST.get('selected_date') is None:
+            selectedDate = str(date.today())
+        else:
+            selectedDate = request.POST.get('selected_date')
 
         if request.method == 'GET':
 
