@@ -6,8 +6,14 @@ import json
 from datetime import date
 
 # Create your views here.
+
+# Create global logged in variable, set it to its default
 global loggedIn
 loggedIn = True
+
+# create variable for the authenticated in user's id
+global auth_user_id
+auth_user_id = ''
 
 def authenticate(request):
     user = request.POST.get('user')
@@ -15,10 +21,18 @@ def authenticate(request):
     print(user)
     print(password)
     try:
-        authUser = User.objects.get(username=user,password=password)
-        print(authUser.dob)
+        auth_user = User.objects.get(username=user,password=password)
+        print(auth_user.dob)
+
+        # log the person in
         global loggedIn
         loggedIn = True
+        
+        # set the global auth_user_id to the user's id
+        global auth_user_id
+        auth_user_id = auth_user.id
+
+        print(auth_user_id)
         return render(request, 'intexApp/index.html')
     except:
         context = {
@@ -48,7 +62,7 @@ def aboutPageView(request):
     return render(request, 'intexApp/about.html')
 
 
-
+########### Journal functions ####################
 def journalPageView(request):
     global loggedIn
     if (loggedIn):
@@ -59,6 +73,31 @@ def journalPageView(request):
     else:
         return redirect('login')
 
+# Access "add food to journal" page
+def add_food_to_dayPageView(request):
+
+    return render(request,'intexApp/add_food_to_day.html')
+
+
+# Query the existing food db for foods based on search
+def food_db_searchView(request):
+    # look for term anywhere within title
+    term = request.GET['search_string']
+    term= term.replace('=', '==').replace('%', '=%').replace('_', '=_')
+    term = term.upper()
+    resultset = Food.objects.filter(food_name__contains=term)
+
+    context ={
+        'resultset': resultset
+    }
+    return render(request,'intexApp/add_food_to_day.html',context)
+
+# Using the food ID, make a new record of the food in the day
+def save_food_to_dayView(request):
+    grams = 5
+    dj_in_use = Daily_Journal.objects.get(id=1)
+    dj_in_use.daily_foods.add(request.POST.get('chosenFood'), through_defaults={'grams':grams})
+    return render(request,'intexApp/journal.html')
 
 def reportPageView(request):
     global loggedIn
@@ -116,14 +155,16 @@ def savesignupView(request):
         new_user = User()
         
         same_user = User.objects.filter(username=request.POST.get('username'))
-        if same_user is not None:
+        if same_user.count() > 0:
+            print(same_user)
+            comorbidityList = Comorbidity.objects.all()
             context = {
             'message': 'Username already in use',
-
+            'comorbidityList' : comorbidityList
             }
             #### if username already in use, basically reload the page in the same way that 
             # 'signup' view does. Redirect to signup
-            return redirect(request, 'signup')
+            return render(request, 'intexApp/signup.html',context)
 
 
         else:
@@ -152,6 +193,9 @@ def savesignupView(request):
             if request.POST.get('comorbidity3') is not None:
                 new_user.comorbidities.add(request.POST.get('comorbidity3'))
 
+            # log them in 
+            global loggedIn
+            loggedIn = True
 
             return render(request, 'intexApp/index.html')
 
