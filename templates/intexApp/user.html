@@ -34,8 +34,8 @@
         <p class="error-message hidden">There was an error!</p>
       </div>
 
-      <form type="POST" name="photo-form">
-
+      <form method="POST" name="photo-form" action="{% url 'update_user' %}">
+        {% csrf_token %}
         <label for="first_name">First Name</label>
         <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
 

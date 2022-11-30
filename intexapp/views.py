@@ -9,7 +9,7 @@ from datetime import date
 
 # Create global logged in variable, set it to its default
 global loggedIn
-loggedIn = True
+loggedIn = False
 
 # create variable for the authenticated in user's id
 global auth_user_id
@@ -110,7 +110,8 @@ def reportPageView(request):
 def userPageView(request):
     global loggedIn
     if (loggedIn):
-        user_id = 1
+        global auth_user_id
+        user_id = auth_user_id
         user = User.objects.get(id=user_id)
         age = date.today().year - (user.dob).year - ((date.today().month, date.today().day) < ((user.dob).month, (user.dob).day))
         gender = user.gender
@@ -123,6 +124,43 @@ def userPageView(request):
 
     else:
         return redirect('login')
+
+def updateUserPageView(request):
+    if request.method == 'POST':
+        global auth_user_id
+        id = auth_user_id
+        updateUser = User.objects.get(id=id)
+
+        newFirst = request.POST.get('first_name')
+        newLast= request.POST.get('last_name')
+        newWeight = request.POST.get('weight')
+        newHeight = request.POST.get('height')
+        newStage = request.POST.get('stage')
+    
+        updateUser.first_name = newFirst
+        updateUser.last_name = newLast
+        updateUser.weight = newWeight
+        updateUser.height = newHeight
+        updateUser.stage = newStage
+
+        updateUser.save()
+
+    global loggedIn
+    if (loggedIn):
+        user_id = auth_user_id
+        user = User.objects.get(id=user_id)
+        age = date.today().year - (user.dob).year - ((date.today().month, date.today().day) < ((user.dob).month, (user.dob).day))
+        gender = user.gender
+        context = {
+            'user' : user,
+            'age' : age,
+            'gender' : gender
+        }
+        return render(request, 'intexApp/user.html', context)
+
+    else:
+        return redirect('login')
+    return render(request, 'intexApp/user.html')  
 
 
 def foodsPageView(request):
