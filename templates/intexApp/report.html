@@ -2,5 +2,53 @@
 {% load static %}
 {% block title %}Reports{% endblock title %}
 {% block content %}
- <p>This is the reports page</p>
+    <p>This is the reports page</p>
+    <!--Calendar option for the user to choose the day of the report-->
+    <form name = 'form' method = 'get' action = "{% url 'report' %}">
+        <label for="selected_date">Journal Date</label>
+        <input type="date" value = {{'2022-11-30'}} name="selected_date" id="selected_date">
+        <button type = 'submit'>Select Date</button>
+    </form>
+    This is your selected date {{selectedDate}}
+    <div class = "col-md-8">
+        <canvas id="myChart" width="600" height="200"></canvas>
+        <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Sodium', 'Protein', 'Potassium', 'Phosphorus', 'Water'],
+                datasets: [{
+                    label: '# of grams',
+                    data: [{{sodiumCount}}, {{proteinCount}}, {{potassiumCount}},
+                        {{phosphorusCount}}, {{waterCount}},],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        </script>
+    </div>
 {% endblock %}

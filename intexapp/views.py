@@ -45,8 +45,6 @@ def logoutView(request):
     loggedIn = False
     return render(request,'intexApp/login.html')
 
-
-
 def indexPageView(request):
     global loggedIn
     if (loggedIn):
@@ -56,7 +54,6 @@ def indexPageView(request):
         return render(request, 'intexApp/index.html', context)
     else:
         return redirect('login')
-
 
 def aboutPageView(request):
     return render(request, 'intexApp/about.html')
@@ -72,6 +69,7 @@ def journalPageView(request):
         return render(request, 'intexApp/journal.html')
     else:
         return redirect('login')
+
 
 # Access "add food to journal" page
 def add_food_to_dayPageView(request):
@@ -99,13 +97,95 @@ def save_food_to_dayView(request):
     dj_in_use.daily_foods.add(request.POST.get('chosenFood'), through_defaults={'grams':grams})
     return render(request,'intexApp/journal.html')
 
+
 def reportPageView(request):
     global loggedIn
-    if (loggedIn): 
-        return render(request, 'intexApp/report.html')
+    if (loggedIn):
+
+        # sets default to avoid errors
+        selectedDate = '2022-11-30'
+
+        if request.method == 'GET':
+
+            #Get the date selected  from the calendar
+            #selectedDate = request.GET['selected_date']
+
+            #Gather all of the records in Daily Journal
+            dailyJournals = Daily_Journal.objects.all()
+            journalId = 0
+
+            #for every object in dail journals check if the selected date is equal to the
+            #date the journal was written, if it is save that journal id
+            for dailyJournal in dailyJournals:
+                if str(dailyJournal.date) == str(selectedDate):
+                    journalId = dailyJournal.id
+
+            #gather all of the objects from the food in day table, create an empty food in days list
+            foodInDays = Food_in_Day.objects.all()
+            foodInDayList = []
+
+            #go through every object in the food in days table, if the journal id for that food in
+            #day entry matches the one we have saved then add that food object to the food in days list
+            for foodInDay in foodInDays:
+                if foodInDay.journal_id == journalId:
+                    foodInDayList.append(foodInDay)
+
+            #Gather all of the food objects and create an empty food list
+            foods = Food.objects.all()
+            foodsList = []
+
+            #go through all of the objects in the food in day list, inside of that go through
+            #all of the food objects one by one, if the food id of that food is in the food in day
+            #list that we have already filtered, then add that food object to the food list
+            for foodInDay in foodInDayList:
+                for food in foods:
+                    if food.id == foodInDay.food_id:
+                        newFoodObject = {
+                            'name': food.food_name,
+                            'protein': food.protein,
+                            'phosphorus': food.phosphorus,
+                            'potassium': food.potassium,
+                            'sodium': food.sodium,
+                            'water': food.water,
+                            'numGrams': foodInDay.grams
+                        }
+                        foodsList.append(newFoodObject)
+
+            #initializes all of the nutrient count variables
+            sodiumCount = 0
+            proteinCount = 0
+            potassiumCount = 0
+            phosphorusCount = 0
+            waterCount = 0
+
+            for foodItem in foodsList:
+                sodium = foodItem['sodium'] * foodItem['numGrams']
+                protein = foodItem['protein'] * foodItem['numGrams']
+                phosphorus = foodItem['phosphorus'] * foodItem['numGrams']
+                potassium = foodItem['potassium'] * foodItem['numGrams']
+                water = foodItem['water'] * foodItem['numGrams']
+                sodiumCount += sodium
+                proteinCount += protein
+                potassiumCount += potassium
+                phosphorusCount += phosphorus
+                waterCount += water
+
+            context = {
+            'sodiumCount': sodiumCount,
+            'proteinCount': proteinCount,
+            'potassiumCount': potassiumCount,
+            'phosphorusCount': phosphorusCount,
+            'waterCount': waterCount,
+            'selectedDate': selectedDate
+            }
+
+        else:
+            context = {
+                'selectedDate': selectedDate
+            }
+        return render(request, 'intexApp/report.html', context)
     else:
         return redirect('login')
-
 
 def userPageView(request):
     global loggedIn
@@ -162,7 +242,6 @@ def updateUserPageView(request):
         return redirect('login')
     return render(request, 'intexApp/user.html')  
 
-
 def foodsPageView(request):
     global loggedIn
     if (loggedIn): 
@@ -174,7 +253,6 @@ def foodsPageView(request):
         return render(request, 'intexApp/myfoods.html', context)
     else:
         return redirect('login')
-
 
 def loginPageView(request):
     return render(request, 'intexApp/login.html')
@@ -323,10 +401,6 @@ def apiSearchPageView(request):
     else:
         return redirect('login')
 
-
-
-
-
 def addNewFoodPageView (request):
     global loggedIn
     if (loggedIn): 
@@ -363,12 +437,3 @@ def addNewFoodPageView (request):
     else:
         return redirect('login')
 
-
-
-''' for adding food to journal from database
-# Gets number of grams from user input. If empty, default is 100 g
-        numGrams = request.GET['num_grams']
-        if numGrams == '':
-            numGrams = 100
-
-'''

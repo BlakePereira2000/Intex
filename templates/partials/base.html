@@ -5,18 +5,16 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
+    <!--Chart js Code-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <!-- Bootstrap CSS -->
- 
     <title>{% block title %} {% endblock %} </title>
   </head>
   <body class="home">
     {% include 'partials/header.html'%}
     {% include 'partials/nav.html' %}
- 
     <div class = "container">
         {% block content %}
- 
         {% endblock %}
     </div>
     <!-- Footer-->
