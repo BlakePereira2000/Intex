@@ -41,6 +41,15 @@ h2 {
   margin-bottom: 1rem;
 }
 
+h3 {
+  font-family: var(--heading-font);
+  font-size: 3rem;
+  color: var(--gray);
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 img {
   display: block;
   width: 100%;
@@ -109,7 +118,7 @@ footer {
   top: 1.5rem;
   left: 1.5rem;
   width: 60px;
-  height: 60px;
+  height: 50px;
   background-color: rgba(255, 255, 255, .6);
   border-radius: 50%;
 
@@ -172,7 +181,7 @@ nav {
   display: flex;
 
   transform: translateX(-100vw);
- transition: transform 400ms;
+  transition: transform 400ms;
 }
 
 .menu-show nav {
@@ -184,13 +193,13 @@ nav ul {
   flex-direction: column;
   justify-content: center;
   list-style-type: none;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   max-width: 80rem;
 }
 
 nav a {
-  display: block;
+  display: flex;
   padding: 1rem;
   font-size: 1.4rem;
 
@@ -316,6 +325,7 @@ legend {
 }
 
 form > input,
+select,
 textarea,
 fieldset,
 button {
@@ -346,7 +356,7 @@ form button:hover {
 
 form input:hover,
 form input:focus {
-  background-color: lightyellow;
+  background-color: rgb(255, 252, 248);
 }
 
 form input:focus {
@@ -702,7 +712,8 @@ body footer.about-footer {
     grid-column-start: 2;
   }
   
-  form > input {
+  form > input,
+  select {
     margin: .5rem .5rem;
   }
 
