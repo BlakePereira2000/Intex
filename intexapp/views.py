@@ -68,8 +68,16 @@ def journalPageView(request):
             selected_date = date.today()
         else:
             selected_date = request.POST.get('selected_date')
+
         # Determine the journal we are looking at
-        journal_were_looking_at = Daily_Journal.objects.get(date= selected_date)
+        if Daily_Journal.objects.get(date=selected_date) is None:
+            new_journal = Daily_Journal()
+            new_journal.date = selected_date
+            new_journal.save()
+            journal_were_looking_at = new_journal
+        else:
+            journal_were_looking_at = Daily_Journal.objects.get(date= selected_date)
+
         journalID = journal_were_looking_at.id
 
         # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
@@ -77,7 +85,8 @@ def journalPageView(request):
 
         context = {
             'foods_in_day' : foods_in_day,
-            'journalID_in_use' : journalID
+            'journalID_in_use' : journalID,
+            'selected_date': selected_date
         }
         return render(request, 'intexApp/journal.html',context)
     else:
