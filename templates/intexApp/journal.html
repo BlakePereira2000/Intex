@@ -18,6 +18,10 @@
     <div class="column">
       <p id="demo"></p>
       <input type="date" id="theDate" name="date" onchange='change()'>
+      <form action='{% url 'journal' %}' method='GET' id='form_submit'>
+        <input type='text' id="submitDate" name='selected_date'>
+        <input type='submit' >
+      </form>
     </div>
     
     <div class="column">
@@ -43,8 +47,9 @@
     </div>
     
     <div class="column">
-      <h2>Column</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+      <form name='form' action='{% url 'journal' %}' method='GET'>
+        
+      </form>
     </div>
   </div>
 
@@ -88,10 +93,13 @@
 
     document.getElementById('theDate').value = today;
     document.getElementById("demo").innerHTML = formatDate(today);
+    document.getElementById("submitDate").value = today;
 
     function change(){
       today = document.getElementById('theDate').value;
       document.getElementById("demo").innerHTML = formatDate(today);
+      document.getElementById("submitDate").value = today;
+      document.getElementById("form_submit").submit();
     }
     function formatDate(today){
     var month = today.slice(5,7);
