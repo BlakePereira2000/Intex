@@ -63,22 +63,41 @@ def aboutPageView(request):
 def journalPageView(request):
     global loggedIn
     if (loggedIn):
-
-        if request.POST.get('selected_date') is None:
+        
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
             selected_date = date.today()
+            print(selected_date)
         else:
-            selected_date = request.POST.get('selected_date')
+            selected_date = request.GET.get('selected_date')
 
         # Determine the journal we are looking at
-        if Daily_Journal.objects.get(date=selected_date) is None:
+        try:
+            journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+            print('already existed')
+        except:
+            print('need to make new one')
             new_journal = Daily_Journal()
+            print(selected_date)
             new_journal.date = selected_date
+            global auth_user_id
+            new_journal.journal_user = User.objects.get(id=auth_user_id)
             new_journal.save()
+            print('journal saved')
             journal_were_looking_at = new_journal
-        else:
-            journal_were_looking_at = Daily_Journal.objects.get(date= selected_date)
 
         journalID = journal_were_looking_at.id
+
+        # dateresult = Daily_Journal.objects.get(date=selected_date)
+
+        # if dateresult.count() == 0:
+        #     new_journal = Daily_Journal()
+        #     new_journal.date = selected_date
+        #     new_journal.save()
+        #     journal_were_looking_at = new_journal
+        # else:
+            
+
 
         # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
         foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
