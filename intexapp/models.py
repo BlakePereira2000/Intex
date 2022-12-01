@@ -4,11 +4,11 @@ import datetime
 # Create your models here.
 class Food(models.Model):
     food_name = models.CharField(max_length=200)
-    sodium = models.DecimalField(max_digits=8, decimal_places=2)
-    protein = models.DecimalField(max_digits=8, decimal_places=2)
-    potassium = models.DecimalField(max_digits=8, decimal_places=2)
-    phosphorus = models.DecimalField(max_digits=8, decimal_places=2)
-    water = models.DecimalField(max_digits=8, decimal_places=2)
+    sodium = models.DecimalField(max_digits=8, decimal_places=6)
+    protein = models.DecimalField(max_digits=8, decimal_places=6)
+    potassium = models.DecimalField(max_digits=8, decimal_places=6)
+    phosphorus = models.DecimalField(max_digits=8, decimal_places=6)
+    water = models.DecimalField(max_digits=8, decimal_places=6)
 
     def __str__(self) :
         return (self.food_name)
@@ -46,15 +46,15 @@ class User(models.Model):
 class Daily_Journal(models.Model):
     date = models.DateField(blank=False)
     journal_user = models.ForeignKey('User', null=False,blank=False,on_delete=models.PROTECT)
-    daily_weight = models.DecimalField(max_digits=8, decimal_places=2)
-    avg_blood_sugar = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_blood_pressure = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_sodium = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_creatinine = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_albumin = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_potassium = models.DecimalField(max_digits=8, decimal_places=2)
-    lab_phosphorus = models.DecimalField(max_digits=8, decimal_places=2)
-    water_intake = models.DecimalField(max_digits=8, decimal_places=2)
+    daily_weight = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    avg_blood_sugar = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_blood_pressure = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_sodium = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_creatinine = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_albumin = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_potassium = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    lab_phosphorus = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    water_intake = models.DecimalField(max_digits=8, decimal_places=2,null=True)
     daily_foods = models.ManyToManyField('Food',through='Food_in_Day')
 
     def __str__(self) :

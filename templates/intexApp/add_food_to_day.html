@@ -7,6 +7,7 @@
         <form name="form" method="get" action="{% url 'food_db_search' %}">
             <label for="search_string">Search for a food</label>
             <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' required>
+            <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
             <button type="submit">Search</button>
         </form>
 
@@ -16,7 +17,13 @@
                     <label for="chosenFood">{{food.food_name}}</label>
                     <input type="radio" class="radio" value="{{food.id}}" name="chosenFood" id="{{food.food_name}}" checked/>
                 {% endfor %}
-                <button type="submit">Add food</button>
+                <label for="grams">How many grams?</label>
+                <input type="number" name='grams' step='.1' >
+                <input type="hidden" name="journalID_in_use" value="{{journalID_in_use}}">
+                <button type="submit">Add food to day</button>
+            </form>
+            <form action="{% url 'foods' %}" method="get">
+                <button type="submit">Don't see your food? Add it to your food collection</button>
             </form>
         </div>
     </div>
