@@ -171,7 +171,11 @@ def todayGraphInfo():
         potassiumCount += potassium
         phosphorusCount += phosphorus
         waterCount += water
-    waterL = journal.water_intake / 1000
+    if journal.water_intake is not None:
+        waterL = journal.water_intake / 1000
+        waterCount += waterL
+    else:
+        waterL = 0
     waterCount += waterL
     
 
@@ -868,10 +872,11 @@ def reportPageView(request):
                 potassiumCount += potassium
                 phosphorusCount += phosphorus
                 waterCount += water
-            
-            waterL = journal.water_intake / 1000
-            waterCount += waterL
-
+            if journal.water_intake is not None:
+                waterL = journal.water_intake / 1000
+                waterCount += waterL
+            else:
+                waterL = 0
             
 
             ############################################ RECCOMMENDED VALUES GRAPH #############################################
