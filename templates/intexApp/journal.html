@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,14 +10,7 @@
 <body class="form">
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-  
-  <form action="{% url 'add_food_to_day'%}" method="get">
-    <button type='submit'>Add food to day</button>
-    <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
-  </form>
-
-
-
+  <br>
   <div class="row">
     <div class="column">
       <p id="demo"></p>
@@ -52,31 +45,97 @@
         {% endfor %}
 
       </table>
-      
-      <!-- (A) HTML LIST -->
-        <ol id="demoA">
-          <li>First</li>
-          <li>Second</li>
-        </ol>
-        
-        <!-- (B) JAVASCRIPT ADD -->
-        <script>
-        function addItem () {
-          // (B1) CREATE NEW LIST ITEM
-          var item = document.createElement("li");
-          item.innerHTML = "New";
-
-          // (B2) APPEND TO LIST
-          document.getElementById("demoA").appendChild(item);
-        }
-        </script>
-        <input type="button" value="Add Item" onclick="addItem()"/>
     </div>
     
     <div class="column">
-      <form name='form' action='{% url 'journal' %}' method='GET'>
-        
+
+      {% comment %} overlays {% endcomment %}
+
+      <div id="dailyStats" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeDaily()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <label for="blSugar">Avg. Blood Sugar</label>
+          <input type="number" name="blSugar" id="blSugar" step=".1">
+
+          <label for="weight">Weight (in lbs)</label>
+          <input type="number" name="weight" id="weight" step=".1" value="{{ user.weight }}">
+          <br><br>
+          <form method="post">
+            <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="water" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeWater()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <label for="addWater">Water (in mL):</label>
+          <input type="number" name="addWater" id="addWater" step=".1">
+
+          <br><br>
+          <form method="post">
+            <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="lab" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeLab()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <label for="k" class="lab">K:</label>
+          <input type="number" name="k" id="k" step=".1" class="lab">
+
+          <label for="phos">Phos:</label>
+          <input type="number" name="phos" id="phos" step=".1">
+
+          <label for="sodium">Sodium:</label>
+          <input type="number" name="sodium" id="sodium" step=".1">
+
+          <label for="creatine">Creatine:</label>
+          <input type="number" name="creatine" id="creatine" step=".1">
+
+          <label for="albumin">Albumin:</label>
+          <input type="number" name="albumin" id="albumin" step=".1">
+
+          <label for="bp">Blood Pressure:</label>
+          <input type="number" name="bp" id="bp" step=".1">
+
+          <br><br>
+          <form method="post">
+            <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+
+      <form action="{% url 'add_food_to_day'%}" method="get">
+        <button type='submit'>+ Add Food to Your Day</button>
+        <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
       </form>
+
+      <div class="overlay-button">
+          <button onclick="openDaily()">+ Daily Stats</button>
+      </div>
+
+      <div class="overlay-button">
+        <button onclick="openWater()">+ Add Water</button>
+      </div>
+
+      <div class="overlay-button">
+        <button onclick="openLab()">+ Lab Results</button>
+      </div>
     </div>
   </div>
 

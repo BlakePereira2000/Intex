@@ -102,9 +102,14 @@ def journalPageView(request):
         # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
         foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
 
+        global auth_user_id
+        user_id = auth_user_id
+        user = User.objects.get(id=user_id)
+
         context = {
             'foods_in_day' : foods_in_day,
             'journalID_in_use' : journalID,
+            'user' : user
             'selected_date': selected_date
         }
         return render(request, 'intexApp/journal.html',context)
