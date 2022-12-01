@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}Reports{% endblock title %}
 {% block content %}
-    stage: {{sodiumRDA}}
     <p>This is the reports page</p>
     <!--Calendar option for the user to choose the day of the report-->
     <form name = 'form' method = 'get' action = "{% url 'report' %}">
@@ -12,6 +11,9 @@
         <button type = 'submit'>Select Date</button>
     </form>
     This is the selected date: <b>{{selectedDate}}</b>. Default should be today's date. 
+
+
+    <!--Micronutrients chart-->
     <div class = "col-md-8">
         <canvas id="myChart" width="600" height="200"></canvas>
         <script>
@@ -19,7 +21,7 @@
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Sodium (mg)', 'Potassium (mg)', 'Phosphorus (mg)', 'Water (g or ml)'],
+                labels: ['Sodium (mg)', 'Potassium (mg)', 'Phosphorus (mg)'],
                 datasets: [{
                     label: 'Amount Consumed',
                     data: [{{sodiumCount}}, {{potassiumCount}}, {{phosphorusCount}}],
@@ -52,7 +54,7 @@
                       stacked: true,
                     },
                     y: {
-                      stacked: true
+                      stacked: false,
                     }
                   },
                 plugins: {
@@ -65,6 +67,9 @@
         });
         </script>
     </div>
+
+
+    <!--Protein Chart -->
     <div class = "col-md-8">
         <canvas id="proteinChart" width="600" height="200"></canvas>
         <script>
@@ -77,9 +82,6 @@
                     label: 'Amount Consumed',
                     data: [{{proteinCount}}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
@@ -88,9 +90,6 @@
                     {label: 'Reccommended Dietary Allowance',
                     data: [{{proteinRDA}}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
@@ -105,7 +104,7 @@
                       stacked: true,
                     },
                     y: {
-                      stacked: true
+                      stacked: false,
                     }
                   },
                 plugins: {
@@ -118,6 +117,9 @@
         });
         </script>
     </div>
+
+
+    <!--Water Chart -->
     <div class = "col-md-8">
         <canvas id="waterChart" width="600" height="200"></canvas>
         <script>
@@ -125,15 +127,13 @@
         const waterChart = new Chart(different2, {
             type: 'bar',
             data: {
-                labels: ['Water (mL)'],
+
+                labels: ['Water (L)'],
+
                 datasets: [{
                     label: 'Amount Consumed',
                     data: [{{waterCount}}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
                     ],
@@ -141,10 +141,6 @@
                     {label: 'Reccommended Dietary Allowance',
                     data: [{{waterRDA}}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
                     ],
@@ -158,7 +154,7 @@
                       stacked: true,
                     },
                     y: {
-                      stacked: true
+                      stacked: false,
                     }
                   },
                 plugins: {
