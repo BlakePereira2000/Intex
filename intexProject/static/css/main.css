@@ -6,7 +6,7 @@
   --zesty-orange: #f05c24;
   --body-font: "Inter", sans-serif;
   --heading-font: "Playfair Display", serif;
-  --checkbox-size: 28px;
+  --checkbox-size: 24px;
 }
 
 * {
@@ -398,6 +398,10 @@ form button:hover {
   cursor: pointer;
 }
 
+.alert {
+  color: var(--alerts);
+}
+
 form input:hover,
 form input:focus {
   background-color: rgb(255, 252, 248);
@@ -521,7 +525,7 @@ input#selected_date::-webkit-calendar-picker-indicator{
   left:0;
   background: #0000;
   position:absolute;
-  transform: scale(12)
+  transform: scale(36)
 }
 
 .form section img {
@@ -704,15 +708,6 @@ h2 {
 }
 
 @media (min-width: 600px) {
-  .cards {
-    flex-direction: row;
-    flex-wrap: wrap;
-    
-  }
-  
-  .card {
-    flex: 0 1 40%;
-  }
 
   form {
     grid-template-columns: max-content 1fr;
@@ -727,10 +722,6 @@ h2 {
     grid-column-start: 2;
   }
   
-  form > input,
-  select {
-    margin: .5rem .5rem;
-  }
 
   form > label {
     justify-self: end;
