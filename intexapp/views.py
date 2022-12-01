@@ -3,7 +3,12 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
-from datetime import date
+from datetime import datetime, date
+
+# For embedding SQL queries in python
+import psycopg2
+# For accessing information in settings.py file
+from django.conf import settings
 
 # Create your views here.
 
@@ -60,16 +65,19 @@ def aboutPageView(request):
 
 
 ###################### Journal Functions ####################
+
 def journalPageView(request):
     global loggedIn
     if (loggedIn):
         
         print(request.GET.get('selected_date'))
         if request.GET.get('selected_date') is None:
-            selected_date = date.today()
+            selected_date = date.today()        # Keeps as datetime dt for template formatting
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
+            # should turn this into datetime format so that template can format it
+            selected_date = datetime.strptime(selected_date,'%Y-%m-%d')
 
         # Determine the journal we are looking at
         try:
@@ -102,12 +110,224 @@ def journalPageView(request):
             'foods_in_day' : foods_in_day,
             'journalID_in_use' : journalID,
             'user' : user,
-            'selected_date': selected_date
+            'selected_date': selected_date,
+            'journal' : journal_were_looking_at
         }
         print(selected_date)
         return render(request, 'intexApp/journal.html',context)
     else:
         return redirect('login')
+
+
+####### Journal Overlays #########
+
+def updateDailyStatsPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newBlood = request.POST.get('avg_blood_sugar')
+        newWeight = request.POST.get('daily_weight')
+    
+        updateJournal.avg_blood_sugar = newBlood
+        updateJournal.daily_weight = newWeight
+
+        updateJournal.save()
+
+############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+    return render(request, 'intexApp/journal.html')
+
+    
+
+def updateWaterPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newWater = request.POST.get('water_intake')
+
+        updateJournal.water_intake = newWater
+
+        updateJournal.save()
+
+        ############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+
+    return render(request, 'intexApp/journal.html') 
+
+def updateLabPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newK = request.POST.get('lab_potassium')
+        newPhos = request.POST.get('lab_phosphorus')
+        newSodium = request.POST.get('lab_sodium')
+        newCrea = request.POST.get('lab_creatinine')
+        newAlb = request.POST.get('lab_albumin')
+        newBP = request.POST.get('lab_blood_pressure')
+
+        updateJournal.lab_potassium = newK
+        updateJournal.lab_phosphorus = newPhos
+        updateJournal.lab_sodium = newSodium
+        updateJournal.lab_creatinine = newCrea
+        updateJournal.lab_albumin = newAlb
+        updateJournal.lab_blood_pressure = newBP
+
+        updateJournal.save()
+
+        ############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+
+    return render(request, 'intexApp/journal.html') 
 
 
 # Access "add food to journal" page
@@ -118,7 +338,6 @@ def add_food_to_dayPageView(request):
         'journalID_in_use' : journalID_in_use
     }
     return render(request,'intexApp/add_food_to_day.html', context)
-
 
 # Query the existing food db for foods based on search
 def food_db_searchView(request):
@@ -150,7 +369,6 @@ def save_food_to_dayView(request):
     return redirect('journal')
 
 
-
 # Save the edits made to the journal entry in the database
 def save_journal_editsView(request):
     selected_date = request.POST.get('date_to_return_to')
@@ -171,24 +389,21 @@ def save_journal_editsView(request):
 
     return redirect('journal')
 
-
-
-
-
 ################### Report Views #####################
 def reportPageView(request):
     global loggedIn
     if (loggedIn):
 
         # sets default to avoid errors
-        selectedDate = '2022-11-30'
+        if request.POST.get('selected_date') is None:
+            selectedDate = str(date.today())
+        else:
+            selectedDate = request.POST.get('selected_date')
 
         if request.method == 'GET':
 
             #####################################FOOD CONSUMED GRAPHS############################################
-            #Get the date selected  from the calendar
-            #selectedDate = request.GET['selected_date']
-
+     
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
@@ -367,6 +582,7 @@ def updateUserPageView(request):
 
         updateUser.save()
 
+############ should be the exact same as user view ##############
     global loggedIn
     if (loggedIn):
         user_id = auth_user_id
@@ -588,3 +804,71 @@ def addNewFoodPageView (request):
     else:
         return redirect('login')
 
+def deleteFoodPageView(request):
+    global loggedIn
+    if (loggedIn): 
+
+        data = Food.objects.all()
+
+        if request.method == 'POST':
+
+            chosenDbItem= str(request.POST.get('chosenDbItem'))
+
+            foodInDays = Food_in_Day.objects.all()
+            usedInJournal = 'No'
+
+            for food in data:
+
+                if food.food_name == chosenDbItem:
+                    currentFoodId = food.id
+
+                    # checking if the food is used in a journal. If it is, it can't be deleted.
+                    for foodInDay in foodInDays:
+
+                        # If the current food appears in any journals.
+                        if foodInDay.food_id == currentFoodId:
+                            usedInJournal = 'Yes'
+                        else:
+                            # Since the food isn't in any journals, delete the food from database.
+                            connection = ''
+                            
+
+                            try:
+                                connection = psycopg2.connect(user="postgres",
+                                                            password= settings.DATABASES['default']['PASSWORD'],
+                                                            host="localhost",
+                                                            port="5432",
+                                                            database="kidney"
+                                                            )
+
+                                cursor = connection.cursor()
+
+                                # Update single record now
+                                sql_delete_query = """Delete from intexapp_food where id = %s"""
+                                cursor.execute(sql_delete_query, (food.id,))
+                                connection.commit()
+                                count = cursor.rowcount
+                                print(count, "Record deleted successfully ")
+
+                            except (Exception, psycopg2.Error) as error:
+                                print("Error in Delete operation", error)
+
+                            finally:
+                                # closing database connection.
+                                if connection:
+                                    cursor.close()
+                                    connection.close()
+                                    print("PostgreSQL connection is closed")
+
+        
+        data = Food.objects.all()
+
+        context = {
+            'userFoods': data,
+            'usedInJournal': usedInJournal,
+            'foodName': chosenDbItem,
+        }
+
+        return render(request, 'intexApp/myfoods.html', context)
+    else:
+        return redirect('login')

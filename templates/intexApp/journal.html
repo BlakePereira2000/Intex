@@ -10,17 +10,10 @@
 <body class="form">
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-
-
-
-
-
   <br>
-
   <div class="row">
     <div class="column">
       <p id="demo"></p>
-      
 
       <form action="{% url 'journal' %}" method='GET' id='form_submit'>
         <input type="date" id="theDate" name="selected_date" onchange='change()'>
@@ -30,7 +23,7 @@
     </div>
     
     <div class="column">
-      <h3 id = 'middleDate'style='border-style: ridge; border-radius: 5px;color:black;'>{{selected_date}}</h3>
+      <h3>{{selected_date | date:'M d, Y'}}</h3>
 
       {% comment %} Results Table {% endcomment %}
       <table>
@@ -79,13 +72,14 @@
       
         <!-- Overlay content -->
         <div class="overlay-content">
-          <label for="blSugar">Avg. Blood Sugar</label>
-          <input type="number" name="blSugar" id="blSugar" step=".1">
+          <form method="post" action="{% url 'update_daily_stats' %}">
+            {% csrf_token %}
+            <label for="avg_blood_sugar">Avg. Blood Sugar</label>
+            <input type="number" name="avg_blood_sugar" id="avg_blood_sugar" step=".1" value="{{ journal.avg_blood_sugar}}">
 
-          <label for="weight">Weight (in lbs)</label>
-          <input type="number" name="weight" id="weight" step=".1" value="{{ user.weight }}">
-          <br><br>
-          <form method="post">
+            <label for="daily_weight">Weight (in lbs)</label>
+            <input type="number" name="daily_weight" id="daily_weight" step=".1" value="{{ journal.daily_weight }}">
+            <br><br>
             <button type="submit">Add to Journal</button>
           </form>
         </div>
@@ -98,43 +92,45 @@
       
         <!-- Overlay content -->
         <div class="overlay-content">
-          <label for="addWater">Water (in mL):</label>
-          <input type="number" name="addWater" id="addWater" step=".1">
+          <form method="post" action="{% url 'update_water' %}">
+            {% csrf_token %}
+            <label for="water_intake">Water (in mL):</label>
+            <input type="number" name="water_intake" id="water_intake" step=".1" value="{{journal.water_intake}}">
 
-          <br><br>
-          <form method="post">
-            <button type="submit">Add to Journal</button>
+            <br><br>
+              <button type="submit">Add to Journal</button>
           </form>
         </div>
       </div>
 
       <div id="lab" class="overlay">
-
+        
         <!-- Button to close the overlay navigation -->
         <a href="javascript:void(0)" class="closebtn" onclick="closeLab()">&times;</a>
       
         <!-- Overlay content -->
         <div class="overlay-content">
-          <label for="k" class="lab">K:</label>
-          <input type="number" name="k" id="k" step=".1" class="lab">
+          <form method="post" action="{% url 'update_lab' %}">
+            {% csrf_token %}
+            <label for="lab_potassium" class="lab">K (in grams):</label>
+            <input type="number" name="lab_potassium" id="lab_potassium" step=".1" class="lab" value="{{journal.lab_potassium}}">
 
-          <label for="phos">Phos:</label>
-          <input type="number" name="phos" id="phos" step=".1">
+            <label for="lab_phosphorus">Phos (in grams):</label>
+            <input type="number" name="lab_phosphorus" id="lab_phosphorus" step=".1" value="{{journal.lab_phosphorus}}">
 
-          <label for="sodium">Sodium:</label>
-          <input type="number" name="sodium" id="sodium" step=".1">
+            <label for="lab_sodium">Sodium (in grams):</label>
+            <input type="number" name="lab_sodium" id="lab_sodium" step=".1" value="{{journal.lab_sodium}}">
 
-          <label for="creatine">Creatine:</label>
-          <input type="number" name="creatine" id="creatine" step=".1">
+            <label for="lab_creatinine">Creatinine (in grams):</label>
+            <input type="number" name="lab_creatinine" id="lab_creatinine" step=".1" value="{{journal.lab_creatinine}}">
 
-          <label for="albumin">Albumin:</label>
-          <input type="number" name="albumin" id="albumin" step=".1">
+            <label for="lab_albumin">Albumin (in grams):</label>
+            <input type="number" name="lab_albumin" id="lab_albumin" step=".1" value="{{journal.lab_albumin}}">
 
-          <label for="bp">Blood Pressure:</label>
-          <input type="number" name="bp" id="bp" step=".1">
+            <label for="lab_blood_pressure">Blood Pressure:</label>
+            <input type="number" name="lab_blood_pressure" id="lab_blood_pressure" step=".1" value="{{journal.lab_blood_pressure}}">
 
-          <br><br>
-          <form method="post">
+            <br><br>
             <button type="submit">Add to Journal</button>
           </form>
         </div>

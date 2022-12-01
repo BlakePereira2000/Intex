@@ -2,18 +2,72 @@
 {% load static %}
 {% block title %}My Foods{% endblock title %}
 {% block content %}
-<p>
-User's saved foods:<br>
-{% for foodItem in userFoods %}
-<b>--- {{foodItem.food_name}}</b><br>
-{% endfor %}
-</p>
+<div>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for foods..">
 
-<p>Api food search and database adding below. This will move to the journal page eventually:</p>
+<table id="myTable">
+    <tr class="header">
+    <th style="width:60%;">MyFoods</th>
+    </tr>
+
+    <form name="form" method="post" action="{% url 'deleteFood' %}">
+        {% csrf_token %}
+        {% for foodItem in userFoods %}
+        <tr>
+            <td style= 'border-bottom: 1px solid black; text-align: left; padding: 12px'>
+                <div class="row">
+                    <div style='float: left; width: 10%;'>
+                        <input type="radio" class="radio" value="{{foodItem}}" name="chosenDbItem" id="{{foodItem.food_name}}"/>
+                    </div>
+                    <div style='float: left; width: 90%;'>
+                        <label for="chosenDbItem">{{foodItem.food_name}}</label>
+                    </div>
+                </div>             
+            
+            </td>
+        </tr>    
+        {% endfor %}
+        <button type="submit">Delete Food</button>
+    </form>
+
+</table>
+
+<script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    </script>
+</div>
+{% if usedInJournal == 'Yes' %}
+<div style='color: red;'><b>{{foodName}}</b> is being used in a journal entry and can't be deleted!</div>
+{% endif %}
+{% if usedInJournal == 'No' %}
+<div style='color: green;'><b>{{foodName}}</b> was successfully deleted!</div>
+{% endif %}
+
+<div style='padding-top: 50px;'><b>Search for new foods to add:</b></div>
 
 <form name="form" method="get" action="{% url 'apisearch' %}">
-    <label for="search_string">Search for a food</label>
-    <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' required>
+    <label for="search_string"></label>
+    <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' placeholder="Search for new foods.." required>
     <button type="submit">Search</button>
 </form>
 
@@ -45,26 +99,3 @@ User's saved foods:<br>
 {% endblock %}
 
 
-<!-- This for loop displays test information
-
-
-Serving size:
-{{num_grams}} <br>
-
-
-<label for="num_grams">Serving size (grams)</label>
-<input type="number" value="{{num_grams}}" name='num_grams' id='num_grams' placeholder="100">
-<button type="submit">Submit</button>
-
-{% for item in validItemList %}
-<p>
-<b>{{item.name}}</b> <br>
-Protein per {{num_grams}} gram(s): <b>{{item.protein}} g</b><br>
-Phosphorus per {{num_grams}} gram(s): <b>{{item.phosphorus}} mg</b><br>
-Potassium per {{num_grams}} gram(s): <b>{{item.potassium}} mg</b><br>
-Sodium per {{num_grams}} gram(s): <b>{{item.sodium}} mg</b><br>
-Water per {{num_grams}} gram(s): <b>{{item.water}} ml</b>
-</p>
-{% endfor %} 
-
--->
