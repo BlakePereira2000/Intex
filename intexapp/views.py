@@ -461,6 +461,7 @@ def reportPageView(request):
                 phosphorus = (foodItem['phosphorus'] * (foodItem['numGrams'] * 1000))
                 potassium = foodItem['potassium'] * (foodItem['numGrams'] * 1000)
                 water = foodItem['water'] * ((foodItem['numGrams']) / 1000)
+
                 sodiumCount += sodium
                 proteinCount += protein
                 potassiumCount += potassium
@@ -474,49 +475,119 @@ def reportPageView(request):
             users = User.objects.all()
             firstUser = users[0]
 
+            #initialize all of the alerts to be empty
+            sodiumAlert = ''
+            potassiumAlert = ''
+            proteinAlert = ''
+            phosphorusAlert =''
+            waterAlert = ''
+
+            
             #if the user has a normal stage of kidney disease
             if (firstUser.stage < 3):
                 sodiumRDA = 2300
+                if (sodiumCount > sodiumRDA):
+                    diff = sodiumCount - sodiumRDA
+                    sodiumAlert = 'Alert: Your sodium level is ' + diff +' above the daily recommended allowance!'
+
                 potassiumRDA = 3500
+                if (potassiumCount > potassiumRDA):
+                    diff = potassiumCount - potassiumRDA
+                    potassiumAlert = 'Alert: Your sodium level is ' + diff +' above the daily recommended allowance!'
+
                 phosphorusRDA = 3000
+                if (phosphorusCount > phosphorusRDA):
+                    diff = phosphorusCount - phosphorusRDA
+                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
+
                 #this is to get it in g/kg of body weight
                 proteinRDA = 0.8 * (float(firstUser.weight) * 0.453592)
+                if (proteinCount > proteinRDA):
+                    diff = int(proteinCount) - int(proteinRDA)
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
+
 
                 #if they select male or other for their gender for water intake
                 if((firstUser.gender == 'M') or (firstUser.gender == 'O')):
                     waterRDA = 3.7
+                    if (waterCount > waterRDA):
+                        diff = waterCount - waterRDA
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
 
                 #if they select their gender as female
                 else:
                     waterRDA = 2.7
+                    if (waterCount > waterRDA):
+                        diff = waterCount - waterRDA
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
 
             
             #if they have stage 3/4 of kidney disease
             if ((firstUser.stage < 5) and (firstUser.stage > 2)):
                 sodiumRDA = 2300
+                if (sodiumCount > sodiumRDA):
+                    diff = sodiumCount - sodiumRDA
+                    sodiumAlert = 'Alert: Your sodium level is ' + str(diff) +' above the daily recommended allowance!'
+
                 potassiumRDA = 3000
+                if (potassiumCount > potassiumRDA):
+                    diff = potassiumCount - potassiumRDA
+                    potassiumAlert = 'Alert: Your potassium level is ' + str(diff) +' above the daily recommended allowance!'
+
                 phosphorusRDA = 1000
+                if (phosphorusCount > phosphorusRDA):
+                    diff = phosphorusCount - phosphorusRDA
+                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
+
                 proteinRDA = 0.6 * (float(firstUser.weight) * 0.453592)
+                if (proteinCount > proteinRDA):
+                    diff = int(proteinCount) - int(proteinRDA)
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
 
                 #if they select male or other for their gender for water intake
-                if((firstUser.gender== 'M') | (firstUser.gender == 'O')):
+                if((firstUser.gender == 'M') | (firstUser.gender == 'O')):
                     waterRDA = 3.7
+                    if (waterCount > waterRDA):
+                        diff = waterCount - waterRDA
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
 
                 #if they select their gender as female
-                else:
-                    waterRDA = 1000 * 2.7
+                elif (firstUser.gender == 'F'):
+                    waterRDA = 2.7
+                    if (waterCount > waterRDA):
+                        diff = waterCount - waterRDA
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
 
             if (firstUser.stage == 5):
                 sodiumRDA = 2000
+                if (sodiumCount > sodiumRDA):
+                    diff = sodiumCount - sodiumRDA
+                    sodiumAlert = 'Alert: Your sodium level is ' + str(diff) +' above the daily recommended allowance!'
+
                 potassiumRDA = 2000
+                if (potassiumCount > potassiumRDA):
+                    diff = potassiumCount - potassiumRDA
+                    potassiumAlert = 'Alert: Your potassium level is ' + str(diff) +' above the daily recommended allowance!'
+
                 phosphorusRDA = 1000
+                if (phosphorusCount > phosphorusRDA):
+                    diff = phosphorusCount - phosphorusRDA
+                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
+
                 proteinRDA = 1.2 * (float(firstUser.weight) * 0.453592)
+                if (proteinCount > proteinRDA):
+                    diff = int(proteinCount) - int(proteinRDA)
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
+
                 waterRDA = 1
+                if (waterCount > waterRDA):
+                        diff = waterCount - waterRDA
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+
+    
+
 
             
-
-            
-
             context = {
             #Counsumed Values
             'sodiumCount': sodiumCount,
@@ -532,6 +603,13 @@ def reportPageView(request):
             'phosphorusRDA': phosphorusRDA,
             'proteinRDA': proteinRDA,
             'waterRDA': waterRDA,
+
+            #Alerts
+            'sodiumAlert': sodiumAlert,
+            'potassiumAlert': potassiumAlert,
+            'phosphorusAlert': phosphorusAlert,
+            'proteinAlert': proteinAlert,
+            'waterAlert': waterAlert,
             }
 
         else:
