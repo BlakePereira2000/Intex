@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'kidney',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'LOCALHOST' : 'localhost',
+        'HOST':'localhost',
         'PORT': 5432
     }
 }
