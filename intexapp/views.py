@@ -601,12 +601,14 @@ def reportPageView(request):
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
+            journal = {}
 
             #for every object in dail journals check if the selected date is equal to the
             #date the journal was written, if it is save that journal id
             for dailyJournal in dailyJournals:
                 if str(dailyJournal.date) == selectedDate:
                     journalId = dailyJournal.id
+                    journal = dailyJournal
 
             #gather all of the objects from the food in day table, create an empty food in days list
             foodInDays = Food_in_Day.objects.all()
@@ -660,6 +662,9 @@ def reportPageView(request):
                 potassiumCount += potassium
                 phosphorusCount += phosphorus
                 waterCount += water
+            
+            waterL = journal.water_intake / 1000
+            waterCount += waterL
 
             
 
