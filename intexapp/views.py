@@ -5,6 +5,11 @@ import requests
 import json
 from datetime import date
 
+# For embedding SQL queries in python
+import psycopg2
+# For accessing information in settings.py file
+from django.conf import settings
+
 # Create your views here.
 
 # Create global logged in variable, set it to its default
@@ -58,7 +63,6 @@ def indexPageView(request):
 def aboutPageView(request):
     return render(request, 'intexApp/about.html')
 
-
 ########### Journal functions ####################
 def journalPageView(request):
     global loggedIn
@@ -111,12 +115,10 @@ def journalPageView(request):
     else:
         return redirect('login')
 
-
 # Access "add food to journal" page
 def add_food_to_dayPageView(request):
     
     return render(request,'intexApp/add_food_to_day.html')
-
 
 # Query the existing food db for foods based on search
 def food_db_searchView(request):
@@ -137,10 +139,6 @@ def save_food_to_dayView(request):
     dj_in_use = Daily_Journal.objects.get(id=1) # hardcoded to 1. It should be the journal that is being used.
     dj_in_use.daily_foods.add(request.POST.get('chosenFood'), through_defaults={'grams':grams})
     return redirect('journal')
-
-
-
-
 
 ################### Report Views #####################
 def reportPageView(request):
@@ -489,3 +487,71 @@ def addNewFoodPageView (request):
     else:
         return redirect('login')
 
+def deleteFoodPageView(request):
+    global loggedIn
+    if (loggedIn): 
+
+        data = Food.objects.all()
+
+        if request.method == 'POST':
+
+            chosenDbItem= str(request.POST.get('chosenDbItem'))
+
+            foodInDays = Food_in_Day.objects.all()
+            usedInJournal = 'No'
+
+            for food in data:
+
+                if food.food_name == chosenDbItem:
+                    currentFoodId = food.id
+
+                    # checking if the food is used in a journal. If it is, it can't be deleted.
+                    for foodInDay in foodInDays:
+
+                        # If the current food appears in any journals.
+                        if foodInDay.food_id == currentFoodId:
+                            usedInJournal = 'Yes'
+                        else:
+                            # Since the food isn't in any journals, delete the food from database.
+                            connection = ''
+                            
+
+                            try:
+                                connection = psycopg2.connect(user="postgres",
+                                                            password= settings.DATABASES['default']['PASSWORD'],
+                                                            host="localhost",
+                                                            port="5432",
+                                                            database="kidney"
+                                                            )
+
+                                cursor = connection.cursor()
+
+                                # Update single record now
+                                sql_delete_query = """Delete from intexapp_food where id = %s"""
+                                cursor.execute(sql_delete_query, (food.id,))
+                                connection.commit()
+                                count = cursor.rowcount
+                                print(count, "Record deleted successfully ")
+
+                            except (Exception, psycopg2.Error) as error:
+                                print("Error in Delete operation", error)
+
+                            finally:
+                                # closing database connection.
+                                if connection:
+                                    cursor.close()
+                                    connection.close()
+                                    print("PostgreSQL connection is closed")
+
+        
+        data = Food.objects.all()
+
+        context = {
+            'userFoods': data,
+            'usedInJournal': usedInJournal,
+            'foodName': chosenDbItem,
+        }
+
+        return render(request, 'intexApp/myfoods.html', context)
+    else:
+        return redirect('login')
