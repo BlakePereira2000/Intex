@@ -10,18 +10,25 @@
 <body class="form">
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-  <br>
-  <div class="row">
-    <div class="column">
-      <h3 style='text-align: center'>Select Date:</h3>
-      <form action="{% url 'journal' %}" method='GET' id='form_submit' class="report-date">
-        <input type="date" id="selected_date" name="selected_date" onchange='change()'>
-        <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
-      </form>
+
+<div class="row" style='width: 100%;'>  
+  <form action="{% url 'journal' %}" method='GET' id='form_submit' class="report-date" style='padding: 0px;'>
+    
+    <input type="date" id="selected_date" name="selected_date" onchange='change()'style='width: 100%; padding: 10px;'>
+    <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
+    
+
+    <div style='width: 50%;'>
+    <h3 style='text-align: left;'>{{selected_date | date:'d M Y'}}</h3>
     </div>
     
-    <div class="column">
-      <h3>{{selected_date | date:'M d, Y'}}</h3>
+  </form>
+</div>
+
+  <div class="row">     
+
+    <div class="column" style='width: 70%;'>
+      
 
       {% comment %} Results Table {% endcomment %}
       <table>
@@ -43,9 +50,10 @@
             <input type="hidden" name='date_to_return_to' value="{{selected_date}}">
             <input type="number" name="food_grams" id="food_grams" value="{{food.grams}}">
             <input type="hidden" name='food_in_day_id' value="{{food.id}}">
+
             <div>
               <button type="submit" class="save-changes">Save Journal Changes</button>
-            </div   
+            </div>   
             </form>
           </td>
           
@@ -59,7 +67,7 @@
 
     </div>
     
-    <div class="column">
+    <div class="column" style='width: 30%;'>
 
       {% comment %} overlays {% endcomment %}
 
