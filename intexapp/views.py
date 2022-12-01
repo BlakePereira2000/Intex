@@ -109,7 +109,7 @@ def journalPageView(request):
         context = {
             'foods_in_day' : foods_in_day,
             'journalID_in_use' : journalID,
-            'user' : user
+            'user' : user,
             'selected_date': selected_date
         }
         return render(request, 'intexApp/journal.html',context)
