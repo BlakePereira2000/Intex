@@ -5,6 +5,11 @@ import requests
 import json
 from datetime import datetime, date
 
+# For embedding SQL queries in python
+import psycopg2
+# For accessing information in settings.py file
+from django.conf import settings
+
 # Create your views here.
 
 # Create global logged in variable, set it to its default
@@ -60,6 +65,7 @@ def aboutPageView(request):
 
 
 ###################### Journal Functions ####################
+
 def journalPageView(request):
     global loggedIn
     if (loggedIn):
@@ -110,6 +116,7 @@ def journalPageView(request):
         return render(request, 'intexApp/journal.html',context)
     else:
         return redirect('login')
+
 
 ####### Journal Overlays #########
 
@@ -331,7 +338,6 @@ def add_food_to_dayPageView(request):
     }
     return render(request,'intexApp/add_food_to_day.html', context)
 
-
 # Query the existing food db for foods based on search
 def food_db_searchView(request):
     # look for term anywhere within title
@@ -362,7 +368,6 @@ def save_food_to_dayView(request):
     return redirect('journal')
 
 
-
 # Save the edits made to the journal entry in the database
 def save_journal_editsView(request):
     selected_date = request.POST.get('date_to_return_to')
@@ -383,31 +388,21 @@ def save_journal_editsView(request):
 
     return redirect('journal')
 
-
-
-
-
-
-
-
 ################### Report Views #####################
 def reportPageView(request):
     global loggedIn
     if (loggedIn):
 
         # sets default to avoid errors
-        selectedDate = '2022-11-30'
+        if request.POST.get('selected_date') is None:
+            selectedDate = str(date.today())
+        else:
+            selectedDate = request.POST.get('selected_date')
 
         if request.method == 'GET':
 
             #####################################FOOD CONSUMED GRAPHS############################################
-            #Get the date selected  from the calendar
-            if request.GET.get('selected_date') is None:
-                selectedDate = date.today()
-            else:
-                selectedDate = request.GET.get('selected_date')
-            print(selectedDate)
-
+     
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
@@ -808,3 +803,71 @@ def addNewFoodPageView (request):
     else:
         return redirect('login')
 
+def deleteFoodPageView(request):
+    global loggedIn
+    if (loggedIn): 
+
+        data = Food.objects.all()
+
+        if request.method == 'POST':
+
+            chosenDbItem= str(request.POST.get('chosenDbItem'))
+
+            foodInDays = Food_in_Day.objects.all()
+            usedInJournal = 'No'
+
+            for food in data:
+
+                if food.food_name == chosenDbItem:
+                    currentFoodId = food.id
+
+                    # checking if the food is used in a journal. If it is, it can't be deleted.
+                    for foodInDay in foodInDays:
+
+                        # If the current food appears in any journals.
+                        if foodInDay.food_id == currentFoodId:
+                            usedInJournal = 'Yes'
+                        else:
+                            # Since the food isn't in any journals, delete the food from database.
+                            connection = ''
+                            
+
+                            try:
+                                connection = psycopg2.connect(user="postgres",
+                                                            password= settings.DATABASES['default']['PASSWORD'],
+                                                            host="localhost",
+                                                            port="5432",
+                                                            database="kidney"
+                                                            )
+
+                                cursor = connection.cursor()
+
+                                # Update single record now
+                                sql_delete_query = """Delete from intexapp_food where id = %s"""
+                                cursor.execute(sql_delete_query, (food.id,))
+                                connection.commit()
+                                count = cursor.rowcount
+                                print(count, "Record deleted successfully ")
+
+                            except (Exception, psycopg2.Error) as error:
+                                print("Error in Delete operation", error)
+
+                            finally:
+                                # closing database connection.
+                                if connection:
+                                    cursor.close()
+                                    connection.close()
+                                    print("PostgreSQL connection is closed")
+
+        
+        data = Food.objects.all()
+
+        context = {
+            'userFoods': data,
+            'usedInJournal': usedInJournal,
+            'foodName': chosenDbItem,
+        }
+
+        return render(request, 'intexApp/myfoods.html', context)
+    else:
+        return redirect('login')
