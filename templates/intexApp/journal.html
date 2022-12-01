@@ -27,9 +27,9 @@
       <table>
         <th>
           <tr>
-            <td>Food ID</td>
-            <td>Food Name</td>
-            <td>Grams</td>
+            <td><strong>Food ID</strong></td>
+            <td><strong>Food Name</strong></td>
+            <td><strong>Grams</strong></td>
           </tr>
         </th>
         
@@ -75,10 +75,22 @@
           <form method="post" action="{% url 'update_daily_stats' %}">
             {% csrf_token %}
             <label for="avg_blood_sugar">Avg. Blood Sugar</label>
-            <input type="number" name="avg_blood_sugar" id="avg_blood_sugar" step=".1" value="{{ journal.avg_blood_sugar}}">
+            <input type="number" name="avg_blood_sugar" id="avg_blood_sugar" step=".1" 
+            {% if journal.avg_blood_sugar is null %}
+            value="0"
+            {% else %}
+            value="{{journal.avg_blood_sugar}}"
+            {% endif %}
+            required>
 
             <label for="daily_weight">Weight (in lbs)</label>
-            <input type="number" name="daily_weight" id="daily_weight" step=".1" value="{{ journal.daily_weight }}">
+            <input type="number" name="daily_weight" id="daily_weight" step=".1" 
+            {% if journal.daily_weight is null %}
+            value="0"
+            {% else %}
+            value="{{journal.daily_weight}}"
+            {% endif %}
+            required>
             <br><br>
             <button type="submit">Add to Journal</button>
           </form>
@@ -95,7 +107,13 @@
           <form method="post" action="{% url 'update_water' %}">
             {% csrf_token %}
             <label for="water_intake">Water (in mL):</label>
-            <input type="number" name="water_intake" id="water_intake" step=".1" value="{{journal.water_intake}}">
+            <input type="number" name="water_intake" id="water_intake" step=".1" 
+            {% if journal.water_intake is null %}
+            value="0"
+            {% else %}
+            value="{{journal.water_intake}}"
+            {% endif %}
+            required>
 
             <br><br>
             <button type="submit">Add to Journal</button>
@@ -113,22 +131,57 @@
           <form method="post" action="{% url 'update_lab' %}">
             {% csrf_token %}
             <label for="lab_potassium" class="lab">K (in grams):</label>
-            <input type="number" name="lab_potassium" id="lab_potassium" step=".1" class="lab" value="{{journal.lab_potassium}}">
+            <input type="number" name="lab_potassium" id="lab_potassium" step=".1" class="lab"
+            {% if journal.lab_potassium is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_potassium}}"
+            {% endif %}
+            required>
 
             <label for="lab_phosphorus">Phos (in grams):</label>
-            <input type="number" name="lab_phosphorus" id="lab_phosphorus" step=".1" value="{{journal.lab_phosphorus}}">
+            <input type="number" name="lab_phosphorus" id="lab_phosphorus" step=".1"
+            {% if journal.lab_phosphorus is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_phosphorus}}"
+            {% endif %}
+            required>
 
             <label for="lab_sodium">Sodium (in grams):</label>
-            <input type="number" name="lab_sodium" id="lab_sodium" step=".1" value="{{journal.lab_sodium}}">
+            <input type="number" name="lab_sodium" id="lab_sodium" step=".1"
+            {% if journal.lab_sodium is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_sodium}}"
+            {% endif %}
+            required>
 
             <label for="lab_creatinine">Creatinine (in grams):</label>
-            <input type="number" name="lab_creatinine" id="lab_creatinine" step=".1" value="{{journal.lab_creatinine}}">
+            <input type="number" name="lab_creatinine" id="lab_creatinine" step=".1" 
+            {% if journal.lab_creatinine is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_creatinine}}"
+            {% endif %}
+            required>
 
             <label for="lab_albumin">Albumin (in grams):</label>
-            <input type="number" name="lab_albumin" id="lab_albumin" step=".1" value="{{journal.lab_albumin}}">
+            <input type="number" name="lab_albumin" id="lab_albumin" step=".1"             
+            {% if journal.lab_albumin is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_albumin}}"
+            {% endif %} required>
 
             <label for="lab_blood_pressure">Blood Pressure:</label>
-            <input type="number" name="lab_blood_pressure" id="lab_blood_pressure" step=".1" value="{{journal.lab_blood_pressure}}">
+            <input type="number" name="lab_blood_pressure" id="lab_blood_pressure" step=".1"
+            {% if journal.lab_blood_pressure is null %}
+            value="0"
+            {% else %}
+            value="{{journal.lab_blood_pressure}}"
+            {% endif %}
+            required>
 
             <br><br>
             <button type="submit">Add to Journal</button>

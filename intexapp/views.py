@@ -81,14 +81,15 @@ def journalPageView(request):
 
         # Determine the journal we are looking at
         try:
-            journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+            global auth_user_id
+            User.objects.get(id=auth_user_id)
+            journal_were_looking_at = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
             print('already existed')
         except:
             print('need to make new one')
             new_journal = Daily_Journal()
             print(selected_date)
             new_journal.date = selected_date
-            global auth_user_id
             print('Authuserid = ' + str(auth_user_id))
             new_journal.journal_user = User.objects.get(id=auth_user_id)
             new_journal.save()
@@ -129,8 +130,8 @@ def updateDailyStatsPageView(request):
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
-
-        updateJournal = Daily_Journal.objects.get(date=selected_date)
+        User.objects.get(id=auth_user_id)
+        updateJournal = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
 
         newBlood = request.POST.get('avg_blood_sugar')
         newWeight = request.POST.get('daily_weight')
@@ -153,14 +154,14 @@ def updateDailyStatsPageView(request):
 
             # Determine the journal we are looking at
             try:
-                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                User.objects.get(id=auth_user_id)
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
                 print('already existed')
             except:
                 print('need to make new one')
                 new_journal = Daily_Journal()
                 print(selected_date)
                 new_journal.date = selected_date
-                global auth_user_id
                 new_journal.journal_user = User.objects.get(id=auth_user_id)
                 new_journal.save()
                 print('journal saved')
@@ -197,8 +198,8 @@ def updateWaterPageView(request):
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
-
-        updateJournal = Daily_Journal.objects.get(date=selected_date)
+        User.objects.get(id=auth_user_id)
+        updateJournal = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
 
         newWater = request.POST.get('water_intake')
 
@@ -207,7 +208,6 @@ def updateWaterPageView(request):
         updateJournal.save()
 
         ############ should be exact same as journal views ##############
-        global loggedIn
         if (loggedIn):
         
             print(request.GET.get('selected_date'))
@@ -219,14 +219,14 @@ def updateWaterPageView(request):
 
             # Determine the journal we are looking at
             try:
-                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                User.objects.get(id=auth_user_id)
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id )
                 print('already existed')
             except:
                 print('need to make new one')
                 new_journal = Daily_Journal()
                 print(selected_date)
                 new_journal.date = selected_date
-                global auth_user_id
                 new_journal.journal_user = User.objects.get(id=auth_user_id)
                 new_journal.save()
                 print('journal saved')
@@ -261,8 +261,8 @@ def updateLabPageView(request):
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
-
-        updateJournal = Daily_Journal.objects.get(date=selected_date)
+        User.objects.get(id=auth_user_id)
+        updateJournal = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
 
         newK = request.POST.get('lab_potassium')
         newPhos = request.POST.get('lab_phosphorus')
@@ -293,14 +293,14 @@ def updateLabPageView(request):
 
             # Determine the journal we are looking at
             try:
-                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                User.objects.get(id=auth_user_id)
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date, journal_user = auth_user_id)
                 print('already existed')
             except:
                 print('need to make new one')
                 new_journal = Daily_Journal()
                 print(selected_date)
                 new_journal.date = selected_date
-                global auth_user_id
                 new_journal.journal_user = User.objects.get(id=auth_user_id)
                 new_journal.save()
                 print('journal saved')
