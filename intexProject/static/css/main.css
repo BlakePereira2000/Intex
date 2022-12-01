@@ -88,6 +88,67 @@ footer {
   line-height: 1.25;
 }
 
+/* journal overlay */
+.overlay {
+  height: 0%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0, 0.9);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.overlay label {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay label:hover, .overlay label:focus {
+  color: #f1f1f1;
+}
+
+.overlay input[type="number"] {
+  height: 3rem;
+  font-size: 18px;
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+  color: var(--alerts);
+}
+
+@media screen and (max-height: 450px) {
+  .overlay {overflow-y: auto;}
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+  font-size: 40px;
+  top: 15px;
+  right: 35px;
+  }
+}
+
+
+/* end journal overlay */
+
 .home main {
   max-width: 80rem;
 }
@@ -221,50 +282,10 @@ nav a[href]:hover {
   gap: 2rem;
 }
 
-/* cards */
-
-.cards {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding-top: 1rem;
-}
-
-.card {
-  position: relative;
-}
-
-.card .overlay {
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.6);
-  font-size: 1.8rem;
-  line-height: 1.1;
-  padding: 20% 1rem 0;
-  margin: 0;
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.card:hover .overlay {
-  opacity: 1;
-}
-
-.card:hover img {
-  filter: grayscale(0.8)
-  brightness(0.7);
-}
 
 /* button */
 
-.button {
+button {
   border-radius: 100rem;
   padding: 1rem;
   font-size: 1.25rem;
@@ -279,11 +300,18 @@ nav a[href]:hover {
   cursor: pointer;
 }
 
-.button:hover {
+button:hover {
   box-shadow: none;
   color: white;
   transition: box-shadow 600ms ease, 
   color 1000ms ease;
+}
+
+.overlay-button {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 0 1rem;
 }
 
 /* form */
@@ -606,9 +634,6 @@ body footer.about-footer {
 
     /*copied nav css*/
 
-    .hero {
-      margin-bottom: 0;
-    }
 
     nav {
       position: static;
@@ -728,6 +753,7 @@ body footer.about-footer {
 
   button {
     grid-column-start: 2;
+
   }
 
   .form section {
