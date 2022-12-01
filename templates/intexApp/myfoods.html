@@ -18,7 +18,7 @@
             <td style= 'border-bottom: 1px solid black; text-align: left; padding: 12px'>
                 <div class="row">
                     <div style='float: left; width: 10%;'>
-                        <input type="radio" class="radio" value="{{foodItem}}" name="chosenDbItem" id="{{foodItem.food_name}}"/>
+                        <input type="radio" class="radio" value="{{foodItem}}" name="chosenDbItem" id="{{foodItem.food_name}}" checked/>
                     </div>
                     <div style='float: left; width: 90%;'>
                         <label for="chosenDbItem">{{foodItem.food_name}}</label>
@@ -33,28 +33,28 @@
 
 </table>
 
-<script>
-    function myFunction() {
-      // Declare variables
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("myInput");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-    
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
+    <script>
+        function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            }
         }
-      }
-    }
+        }
     </script>
 </div>
 {% if usedInJournal == 'Yes' %}
