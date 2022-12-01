@@ -180,84 +180,150 @@ def reportPageView(request):
     if (loggedIn):
 
         # sets default to avoid errors
-        if request.POST.get('selected_date') is None:
-            selectedDate = str(date.today())
+        selectedDate = '2022-11-30'
+
+        if request.method == 'GET':
+
+            #####################################FOOD CONSUMED GRAPHS############################################
+            #Get the date selected  from the calendar
+            #selectedDate = request.GET['selected_date']
+
+            #Gather all of the records in Daily Journal
+            dailyJournals = Daily_Journal.objects.all()
+            journalId = 0
+
+            #for every object in dail journals check if the selected date is equal to the
+            #date the journal was written, if it is save that journal id
+            for dailyJournal in dailyJournals:
+                if str(dailyJournal.date) == str(selectedDate):
+                    journalId = dailyJournal.id
+
+            #gather all of the objects from the food in day table, create an empty food in days list
+            foodInDays = Food_in_Day.objects.all()
+            foodInDayList = []
+
+            #go through every object in the food in days table, if the journal id for that food in
+            #day entry matches the one we have saved then add that food object to the food in days list
+            for foodInDay in foodInDays:
+                if foodInDay.journal_id == journalId:
+                    foodInDayList.append(foodInDay)
+
+            #Gather all of the food objects and create an empty food list
+            foods = Food.objects.all()
+            foodsList = []
+
+            #go through all of the objects in the food in day list, inside of that go through
+            #all of the food objects one by one, if the food id of that food is in the food in day
+            #list that we have already filtered, then add that food object to the food list
+            for foodInDay in foodInDayList:
+                for food in foods:
+                    if food.id == foodInDay.food_id:
+                        newFoodObject = {
+                            'name': food.food_name,
+                            'protein': food.protein,
+                            'phosphorus': food.phosphorus,
+                            'potassium': food.potassium,
+                            'sodium': food.sodium,
+                            'water': food.water,
+                            'numGrams': foodInDay.grams
+                        }
+                        foodsList.append(newFoodObject)
+
+            #initializes all of the nutrient count variables
+            sodiumCount = 0
+            proteinCount = 0
+            potassiumCount = 0
+            phosphorusCount = 0
+            waterCount = 0
+
+            for foodItem in foodsList:
+                sodium = (foodItem['sodium'] * (foodItem['numGrams'] * 1000))
+                protein = foodItem['protein'] * foodItem['numGrams']
+                phosphorus = (foodItem['phosphorus'] * (foodItem['numGrams'] * 1000))
+                potassium = foodItem['potassium'] * (foodItem['numGrams'] * 1000)
+                water = foodItem['water'] * foodItem['numGrams']
+                sodiumCount += sodium
+                proteinCount += protein
+                potassiumCount += potassium
+                phosphorusCount += phosphorus
+                waterCount += water
+
+            
+
+            ############################################ RECCOMMENDED VALUES GRAPH #############################################
+            #Grab all user objects and select just the first one haha
+            users = User.objects.all()
+            firstUser = users[0]
+
+            #if the user has a normal stage of kidney disease
+            if (firstUser.stage < 3):
+                sodiumRDA = 2300
+                potassiumRDA = 3500
+                phosphorusRDA = 3000
+                proteinRDA = 0.8 * (float(firstUser.weight) * 0.453592)
+
+                #if they select male or other for their gender for water intake
+                if((firstUser.gender == 'M') or (firstUser.gender == 'O')):
+                    waterRDA = 3.7
+
+                #if they select their gender as female
+                else:
+                    waterRDA = 2.7
+
+            
+            #if they have stage 3/4 of kidney disease
+            if ((firstUser.stage < 5) and (firstUser.stage > 2)):
+                sodiumRDA = 2300
+                potassiumRDA = 3000
+                phosphorusRDA = 1000
+                proteinRDA = 0.6 * (float(firstUser.weight) * 0.453592)
+
+                #if they select male or other for their gender for water intake
+                if((firstUser.gender== 'M') | (firstUser.gender == 'O')):
+                    waterRDA = 3.7
+
+                #if they select their gender as female
+                else:
+                    waterRDA = 1000 * 2.7
+
+            if (firstUser.stage == 5):
+                sodiumRDA = 2000
+                potassiumRDA = 2000
+                phosphorusRDA = 1000
+                proteinRDA = 1.2 * (float(firstUser.weight) * 0.453592)
+                waterRDA = 1
+
+            
+
+            
+
+
+
+
+            context = {
+            #Counsumed Values
+            'sodiumCount': sodiumCount,
+            'proteinCount': proteinCount,
+            'potassiumCount': potassiumCount,
+            'phosphorusCount': phosphorusCount,
+            'waterCount': waterCount,
+            'selectedDate': selectedDate,
+            
+            #RDA Values
+            'sodiumRDA': sodiumRDA,
+            'potassiumRDA': potassiumRDA,
+            'phosphorusRDA': phosphorusRDA,
+            'proteinRDA': proteinRDA,
+            'waterRDA': waterRDA,
+            }
+
         else:
-            selectedDate = request.POST.get('selected_date')
+            context = {
+                'selectedDate': selectedDate
+            }
 
 
-        #Get the date selected  from the calendar
-        #selectedDate = request.GET['selected_date']
-
-        #Gather all of the records in Daily Journal
-        dailyJournals = Daily_Journal.objects.all()
-        journalId = 0
-
-        #for every object in dail journals check if the selected date is equal to the
-        #date the journal was written, if it is save that journal id
-        for dailyJournal in dailyJournals:
-            if str(dailyJournal.date) == str(selectedDate):
-                journalId = dailyJournal.id
-
-        #gather all of the objects from the food in day table, create an empty food in days list
-        foodInDays = Food_in_Day.objects.all()
-        foodInDayList = []
-
-        #go through every object in the food in days table, if the journal id for that food in
-        #day entry matches the one we have saved then add that food object to the food in days list
-        for foodInDay in foodInDays:
-            if foodInDay.journal_id == journalId:
-                foodInDayList.append(foodInDay)
-
-        #Gather all of the food objects and create an empty food list
-        foods = Food.objects.all()
-        foodsList = []
-
-        #go through all of the objects in the food in day list, inside of that go through
-        #all of the food objects one by one, if the food id of that food is in the food in day
-        #list that we have already filtered, then add that food object to the food list
-        for foodInDay in foodInDayList:
-            for food in foods:
-                if food.id == foodInDay.food_id:
-                    newFoodObject = {
-                        'name': food.food_name,
-                        'protein': food.protein,
-                        'phosphorus': food.phosphorus,
-                        'potassium': food.potassium,
-                        'sodium': food.sodium,
-                        'water': food.water,
-                        'numGrams': foodInDay.grams
-                    }
-                    foodsList.append(newFoodObject)
-
-        #initializes all of the nutrient count variables
-        sodiumCount = 0
-        proteinCount = 0
-        potassiumCount = 0
-        phosphorusCount = 0
-        waterCount = 0
-
-        for foodItem in foodsList:
-            sodium = foodItem['sodium'] * foodItem['numGrams']
-            protein = foodItem['protein'] * foodItem['numGrams']
-            phosphorus = foodItem['phosphorus'] * foodItem['numGrams']
-            potassium = foodItem['potassium'] * foodItem['numGrams']
-            water = foodItem['water'] * foodItem['numGrams']
-            sodiumCount += sodium
-            proteinCount += protein
-            potassiumCount += potassium
-            phosphorusCount += phosphorus
-            waterCount += water
-
-        context = {
-        'sodiumCount': sodiumCount,
-        'proteinCount': proteinCount,
-        'potassiumCount': potassiumCount,
-        'phosphorusCount': phosphorusCount,
-        'waterCount': waterCount,
-        'selectedDate': selectedDate
-        }
-
+        
         return render(request, 'intexApp/report.html', context)
     else:
         return redirect('login')
