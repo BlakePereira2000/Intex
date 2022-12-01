@@ -11,6 +11,50 @@ import psycopg2
 # For accessing information in settings.py file
 from django.conf import settings
 
+# Function that returns foods for the current day
+def todayFoodList():
+
+    today = str(date.today())
+    connection = ''      
+    todayFoods = []      
+
+    try:
+        connection = psycopg2.connect(user="postgres",
+                                    password= settings.DATABASES['default']['PASSWORD'],
+                                    host="localhost",
+                                    port="5432",
+                                    database="kidney"
+                                    )
+
+        cursor = connection.cursor()
+
+        # SQL Query that returns journal food names and number of grams for a given date
+        postgreSQL_select_Query = """SELECT f.food_name, fd.grams FROM intexapp_daily_journal j INNER JOIN intexapp_food_in_day fd ON fd.journal_id = j.id INNER JOIN intexapp_food f ON f.id = fd.food_id WHERE j.date = %s GROUP BY j.date, f.food_name, fd.grams;"""
+
+        cursor.execute(postgreSQL_select_Query, (today,))
+        print("Selecting rows from food table using cursor.fetchall")
+        todayFoods = cursor.fetchall()
+
+        # The SQL query returns a list of tuple. These for loops convert to list of list.
+        newList = []
+        for tuple in todayFoods:
+            smallList = []
+            for attribute in tuple:
+                smallList.append(attribute)
+            newList.append(smallList)
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while fetching data from PostgreSQL", error)
+
+    finally:
+        # closing database connection.
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+    return (newList)
+
 # Function that returns overview info for index page
 def todayGraphInfo():
 
@@ -171,7 +215,14 @@ def authenticate(request):
 
         print(auth_user_id)
 
+        # Gets today's nutrient graph info
         context = todayGraphInfo()
+
+        # Gets today's journal food items
+        newList = todayFoodList()
+
+        # Adds query result to context (currently a list of tuples)
+        context["foodsList"] = newList
 
         return render(request, 'intexApp/index.html', context)
     except:
@@ -189,48 +240,13 @@ def indexPageView(request):
     global loggedIn
     if (loggedIn):
 
+        # Gets today's nutrient graph info
         context = todayGraphInfo()
 
-        connection = ''      
-        todayFoods = []           
-
-        try:
-            connection = psycopg2.connect(user="postgres",
-                                        password= settings.DATABASES['default']['PASSWORD'],
-                                        host="localhost",
-                                        port="5432",
-                                        database="kidney"
-                                        )
-
-            cursor = connection.cursor()
-
-            # SQL Query that returns journal food names and number of grams for a given date
-            postgreSQL_select_Query = "SELECT f.food_name, fd.grams FROM intexapp_daily_journal j INNER JOIN intexapp_food_in_day fd ON fd.journal_id = j.id INNER JOIN intexapp_food f ON f.id = fd.food_id WHERE j.date = '2022-12-01' GROUP BY j.date, f.food_name, fd.grams;"
-
-            cursor.execute(postgreSQL_select_Query)
-            print("Selecting rows from food table using cursor.fetchall")
-            todayFoods = cursor.fetchall()
-
-            newList = []
-            for tuple in todayFoods:
-                smallList = []
-                for attribute in tuple:
-                    smallList.append(attribute)
-                newList.append(smallList)
-
-        except (Exception, psycopg2.Error) as error:
-            print("Error while fetching data from PostgreSQL", error)
-
-        finally:
-            # closing database connection.
-            if connection:
-                cursor.close()
-                connection.close()
-                print("PostgreSQL connection is closed")
-
+        # Gets today's journal food items
+        newList = todayFoodList()
 
         # Adds query result to context (currently a list of tuples)
-        context["foods"] = todayFoods
         context["foodsList"] = newList
         
         return render(request, 'intexApp/index.html', context)
@@ -1042,7 +1058,14 @@ def savesignupView(request):
             global loggedIn
             loggedIn = True
 
+            # Gets today's nutrient graph info
             context = todayGraphInfo()
+
+            # Gets today's journal food items
+            newList = todayFoodList()
+
+            # Adds query result to context (currently a list of tuples)
+            context["foodsList"] = newList
 
             return render(request, 'intexApp/index.html', context)
 
