@@ -105,9 +105,13 @@ p {text-align: center;}
               <input type="submit" value="Login" class= 'button'>
           </form> 
       </div>
-      <div class="item2">First Time User?
+      <div class="item2">
           <br><br>
-          <a class='button' href="{% url 'signup'%}">Sign Up</a>
+          <h4 class="report-date">First Time User?</h4>
+          <form action="{% url 'signup'%}" class="report-date">
+            
+            <button>Sign Up</button>
+          </form>
       </div>
     </div>
   </div>

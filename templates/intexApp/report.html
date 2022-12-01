@@ -2,9 +2,9 @@
 {% load static %}
 {% block title %}Reports{% endblock title %}
 {% block content %}
-    <p>This is the reports page</p>
     <!--Calendar option for the user to choose the day of the report-->
-    <form name = 'form' method = 'post' action = "{% url 'report' %}">
+    <br>
+    <form name ='form' method ='post' class="report-date" action = "{% url 'report' %}">
         {% csrf_token %}
         <label for="selected_date">Journal Date</label>
         <input type="date" value ={{selectedDate}} name="selected_date" id="selected_date">
@@ -14,9 +14,9 @@
 
 
     <!--Micronutrients chart-->
-    <div class="row">
-      <div class="column">
-      <div class = "col-md-8">
+    <section>
+      <article class="panel">
+        <div class="image-wrapper">
           <canvas id="myChart" width="600" height="200"></canvas>
           <script>
           const ctx = document.getElementById('myChart').getContext('2d');
@@ -69,35 +69,48 @@
           });
           </script>
       </div>
+      <div class="text-wrapper">
+        <h2>Alerts</h2>
+        <p>{{sodiumAlert}}</p>
+        <p>{{potassiumAlert}}</p>
+        <p>{{phosphorusAlert}}</p>
+        <p>{{proteinAlert}}</p>
+        <p>{{waterAlert}}</p>
+        <br><br>
+        <h4>Recommendations:</h4>
+      </div>
+    </article>
+  </section>
 
-
+  <section>
+    <article class="panel">
       <!--Protein Chart -->
-      <div class = "col-md-8" class ="shrink">
-          <canvas id="proteinChart" width="600" height="200"></canvas>
-          <script>
-          const different = document.getElementById('proteinChart').getContext('2d');
-          const proteinChart = new Chart(different, {
-              type: 'bar',
-              data: {
-                  labels: ['Protein (g)'],
-                  datasets: [{
-                      label: 'Amount Consumed',
-                      data: [{{proteinCount}}],
-                      backgroundColor: [
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)',
-                          'rgba(255, 159, 64, 1)'
-                      ],
-                  },
-                      {label: 'Reccommended Dietary Allowance',
-                      data: [{{proteinRDA}}],
-                      backgroundColor: [
-                          'rgba(75, 192, 192, 0.2)',
-                          'rgba(153, 102, 255, 0.2)',
-                          'rgba(255, 159, 64, 0.2)'
-                      ],
-                  }
-                  ]
+    <div class="image-wrapper">
+        <canvas id="proteinChart" width="600" height="200"></canvas>
+        <script>
+        const different = document.getElementById('proteinChart').getContext('2d');
+        const proteinChart = new Chart(different, {
+            type: 'bar',
+            data: {
+                labels: ['Protein (g)'],
+                datasets: [{
+                    label: 'Amount Consumed',
+                    data: [{{proteinCount}}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                },
+                    {label: 'Reccommended Dietary Allowance',
+                    data: [{{proteinRDA}}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                }
+                ]
               },
               options: {
                   responsive: true,
@@ -119,10 +132,14 @@
           });
           </script>
       </div>
+    </article>
+  </section>
 
 
+    <section>
+      <article class="panel">
+        <div class="image-wrapper">
       <!--Water Chart -->
-      <div class = "col-md-8">
           <canvas id="waterChart" width="600" height="200"></canvas>
           <script>
           const different2 = document.getElementById('waterChart').getContext('2d');
@@ -168,47 +185,8 @@
                 }
           });
           </script>
-      </div>
-    </div>
-      <div class="column1">
-        <h2>Alerts</h2>
-        <p>{{sodiumAlert}}</p>
-        <p>{{potassiumAlert}}</p>
-        <p>{{phosphorusAlert}}</p>
-        <p>{{proteinAlert}}</p>
-        <p>{{waterAlert}}</p>
-        <br><br>
-        <h4>Recommendations:</h4>
-        
-      </div>
-  </div>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-      
-      /* Create two equal columns that floats next to each other */
-      .column {
-        float: left;
-        width: 66.66%;
-        padding: 10px;
-        height: 300px; /* Should be removed. Only for demonstration */
-      }
-      .column1 {
-        float: left;
-        width:33.33%;
-        padding: 10px;
-        height: 300px; /* Should be removed. Only for demonstration */
-      }
-      
-      /* Clear floats after the columns */
-      .row:after {
-        content: "";
-        display: table;
-        clear: both;
-      }
-      div.shrink {
-        width: 100px
-      }
-      </style>
+        </div>
+      </article>
+    </section>
+
 {% endblock %}

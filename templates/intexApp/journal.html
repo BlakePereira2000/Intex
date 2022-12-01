@@ -13,9 +13,9 @@
   <br>
   <div class="row">
     <div class="column">
-
-      <form action="{% url 'journal' %}" method='GET' id='form_submit'>
-        <input type="date" id="theDate" name="selected_date" onchange='change()'>
+      <h3 style='text-align: center'>Select Date:</h3>
+      <form action="{% url 'journal' %}" method='GET' id='form_submit' class="report-date">
+        <input type="date" id="selected_date" name="selected_date" onchange='change()'>
         <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
       </form>
     </div>
