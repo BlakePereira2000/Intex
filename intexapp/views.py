@@ -49,7 +49,7 @@ def indexPageView(request):
     global loggedIn
     if (loggedIn):
         context = {
-
+            
         }
         return render(request, 'intexApp/index.html', context)
     else:
@@ -91,7 +91,8 @@ def journalPageView(request):
         print(journalID)
             
 
-        # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+        # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id 
+        # of the journal we are looking at
         foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
 
         user_id = auth_user_id
@@ -236,12 +237,14 @@ def reportPageView(request):
             phosphorusCount = 0
             waterCount = 0
 
+            #API data came in as grams, sodium is in mg, protein is in g/kg of body weight,
+            #phosphorus is in mg, potassium is in mg, water is int liters (1g = 1ml, 1l = 0.001 ml)
             for foodItem in foodsList:
                 sodium = (foodItem['sodium'] * (foodItem['numGrams'] * 1000))
                 protein = foodItem['protein'] * foodItem['numGrams']
                 phosphorus = (foodItem['phosphorus'] * (foodItem['numGrams'] * 1000))
                 potassium = foodItem['potassium'] * (foodItem['numGrams'] * 1000)
-                water = foodItem['water'] * foodItem['numGrams']
+                water = foodItem['water'] * ((foodItem['numGrams']) / 1000)
                 sodiumCount += sodium
                 proteinCount += protein
                 potassiumCount += potassium
@@ -260,6 +263,7 @@ def reportPageView(request):
                 sodiumRDA = 2300
                 potassiumRDA = 3500
                 phosphorusRDA = 3000
+                #this is to get it in g/kg of body weight
                 proteinRDA = 0.8 * (float(firstUser.weight) * 0.453592)
 
                 #if they select male or other for their gender for water intake
@@ -296,9 +300,6 @@ def reportPageView(request):
             
 
             
-
-
-
 
             context = {
             #Counsumed Values
