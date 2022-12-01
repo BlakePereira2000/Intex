@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import indexPageView, aboutPageView,journalPageView, reportPageView, savesignupView
 from .views import userPageView, foodsPageView, loginPageView, signupPageView, authenticate,logoutView, apiSearchPageView, addNewFoodPageView
-from .views import add_food_to_dayPageView,food_db_searchView, save_food_to_dayView, updateUserPageView, save_journal_editsView
+from .views import add_food_to_dayPageView,food_db_searchView, save_food_to_dayView, updateUserPageView,updateDailyStatsPageView
+from .views import updateWaterPageView, updateLabPageView, save_journal_editsView
 
 urlpatterns = [
     path('', indexPageView, name='index'),
@@ -22,4 +23,7 @@ urlpatterns = [
     path('save_food_to_day/', save_food_to_dayView, name='save_food_to_day'),
     path('update_user/', updateUserPageView, name='update_user'),
     path('save_journal_edits/', save_journal_editsView, name='save_journal_edits'), 
+    path('update_daily_stats/', updateDailyStatsPageView, name='update_daily_stats'),
+    path('update_water/', updateWaterPageView, name='update_water'),
+    path('update_lab/', updateLabPageView, name='update_lab'),
 ]

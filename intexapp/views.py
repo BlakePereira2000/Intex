@@ -101,12 +101,223 @@ def journalPageView(request):
             'foods_in_day' : foods_in_day,
             'journalID_in_use' : journalID,
             'user' : user,
-            'selected_date': selected_date
+            'selected_date': selected_date,
+            'journal' : journal_were_looking_at
         }
         print(selected_date)
         return render(request, 'intexApp/journal.html',context)
     else:
         return redirect('login')
+
+####### Journal Overlays #########
+
+def updateDailyStatsPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newBlood = request.POST.get('avg_blood_sugar')
+        newWeight = request.POST.get('daily_weight')
+    
+        updateJournal.avg_blood_sugar = newBlood
+        updateJournal.daily_weight = newWeight
+
+        updateJournal.save()
+
+############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+    return render(request, 'intexApp/journal.html')
+
+    
+
+def updateWaterPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newWater = request.POST.get('water_intake')
+
+        updateJournal.water_intake = newWater
+
+        updateJournal.save()
+
+        ############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+
+    return render(request, 'intexApp/journal.html') 
+
+def updateLabPageView(request):
+    if request.method == 'POST':
+        print(request.GET.get('selected_date'))
+        if request.GET.get('selected_date') is None:
+            selected_date = date.today()
+            print(selected_date)
+        else:
+            selected_date = request.GET.get('selected_date')
+
+        updateJournal = Daily_Journal.objects.get(date=selected_date)
+
+        newK = request.POST.get('lab_potassium')
+        newPhos = request.POST.get('lab_phosphorus')
+        newSodium = request.POST.get('lab_sodium')
+        newCrea = request.POST.get('lab_creatinine')
+        newAlb = request.POST.get('lab_albumin')
+        newBP = request.POST.get('lab_blood_pressure')
+
+        updateJournal.lab_potassium = newK
+        updateJournal.lab_phosphorus = newPhos
+        updateJournal.lab_sodium = newSodium
+        updateJournal.lab_creatinine = newCrea
+        updateJournal.lab_albumin = newAlb
+        updateJournal.lab_blood_pressure = newBP
+
+        updateJournal.save()
+
+        ############ should be exact same as journal views ##############
+        global loggedIn
+        if (loggedIn):
+        
+            print(request.GET.get('selected_date'))
+            if request.GET.get('selected_date') is None:
+                selected_date = date.today()
+                print(selected_date)
+            else:
+                selected_date = request.GET.get('selected_date')
+
+            # Determine the journal we are looking at
+            try:
+                journal_were_looking_at = Daily_Journal.objects.get(date=selected_date)
+                print('already existed')
+            except:
+                print('need to make new one')
+                new_journal = Daily_Journal()
+                print(selected_date)
+                new_journal.date = selected_date
+                global auth_user_id
+                new_journal.journal_user = User.objects.get(id=auth_user_id)
+                new_journal.save()
+                print('journal saved')
+                journal_were_looking_at = new_journal
+
+            journalID = journal_were_looking_at.id
+
+            # Get a list of the foods in that day. Find where the journal id of the food in day = the journal id of the journal we are looking at
+            foods_in_day = Food_in_Day.objects.filter(journal_id= journalID).select_related('food','journal')
+
+            user_id = auth_user_id
+            user = User.objects.get(id=user_id)
+
+            context = {
+                'foods_in_day' : foods_in_day,
+                'journalID_in_use' : journalID,
+                'user' : user,
+                'selected_date': selected_date,
+                'journal' : journal_were_looking_at
+            }
+            return render(request, 'intexApp/journal.html',context)
+        else:
+            return redirect('login')
+
+
+    return render(request, 'intexApp/journal.html') 
 
 
 # Access "add food to journal" page
@@ -366,6 +577,7 @@ def updateUserPageView(request):
 
         updateUser.save()
 
+############ should be the exact same as user view ##############
     global loggedIn
     if (loggedIn):
         user_id = auth_user_id
