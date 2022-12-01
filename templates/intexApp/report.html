@@ -14,157 +14,206 @@
 
 
     <!--Micronutrients chart-->
-    <div class = "col-md-8">
-        <canvas id="myChart" width="600" height="200"></canvas>
-        <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Sodium (mg)', 'Potassium (mg)', 'Phosphorus (mg)'],
-                datasets: [{
-                    label: 'Amount Consumed',
-                    data: [{{sodiumCount}}, {{potassiumCount}}, {{phosphorusCount}}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                },
-                    {label: 'Reccommended Dietary Allowance',
-                    data: [{{sodiumRDA}},{{potassiumRDA}},{{phosphorusRDA}}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                      stacked: true,
-                    },
-                    y: {
-                      stacked: false,
-                    }
+    <div class="row">
+      <div class="column">
+      <div class = "col-md-8">
+          <canvas id="myChart" width="600" height="200"></canvas>
+          <script>
+          const ctx = document.getElementById('myChart').getContext('2d');
+          const myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: ['Sodium (mg)', 'Potassium (mg)', 'Phosphorus (mg)'],
+                  datasets: [{
+                      label: 'Amount Consumed',
+                      data: [{{sodiumCount}}, {{potassiumCount}}, {{phosphorusCount}}],
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
                   },
-                plugins: {
-                  title: {
-                    display: true,
-                    text: 'MICRONUTRIENTS',
+                      {label: 'Reccommended Dietary Allowance',
+                      data: [{{sodiumRDA}},{{potassiumRDA}},{{phosphorusRDA}}],
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                  }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  scales: {
+                      x: {
+                        stacked: true,
+                      },
+                      y: {
+                        stacked: false,
+                      }
+                    },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'MICRONUTRIENTS',
+                    }
                   }
                 }
-              }
-        });
-        </script>
-    </div>
+          });
+          </script>
+      </div>
 
 
-    <!--Protein Chart -->
-    <div class = "col-md-8">
-        <canvas id="proteinChart" width="600" height="200"></canvas>
-        <script>
-        const different = document.getElementById('proteinChart').getContext('2d');
-        const proteinChart = new Chart(different, {
-            type: 'bar',
-            data: {
-                labels: ['Protein (g)'],
-                datasets: [{
-                    label: 'Amount Consumed',
-                    data: [{{proteinCount}}],
-                    backgroundColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                },
-                    {label: 'Reccommended Dietary Allowance',
-                    data: [{{proteinRDA}}],
-                    backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                      stacked: true,
-                    },
-                    y: {
-                      stacked: false,
-                    }
+      <!--Protein Chart -->
+      <div class = "col-md-8" class ="shrink">
+          <canvas id="proteinChart" width="600" height="200"></canvas>
+          <script>
+          const different = document.getElementById('proteinChart').getContext('2d');
+          const proteinChart = new Chart(different, {
+              type: 'bar',
+              data: {
+                  labels: ['Protein (g)'],
+                  datasets: [{
+                      label: 'Amount Consumed',
+                      data: [{{proteinCount}}],
+                      backgroundColor: [
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
                   },
-                plugins: {
-                  title: {
-                    display: true,
-                    text: 'PROTEIN',
+                      {label: 'Reccommended Dietary Allowance',
+                      data: [{{proteinRDA}}],
+                      backgroundColor: [
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                  }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  scales: {
+                      x: {
+                        stacked: true,
+                      },
+                      y: {
+                        stacked: false,
+                      }
+                    },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'PROTEIN',
+                    }
                   }
                 }
-              }
-        });
-        </script>
-    </div>
+          });
+          </script>
+      </div>
 
 
-    <!--Water Chart -->
-    <div class = "col-md-8">
-        <canvas id="waterChart" width="600" height="200"></canvas>
-        <script>
-        const different2 = document.getElementById('waterChart').getContext('2d');
-        const waterChart = new Chart(different2, {
-            type: 'bar',
-            data: {
+      <!--Water Chart -->
+      <div class = "col-md-8">
+          <canvas id="waterChart" width="600" height="200"></canvas>
+          <script>
+          const different2 = document.getElementById('waterChart').getContext('2d');
+          const waterChart = new Chart(different2, {
+              type: 'bar',
+              data: {
 
-                labels: ['Water (L)'],
+                  labels: ['Water (L)'],
 
-                datasets: [{
-                    label: 'Amount Consumed',
-                    data: [{{waterCount}}],
-                    backgroundColor: [
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                },
-                    {label: 'Reccommended Dietary Allowance',
-                    data: [{{waterRDA}}],
-                    backgroundColor: [
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                      stacked: true,
-                    },
-                    y: {
-                      stacked: false,
-                    }
+                  datasets: [{
+                      label: 'Amount Consumed',
+                      data: [{{waterCount}}],
+                      backgroundColor: [
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
                   },
-                plugins: {
-                  title: {
-                    display: true,
-                    text: 'WATER',
+                      {label: 'Reccommended Dietary Allowance',
+                      data: [{{waterRDA}}],
+                      backgroundColor: [
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                  }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  scales: {
+                      x: {
+                        stacked: true,
+                      },
+                      y: {
+                        stacked: false,
+                      }
+                    },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'WATER',
+                    }
                   }
                 }
-              }
-        });
-        </script>
+          });
+          </script>
+      </div>
     </div>
+      <div class="column1">
+        <h2>Alerts</h2>
+        <p>{{sodiumAlert}}</p>
+        <p>{{potassiumAlert}}</p>
+        <p>{{phosphorusAlert}}</p>
+        <p>{{proteinAlert}}</p>
+        <p>{{waterAlert}}</p>
+        <br><br>
+        <h4>Recommendations:</h4>
+        <p>{{sodiumRecommendation}}</p>
+        <p>{{potassiumRecommendation}}</p>
+        <p>{{phosphorusRecommendation}}</p>
+        <p>{{proteinRecommendation}}</p>
+        <p>{{waterRecommendation}}</p>
+        
+      </div>
+  </div>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      
+      /* Create two equal columns that floats next to each other */
+      .column {
+        float: left;
+        width: 66.66%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+      }
+      .column1 {
+        float: left;
+        width:33.33%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+      }
+      
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      div.shrink {
+        width: 100px
+      }
+      </style>
 {% endblock %}

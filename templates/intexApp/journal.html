@@ -13,12 +13,10 @@
   <br>
   <div class="row">
     <div class="column">
-      <p id="demo"></p>
 
       <form action="{% url 'journal' %}" method='GET' id='form_submit'>
         <input type="date" id="theDate" name="selected_date" onchange='change()'>
-        <input type='text' value="{{selected_date}}" id="submitDate"  name=''>
-        <input type='submit' >
+        <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
       </form>
     </div>
     
@@ -47,7 +45,9 @@
             <input type="hidden" name='date_to_return_to' value="{{selected_date}}">
             <input type="number" name="food_grams" id="food_grams" value="{{food.grams}}">
             <input type="hidden" name='food_in_day_id' value="{{food.id}}">
-            <button class='button' type="submit">Save Journal Changes</button>    
+            <div>
+              <button type="submit" class="save-changes">Save Journal Changes</button>
+            </div   
             </form>
           </td>
           
@@ -98,7 +98,7 @@
             <input type="number" name="water_intake" id="water_intake" step=".1" value="{{journal.water_intake}}">
 
             <br><br>
-              <button type="submit">Add to Journal</button>
+            <button type="submit">Add to Journal</button>
           </form>
         </div>
       </div>
@@ -188,12 +188,10 @@
 
 
     document.getElementById('theDate').value = today;
-    document.getElementById("demo").innerHTML = formatDate(today);
     document.getElementById("submitDate").value = today;
 
     function change(){
       today = document.getElementById('theDate').value;
-      document.getElementById("demo").innerHTML = formatDate(today);
       document.getElementById("submitDate").value = today;
       document.getElementById("form_submit").submit();
     }
