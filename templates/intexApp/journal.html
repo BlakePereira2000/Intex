@@ -13,12 +13,10 @@
   <br>
   <div class="row">
     <div class="column">
-      <p id="demo"></p>
 
       <form action="{% url 'journal' %}" method='GET' id='form_submit'>
         <input type="date" id="theDate" name="selected_date" onchange='change()'>
-        <input type='text' value="{{selected_date}}" id="submitDate"  name=''>
-        <input type='submit' >
+        <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
       </form>
     </div>
     
@@ -188,12 +186,10 @@
 
 
     document.getElementById('theDate').value = today;
-    document.getElementById("demo").innerHTML = formatDate(today);
     document.getElementById("submitDate").value = today;
 
     function change(){
       today = document.getElementById('theDate').value;
-      document.getElementById("demo").innerHTML = formatDate(today);
       document.getElementById("submitDate").value = today;
       document.getElementById("form_submit").submit();
     }
