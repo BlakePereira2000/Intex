@@ -4,7 +4,7 @@
 {% block content %}
     <p>This is the reports page</p>
     <!--Calendar option for the user to choose the day of the report-->
-    <form name = 'form' method = 'get' action = "{% url 'report' %}">
+    <form name = 'form' method = 'post' action = "{% url 'report' %}">
         {% csrf_token %}
         <label for="selected_date">Journal Date</label>
         <input type="date" value ={{selectedDate}} name="selected_date" id="selected_date">

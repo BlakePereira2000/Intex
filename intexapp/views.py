@@ -393,14 +393,16 @@ def save_journal_editsView(request):
 def reportPageView(request):
     global loggedIn
     if (loggedIn):
-
+        
         # sets default to avoid errors
         if request.POST.get('selected_date') is None:
             selectedDate = str(date.today())
         else:
-            selectedDate = request.POST.get('selected_date')
+            selectedDate = str(request.POST.get('selected_date'))
 
-        if request.method == 'GET':
+        #print(selectedDate)
+
+        if request.method == 'POST' or request.method == 'GET':
 
             #####################################FOOD CONSUMED GRAPHS############################################
      
@@ -411,7 +413,7 @@ def reportPageView(request):
             #for every object in dail journals check if the selected date is equal to the
             #date the journal was written, if it is save that journal id
             for dailyJournal in dailyJournals:
-                if str(dailyJournal.date) == str(selectedDate):
+                if str(dailyJournal.date) == selectedDate:
                     journalId = dailyJournal.id
 
             #gather all of the objects from the food in day table, create an empty food in days list
