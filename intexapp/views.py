@@ -251,7 +251,6 @@ def updateWaterPageView(request):
         else:
             return redirect('login')
 
-
     return render(request, 'intexApp/journal.html') 
 
 def updateLabPageView(request):
