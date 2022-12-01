@@ -14,15 +14,17 @@
   <div class="row">
     <div class="column">
       <p id="demo"></p>
-      <input type="date" id="theDate" name="date" onchange='change()'>
-      <form action='{% url 'journal' %}' method='GET' id='form_submit'>
-        <input type='text' id="submitDate" name='selected_date'>
+      
+
+      <form action="{% url 'journal' %}" method='GET' id='form_submit'>
+        <input type="date" id="theDate" name="selected_date" onchange='change()'>
+        <input type='text' value={{selected_date}} id="submitDate"  name=''>
         <input type='submit' >
       </form>
     </div>
     
     <div class="column">
-      <h3 id = 'middleDate' style = 'border-style: ridge; border-radius: 5px;'></h3>
+      <h3 id = 'middleDate' value={{selected_date}} style='border-style: ridge; border-radius: 5px;'></h3>
     
       {% comment %} Results Table {% endcomment %}
       <table>
@@ -165,15 +167,7 @@
     clear: both;
   }</style>
   <script>
-    var date = new Date();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
 
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-
-    var today = year + "-" + month + "-" + day;
 
     document.getElementById('theDate').value = today;
     document.getElementById("demo").innerHTML = formatDate(today);
@@ -203,7 +197,6 @@
     else if (month == 12) monthName = 'December';
 
     var displayDate = monthName + ' ' + day + ' ' + year;
-    document.getElementById("middleDate").innerHTML = displayDate
 
     return (displayDate);
     }
