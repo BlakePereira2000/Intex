@@ -27,7 +27,6 @@
       <table>
         <th>
           <tr>
-            <td><strong>Food ID</strong></td>
             <td><strong>Food Name</strong></td>
             <td><strong>Grams</strong></td>
           </tr>
@@ -35,7 +34,6 @@
         
         {% for food in foods_in_day %}
         <tr>
-          <td>{{food.food.id}}</td>
           <td>{{food.food.food_name}}</td>
           
           
@@ -201,7 +199,7 @@
       </div>
 
       <div class="overlay-button">
-        <button onclick="openWater()">+ Add Water</button>
+        <button onclick="openWater()">+ Update your water</button>
       </div>
 
       <div class="overlay-button">
