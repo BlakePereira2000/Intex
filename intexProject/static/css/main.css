@@ -79,7 +79,7 @@ aside {
 }
 
 footer {
-  display: block;
+  display: fixed;
   background-color: var(--gray);
   color: #fff;
   margin-top: 6rem;
@@ -486,71 +486,53 @@ input[type="radio"]:checked::after {
   transform: scale(1);
 }
 
+input[type="date"] {
+  border: 2px solid var(--gray);
+  box-shadow: 0 0 3px var(--gray);
+  outline: none;
+  font-weight: bolder;
+  text-align: center;
+  border-radius: 10%;
+}
+
+input {
+  border: 2px solid var(--gray);
+  box-shadow: 0 0 3px var(--gray);
+  outline: none;
+  text-align: center;
+  border-radius: 10%;
+}
+
+select {
+  border: 2px solid var(--gray);
+  box-shadow: 0 0 3px var(--gray);
+  outline: none;
+  text-align: center;
+  border-radius: 10%;
+}
+
+input#selected_date{
+  position:relative;
+  overflow:hidden;
+}
+input#selected_date::-webkit-calendar-picker-indicator{
+  display:block;
+  top:0;
+  left:0;
+  background: #0000;
+  position:absolute;
+  transform: scale(12)
+}
+
 .form section img {
   min-width: 100px;
   max-width: 300px;
   align-self: center;
 }
 
-/* loader */
-
-.loader {
-  width: 90px;
-  height: 90px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.loader div {
-  width: 30px;
-  height: 30px;
-  background-color: var(--gray);
-  animation: cube-grid 1300ms infinite ease-in-out;
-}
-
-.loader div:nth-child(1) {
-  animation-delay: 200ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(2) {
-  animation-delay: 300ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(3) {
-  animation-delay: 400ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(4) {
-  animation-delay: 100ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(5) {
-  animation-delay: 200ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(6) {
-  animation-delay: 300ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(7) {
-  animation-delay: 0s;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(8) {
-  animation-delay: 100ms;
-  border-radius: 25px;
-}
-
-.loader div:nth-child(9) {
-  animation-delay: 200ms;
-  border-radius: 25px;
+.report-date {
+  padding-left: 35%;
+  padding-right: 35%;
 }
 
 .big-img {
@@ -604,17 +586,6 @@ h2 {
   text-align: justify;
 }
 
-body footer.about-footer {
-  display: block;
-  background-color: var(--gray);
-  color: #fff;
-  margin: 0;
-  padding: 3rem;
-  font-size: .5rem;
-  line-height: 1.25;
-}
-
-
 .header {
   padding: 0px;
   text-align: center;
@@ -626,13 +597,14 @@ body footer.about-footer {
   border-color: white white black;
 }
 
+
 @media (min-width: 601px) {
   .panel {
     flex-direction: row;
   }
 
   .panel .text-wrapper {
-    flex: 1 1 60%;
+    flex: 1 1 80%;
   }
 
   .panel .image-wrapper {
