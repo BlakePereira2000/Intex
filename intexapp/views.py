@@ -783,7 +783,7 @@ def reportPageView(request):
                     proteinAlert = 'Alert: Your protein level is ' + str(diff) +'g above the range of daily recommended allowance!'
                     proteinRecommendation = '-Avoid eating too much of these common protein rich foods: Eggs, Almonds, Milk'
                 elif (proteinCount < proteinLow):
-                    diff = proteinLow - proteinCount
+                    diff = float(proteinLow) - float(proteinCount)
                     proteinAlert = '-Alert: Your protein count is ' + str(diff) + 'g below the range of daily recommended allowance!'
                     proteinRecommendation = '-Try eating some more of these common protein rich foods: Eggs, Almonds, Milk'
 
@@ -795,7 +795,7 @@ def reportPageView(request):
                         waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the range of daily recommended allowance!'
                         waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
                     elif (waterCount < 3.5):
-                        diff = 3.5 - waterCount
+                        diff = 3.5 - float(waterCount)
                         waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the range of daily recommended allowance!'
                         waterRecommendation = '-Try drinking more water'
 
