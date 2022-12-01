@@ -47,7 +47,9 @@
             <input type="hidden" name='date_to_return_to' value="{{selected_date}}">
             <input type="number" name="food_grams" id="food_grams" value="{{food.grams}}">
             <input type="hidden" name='food_in_day_id' value="{{food.id}}">
-            <button class='button' type="submit">Save Journal Changes</button>    
+            <div>
+              <button type="submit" class="save-changes">Save Journal Changes</button>
+            </div   
             </form>
           </td>
           
@@ -98,7 +100,7 @@
             <input type="number" name="water_intake" id="water_intake" step=".1" value="{{journal.water_intake}}">
 
             <br><br>
-              <button type="submit">Add to Journal</button>
+            <button type="submit">Add to Journal</button>
           </form>
         </div>
       </div>
