@@ -600,7 +600,7 @@ def updateWaterPageView(request):
 
         newWater = request.POST.get('water_intake')
 
-        updateJournal.water_intake = newWater
+        updateJournal.water_intake = int(updateJournal.water_intake) + float(newWater)
 
         updateJournal.save()
 
