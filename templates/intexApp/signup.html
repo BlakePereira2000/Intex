@@ -16,7 +16,7 @@
         <h2></h2>
       </div>
 
-      <div class="column2">
+    <div class="column2">
         <h2 style= 'text-align: center;'>Welcome to Kidney Konnect +</h2>
         <h3>Please enter your information below</h3>
 
@@ -58,30 +58,15 @@
             <option value="4">Stage 4</option>
             <option value="5">Stage 5</option>
           </select>
-          <label for="comorbidity1">Comorbidity 1:</label><br>
-              <select id='comorbidity1' name="comorbidity1">
-                  <option value="none" selected disabled hidden>Select a comorbidity</option>
-                {% for comorbidity in comorbidityList  %}
-                  <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
-                {% endfor %}
-              </select>
 
-          <label for="comorbidity2">Comorbidity 2:</label><br>
-          <select id='comorbidity2' name="comorbidity2">
-              <option value="none" selected disabled hidden>Select a comorbidity</option>
-            {% for comorbidity in comorbidityList  %}
-              <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
-            {% endfor %}
+          <label for="stage">Comorbidities:</label><br>
+          <select name="como" id="como" required>
+            <option value="none" selected>None</option>
+            <option value="diabetes">Diabetes</option>
+            <option value="high_blood_pressure">High Blood Pressure</option>
+            <option value="cardiovascular_disease">Cardiovascular Disease</option>
+            <option value="lung_disease">Lung Disease</option>
           </select>
-
-          <label for="comorbidity3">Comorbidity 3:</label><br>
-          <select id='comorbidity3' name="comorbidity2">
-              <option value="none" selected disabled hidden>Select a comorbidity</option>
-            {% for comorbidity in comorbidityList  %}
-              <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
-            {% endfor %}
-          </select>
-
         </div>
       </div>
 
@@ -89,7 +74,7 @@
         <h2></h2>
       </div>
     </div>
-      </form>
+</form>
         
 <script>
   var password = document.getElementById("password")
