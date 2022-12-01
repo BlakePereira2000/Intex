@@ -11,6 +11,49 @@ import psycopg2
 # For accessing information in settings.py file
 from django.conf import settings
 
+# Create global logged in variable, set it to its default
+global loggedIn
+loggedIn = False
+
+# create variable for the authenticated in user's id
+global auth_user_id
+auth_user_id = ''
+
+def authenticate(request):
+    user = request.POST.get('user')
+    password = request.POST.get('password')
+    print(user)
+    print(password)
+    try:
+        auth_user = User.objects.get(username=user,password=password)
+        print(auth_user.dob)
+
+        # log the person in
+        global loggedIn
+        loggedIn = True
+        
+        # set the global auth_user_id to the user's id
+        global auth_user_id
+        auth_user_id = auth_user.id
+
+        print(auth_user_id)
+
+        # Gets today's nutrient graph info
+        context = todayGraphInfo()
+
+        # Gets today's journal food items
+        newList = todayFoodList()
+
+        # Adds query result to context (currently a list of tuples)
+        context["foodsList"] = newList
+
+        return render(request, 'intexApp/index.html', context)
+    except:
+        context = {
+            'message': 'User not found'
+            }
+        return render(request,'intexApp/login.html', context)
+
 # Function that returns foods for the current day
 def todayFoodList():
 
@@ -276,7 +319,7 @@ def todayGraphInfo():
         if((firstUser.gender == 'M') | (firstUser.gender == 'O')):
             waterRDA = 3.7
             if (waterCount > waterRDA):
-                diff = waterCount - waterRDA
+                diff = float(waterCount) - waterRDA
                 waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the range of daily recommended allowance!'
                 waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
             elif (waterCount < 3.5):
@@ -392,48 +435,7 @@ def todayGraphInfo():
 
     return(context)
 
-# Create global logged in variable, set it to its default
-global loggedIn
-loggedIn = False
 
-# create variable for the authenticated in user's id
-global auth_user_id
-auth_user_id = ''
-
-def authenticate(request):
-    user = request.POST.get('user')
-    password = request.POST.get('password')
-    print(user)
-    print(password)
-    try:
-        auth_user = User.objects.get(username=user,password=password)
-        print(auth_user.dob)
-
-        # log the person in
-        global loggedIn
-        loggedIn = True
-        
-        # set the global auth_user_id to the user's id
-        global auth_user_id
-        auth_user_id = auth_user.id
-
-        print(auth_user_id)
-
-        # Gets today's nutrient graph info
-        context = todayGraphInfo()
-
-        # Gets today's journal food items
-        newList = todayFoodList()
-
-        # Adds query result to context (currently a list of tuples)
-        context["foodsList"] = newList
-
-        return render(request, 'intexApp/index.html', context)
-    except:
-        context = {
-            'message': 'User not found'
-            }
-        return render(request,'intexApp/login.html', context)
 
 def logoutView(request):
     global loggedIn 
@@ -1016,7 +1018,7 @@ def reportPageView(request):
                 if((firstUser.gender == 'M') | (firstUser.gender == 'O')):
                     waterRDA = 3.7
                     if (waterCount > waterRDA):
-                        diff = waterCount - waterRDA
+                        diff = float(waterCount) - waterRDA
                         waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the range of daily recommended allowance!'
                         waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
                     elif (waterCount < 3.5):
