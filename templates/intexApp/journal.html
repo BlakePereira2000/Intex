@@ -237,12 +237,8 @@
   }</style>
   <script>
 
-
-    document.getElementById('theDate').value = today;
-    document.getElementById("submitDate").value = today;
-
     function change(){
-      today = document.getElementById('theDate').value;
+      today = document.getElementById('selected_date').value;
       document.getElementById("submitDate").value = today;
       document.getElementById("form_submit").submit();
     }
