@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
-from datetime import date
+from datetime import datetime, date
 
 # Create your views here.
 
@@ -66,10 +66,12 @@ def journalPageView(request):
         
         print(request.GET.get('selected_date'))
         if request.GET.get('selected_date') is None:
-            selected_date = date.today()
+            selected_date = date.today()        # Keeps as datetime dt for template formatting
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
+            # should turn this into datetime format so that template can format it
+            selected_date = datetime.strptime(selected_date,'%Y-%m-%d')
 
         # Determine the journal we are looking at
         try:
@@ -385,6 +387,9 @@ def save_journal_editsView(request):
 
 
 
+
+
+
 ################### Report Views #####################
 def reportPageView(request):
     global loggedIn
@@ -397,7 +402,11 @@ def reportPageView(request):
 
             #####################################FOOD CONSUMED GRAPHS############################################
             #Get the date selected  from the calendar
-            #selectedDate = request.GET['selected_date']
+            if request.GET.get('selected_date') is None:
+                selectedDate = date.today()
+            else:
+                selectedDate = request.GET.get('selected_date')
+            print(selectedDate)
 
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
