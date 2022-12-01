@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,13 +10,12 @@
 <body class="form">
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-  
-  <form action="{% url 'add_food_to_day'%}" method="get">
-    <button type='submit'>Add food to day</button>
-    <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
-  </form>
 
 
+
+
+
+  <br>
 
   <div class="row">
     <div class="column">
@@ -25,14 +24,14 @@
 
       <form action="{% url 'journal' %}" method='GET' id='form_submit'>
         <input type="date" id="theDate" name="selected_date" onchange='change()'>
-        <input type='text' value={{selected_date}} id="submitDate"  name=''>
+        <input type='text' value="{{selected_date}}" id="submitDate"  name=''>
         <input type='submit' >
       </form>
     </div>
     
     <div class="column">
-      <h3 id = 'middleDate' value={{selected_date}} style='border-style: ridge; border-radius: 5px;'></h3>
-    
+      <h3 id = 'middleDate'style='border-style: ridge; border-radius: 5px;color:black;'>{{selected_date}}</h3>
+
       {% comment %} Results Table {% endcomment %}
       <table>
         <th>
@@ -47,36 +46,121 @@
         <tr>
           <td>{{food.food.id}}</td>
           <td>{{food.food.food_name}}</td>
-          <td>{{food.grams}}</td>
+          
+          
+          <td>
+            <form action="{% url 'save_journal_edits'%}" method='POST'>
+            {% csrf_token %}
+            <input type="hidden" name='date_to_return_to' value="{{selected_date}}">
+            <input type="number" name="food_grams" id="food_grams" value="{{food.grams}}">
+            <input type="hidden" name='food_in_day_id' value="{{food.id}}">
+            <button class='button' type="submit">Save Journal Changes</button>    
+            </form>
+          </td>
+          
         </tr>
         {% endfor %}
 
       </table>
-      
-      <!-- (A) HTML LIST -->
-        <ol id="demoA">
-          <li>First</li>
-          <li>Second</li>
-        </ol>
-        
-        <!-- (B) JAVASCRIPT ADD -->
-        <script>
-        function addItem () {
-          // (B1) CREATE NEW LIST ITEM
-          var item = document.createElement("li");
-          item.innerHTML = "New";
 
-          // (B2) APPEND TO LIST
-          document.getElementById("demoA").appendChild(item);
-        }
-        </script>
-        <input type="button" value="Add Item" onclick="addItem()"/>
+      <br><br>
+
+
     </div>
     
     <div class="column">
-      <form name='form' action='{% url 'journal' %}' method='GET'>
+
+      {% comment %} overlays {% endcomment %}
+
+      <div id="dailyStats" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeDaily()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <form method="post" action="{% url 'update_daily_stats' %}">
+            {% csrf_token %}
+            <label for="avg_blood_sugar">Avg. Blood Sugar</label>
+            <input type="number" name="avg_blood_sugar" id="avg_blood_sugar" step=".1" value="{{ journal.avg_blood_sugar}}">
+
+            <label for="daily_weight">Weight (in lbs)</label>
+            <input type="number" name="daily_weight" id="daily_weight" step=".1" value="{{ journal.daily_weight }}">
+            <br><br>
+            <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="water" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeWater()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <form method="post" action="{% url 'update_water' %}">
+            {% csrf_token %}
+            <label for="water_intake">Water (in mL):</label>
+            <input type="number" name="water_intake" id="water_intake" step=".1" value="{{journal.water_intake}}">
+
+            <br><br>
+              <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="lab" class="overlay">
         
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeLab()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content">
+          <form method="post" action="{% url 'update_lab' %}">
+            {% csrf_token %}
+            <label for="lab_potassium" class="lab">K (in grams):</label>
+            <input type="number" name="lab_potassium" id="lab_potassium" step=".1" class="lab" value="{{journal.lab_potassium}}">
+
+            <label for="lab_phosphorus">Phos (in grams):</label>
+            <input type="number" name="lab_phosphorus" id="lab_phosphorus" step=".1" value="{{journal.lab_phosphorus}}">
+
+            <label for="lab_sodium">Sodium (in grams):</label>
+            <input type="number" name="lab_sodium" id="lab_sodium" step=".1" value="{{journal.lab_sodium}}">
+
+            <label for="lab_creatinine">Creatinine (in grams):</label>
+            <input type="number" name="lab_creatinine" id="lab_creatinine" step=".1" value="{{journal.lab_creatinine}}">
+
+            <label for="lab_albumin">Albumin (in grams):</label>
+            <input type="number" name="lab_albumin" id="lab_albumin" step=".1" value="{{journal.lab_albumin}}">
+
+            <label for="lab_blood_pressure">Blood Pressure:</label>
+            <input type="number" name="lab_blood_pressure" id="lab_blood_pressure" step=".1" value="{{journal.lab_blood_pressure}}">
+
+            <br><br>
+            <button type="submit">Add to Journal</button>
+          </form>
+        </div>
+      </div>
+
+
+      <form action="{% url 'add_food_to_day'%}" method="get">
+        <button type='submit'>+ Add Food to Your Day</button>
+        <input type="hidden" name="journalID_in_use" value={{journalID_in_use}}>
+
       </form>
+
+      <div class="overlay-button">
+          <button onclick="openDaily()">+ Daily Stats</button>
+      </div>
+
+      <div class="overlay-button">
+        <button onclick="openWater()">+ Add Water</button>
+      </div>
+
+      <div class="overlay-button">
+        <button onclick="openLab()">+ Lab Results</button>
+      </div>
     </div>
   </div>
 
@@ -137,7 +221,7 @@
     else if (month == 11) monthName = 'November';
     else if (month == 12) monthName = 'December';
 
-    var displayDate = monthName + ' ' + day + ' ' + year;
+    var displayDate = year + '-' + month + '-' + day ;
 
     return (displayDate);
     }
