@@ -4,6 +4,7 @@ from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
 from datetime import datetime, date
+import math
 
 # For embedding SQL queries in python
 import psycopg2
@@ -482,29 +483,59 @@ def reportPageView(request):
             phosphorusAlert =''
             waterAlert = ''
 
+            #intitialize all of the recommendations to be empty
+            sodiumRecommendation = ''
+            potassiumRecommendation = ''
+            proteinRecommendation = ''
+            phosphorusRecommendation = ''
+            waterRecommendation = ''
+
             
             #if the user has a normal stage of kidney disease
             if (firstUser.stage < 3):
                 sodiumRDA = 2300
                 if (sodiumCount > sodiumRDA):
                     diff = sodiumCount - sodiumRDA
-                    sodiumAlert = 'Alert: Your sodium level is ' + diff +' above the daily recommended allowance!'
+                    sodiumAlert = '-Alert: Your sodium level is ' + str(diff) + 'mg above range of the daily recommended allowance!'
+                    sodiumRecommendation = '-Avoid eating too much of these common sodium rich foods: Bread, Chicken, Cheese'
+                elif (sodiumCount < 1495):
+                    diff = 1495 - sodiumCount
+                    sodiumAlert = '-Alert: Your sodium count is ' + str(diff) + 'mg below the range of  daily recommended allowance!'
+                    sodiumRecommendation = '-Try eating some more of these common sodium rich foods: Bread, Chicken, Cheese'
 
                 potassiumRDA = 3500
                 if (potassiumCount > potassiumRDA):
                     diff = potassiumCount - potassiumRDA
-                    potassiumAlert = 'Alert: Your sodium level is ' + diff +' above the daily recommended allowance!'
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    potassiumRecommendation = '-Avoid eating too much of these common potassium rich foods: Bananas, Beans, Orange Juice'
+                elif (potassiumCount < 2500):
+                    diff = 2500 - potassiumCount
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg below the range of daily recommended allowance.'
+                    potassiumRecommendation = '-Try eating some more of these common potassium rich foods: Bananas, Beans, Orange Juice'
 
                 phosphorusRDA = 3000
                 if (phosphorusCount > phosphorusRDA):
                     diff = phosphorusCount - phosphorusRDA
-                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
+                    phosphorusAlert = '-Alert: Your phosphorus level is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Avoid eating too much of these common phosphorus rich foods: Chicken, Pork, Seafood'
+                elif (phosphorusCount < 2800):
+                    diff = 2800 - potassiumCount
+                    phosphorusAlert = '-Alert: Your phosphorus count is ' + str(diff) + 'mg below the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Try eating some more of these common phosphorus rich foods: Chicken, Pork, Seafood'
 
                 #this is to get it in g/kg of body weight
                 proteinRDA = 0.8 * (float(firstUser.weight) * 0.453592)
+                proteinRDA = math.floor(proteinRDA)
+                proteinLow = proteinRDA * 0.9
+
                 if (proteinCount > proteinRDA):
                     diff = int(proteinCount) - int(proteinRDA)
-                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +'g above the range of daily recommended allowance!'
+                    proteinRecommendation = '-Avoid eating too much of these common protein rich foods: Eggs, Almonds, Milk'
+                elif (proteinCount < proteinLow):
+                    diff = proteinLow - proteinCount
+                    proteinAlert = '-Alert: Your protein count is ' + str(diff) + 'g below the range of daily recommended allowance!'
+                    proteinRecommendation = '-Try eating some more of these common protein rich foods: Eggs, Almonds, Milk'
 
 
                 #if they select male or other for their gender for water intake
@@ -512,14 +543,27 @@ def reportPageView(request):
                     waterRDA = 3.7
                     if (waterCount > waterRDA):
                         diff = waterCount - waterRDA
-                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the range of daily recommended allowance!'
+                        waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
+                    elif (waterCount < 3.5):
+                        diff = 3.5 - waterCount
+                        waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the range of daily recommended allowance!'
+                        waterRecommendation = '-Try drinking more water'
 
                 #if they select their gender as female
                 else:
                     waterRDA = 2.7
                     if (waterCount > waterRDA):
                         diff = waterCount - waterRDA
-                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the daily recommended allowance!'
+                        waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
+                    elif (waterCount < 2.5):
+                        diff = 2.5 - waterCount
+                        waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the daily recommended allowance!'
+                        waterRecommendation = '-Try drinking more water'
+
+
+
 
             
             #if they have stage 3/4 of kidney disease
@@ -527,62 +571,126 @@ def reportPageView(request):
                 sodiumRDA = 2300
                 if (sodiumCount > sodiumRDA):
                     diff = sodiumCount - sodiumRDA
-                    sodiumAlert = 'Alert: Your sodium level is ' + str(diff) +' above the daily recommended allowance!'
+                    sodiumAlert = '-Alert: Your sodium level is ' + str(diff) + 'mg above range of the daily recommended allowance!'
+                    sodiumRecommendation = '-Avoid eating too much of these common sodium rich foods: Bread, Chicken, Cheese'
+                elif (sodiumCount < 1495):
+                    diff = 1495 - sodiumCount
+                    sodiumAlert = '-Alert: Your sodium count is ' + str(diff) + 'mg below the range of  daily recommended allowance!'
+                    sodiumRecommendation = '-Try eating some more of these common sodium rich foods: Bread, Chicken, Cheese'
 
                 potassiumRDA = 3000
                 if (potassiumCount > potassiumRDA):
                     diff = potassiumCount - potassiumRDA
-                    potassiumAlert = 'Alert: Your potassium level is ' + str(diff) +' above the daily recommended allowance!'
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    potassiumRecommendation = '-Avoid eating too much of these common potassium rich foods: Bananas, Beans, Orange Juice'
+                elif (potassiumCount < 2500):
+                    diff = 2500 - potassiumCount
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg below the range of daily recommended allowance.'
+                    potassiumRecommendation = '-Try eating some more of these common potassium rich foods: Bananas, Beans, Orange Juice'
 
                 phosphorusRDA = 1000
                 if (phosphorusCount > phosphorusRDA):
                     diff = phosphorusCount - phosphorusRDA
-                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
-
+                    phosphorusAlert = '-Alert: Your phosphorus level is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Avoid eating too much of these common phosphorus rich foods: Chicken, Pork, Seafood'
+                elif (phosphorusCount < 800):
+                    diff = 800 - potassiumCount
+                    phosphorusAlert = '-Alert: Your phosphorus count is ' + str(diff) + 'mg below the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Try eating some more of these common phosphorus rich foods: Chicken, Pork, Seafood'
+                
                 proteinRDA = 0.6 * (float(firstUser.weight) * 0.453592)
+                proteinRDA = math.floor(proteinRDA)
+                proteinLow = proteinRDA * 0.9
+
                 if (proteinCount > proteinRDA):
                     diff = int(proteinCount) - int(proteinRDA)
-                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +'g above the range of daily recommended allowance!'
+                    proteinRecommendation = '-Avoid eating too much of these common protein rich foods: Eggs, Almonds, Milk'
+                elif (proteinCount < proteinLow):
+                    diff = proteinLow - proteinCount
+                    proteinAlert = '-Alert: Your protein count is ' + str(diff) + 'g below the range of daily recommended allowance!'
+                    proteinRecommendation = '-Try eating some more of these common protein rich foods: Eggs, Almonds, Milk'
 
                 #if they select male or other for their gender for water intake
                 if((firstUser.gender == 'M') | (firstUser.gender == 'O')):
                     waterRDA = 3.7
                     if (waterCount > waterRDA):
                         diff = waterCount - waterRDA
-                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the range of daily recommended allowance!'
+                        waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
+                    elif (waterCount < 3.5):
+                        diff = 3.5 - waterCount
+                        waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the range of daily recommended allowance!'
+                        waterRecommendation = '-Try drinking more water'
 
                 #if they select their gender as female
                 elif (firstUser.gender == 'F'):
                     waterRDA = 2.7
                     if (waterCount > waterRDA):
                         diff = waterCount - waterRDA
-                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the daily recommended allowance!'
+                        waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
+                    elif (waterCount < 2.5):
+                        diff = 2.5 - waterCount
+                        waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the daily recommended allowance!'
+                        waterRecommendation = '-Try drinking more water'
 
+
+
+            #If they are in stage 5 or dialysis
             if (firstUser.stage == 5):
                 sodiumRDA = 2000
                 if (sodiumCount > sodiumRDA):
                     diff = sodiumCount - sodiumRDA
-                    sodiumAlert = 'Alert: Your sodium level is ' + str(diff) +' above the daily recommended allowance!'
+                    sodiumAlert = '-Alert: Your sodium level is ' + str(diff) + 'mg above range of the daily recommended allowance!'
+                    sodiumRecommendation = '-Avoid eating too much of these common sodium rich foods: Bread, Chicken, Cheese'
+                elif (sodiumCount < 750):
+                    diff = 750 - sodiumCount
+                    sodiumAlert = '-Alert: Your sodium count is ' + str(diff) + 'mg below the range of  daily recommended allowance!'
+                    sodiumRecommendation = '-Try eating some more of these common sodium rich foods: Bread, Chicken, Cheese'
 
                 potassiumRDA = 2000
                 if (potassiumCount > potassiumRDA):
                     diff = potassiumCount - potassiumRDA
-                    potassiumAlert = 'Alert: Your potassium level is ' + str(diff) +' above the daily recommended allowance!'
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    potassiumRecommendation = '-Avoid eating too much of these common potassium rich foods: Bananas, Beans, Orange Juice'
+                elif (potassiumCount < 1500):
+                    diff = 1500 - potassiumCount
+                    potassiumAlert = '-Alert: Your potassium count is ' + str(diff) + 'mg below the range of daily recommended allowance.'
+                    potassiumRecommendation = '-Try eating some more of these common potassium rich foods: Bananas, Beans, Orange Juice'
 
                 phosphorusRDA = 1000
                 if (phosphorusCount > phosphorusRDA):
                     diff = phosphorusCount - phosphorusRDA
-                    phosphorusAlert = 'Alert: Your phosphorus level is ' + str(diff) +' above the daily recommended allowance!'
+                    phosphorusAlert = '-Alert: Your phosphorus level is ' + str(diff) + 'mg above the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Avoid eating too much of these common phosphorus rich foods: Chicken, Pork, Seafood'
+                elif (phosphorusCount < 800):
+                    diff = 800 - potassiumCount
+                    phosphorusAlert = '-Alert: Your phosphorus count is ' + str(diff) + 'mg below the range of daily recommended allowance!'
+                    phosphorusRecommendation = '-Try eating some more of these common phosphorus rich foods: Chicken, Pork, Seafood'
 
                 proteinRDA = 1.2 * (float(firstUser.weight) * 0.453592)
+                proteinRDA = math.floor(proteinRDA)
+                proteinLow = proteinRDA * 0.9
+
                 if (proteinCount > proteinRDA):
                     diff = int(proteinCount) - int(proteinRDA)
-                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +' above the daily recommended allowance!'
+                    proteinAlert = 'Alert: Your protein level is ' + str(diff) +'g above the range of daily recommended allowance!'
+                    proteinRecommendation = '-Avoid eating too much of these common protein rich foods: Eggs, Almonds, Milk'
+                elif (proteinCount < proteinLow):
+                    diff = proteinLow - proteinCount
+                    proteinAlert = '-Alert: Your protein count is ' + str(diff) + 'g below the range of daily recommended allowance!'
+                    proteinRecommendation = '-Try eating some more of these common protein rich foods: Eggs, Almonds, Milk'
 
                 waterRDA = 1
                 if (waterCount > waterRDA):
                         diff = waterCount - waterRDA
-                        waterAlert = 'Alert: Your water level is ' + str(diff) +' above the daily recommended allowance!'
+                        waterAlert = 'Alert: Your water level is ' + str(diff) +'L above the daily recommended allowance!'
+                        waterRecommendation = '-Good job drinking water! But maybe ease up a bit'
+                elif (waterCount < 0.5):
+                        diff =  - waterCount
+                        waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the daily recommended allowance!'
+                        waterRecommendation = '-Try drinking more water'
 
     
 
@@ -610,6 +718,14 @@ def reportPageView(request):
             'phosphorusAlert': phosphorusAlert,
             'proteinAlert': proteinAlert,
             'waterAlert': waterAlert,
+
+            #Recommendations
+            'sodiumRecommendation': sodiumRecommendation,
+            'potassiumRecommendation': potassiumRecommendation,
+            'phosphorusRecommendation': phosphorusRecommendation,
+            'proteinRecommendation': proteinRecommendation,
+            'waterRecommendation': waterRecommendation,
+
             }
 
         else:
