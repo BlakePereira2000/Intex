@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
-from datetime import date
+from datetime import datetime, date
 
 # For embedding SQL queries in python
 import psycopg2
@@ -72,10 +72,12 @@ def journalPageView(request):
         
         print(request.GET.get('selected_date'))
         if request.GET.get('selected_date') is None:
-            selected_date = date.today()
+            selected_date = date.today()        # Keeps as datetime dt for template formatting
             print(selected_date)
         else:
             selected_date = request.GET.get('selected_date')
+            # should turn this into datetime format so that template can format it
+            selected_date = datetime.strptime(selected_date,'%Y-%m-%d')
 
         # Determine the journal we are looking at
         try:
@@ -365,6 +367,27 @@ def save_food_to_dayView(request):
     dj_in_use.daily_foods.add(request.POST.get('chosenFood'), through_defaults={'grams':grams})
     return redirect('journal')
 
+
+# Save the edits made to the journal entry in the database
+def save_journal_editsView(request):
+    selected_date = request.POST.get('date_to_return_to')
+    
+    # find the record to update
+    food_in_day_id = request.POST.get('food_in_day_id')
+    food_in_day_record = Food_in_Day.objects.get(id=food_in_day_id)
+
+    # create the new gram amount
+    new_grams = request.POST.get('food_grams')
+
+    # Make the food in day record's gram count the new one
+    food_in_day_record.grams = new_grams
+
+    # Save change
+    food_in_day_record.save()
+
+
+    return redirect('journal')
+
 ################### Report Views #####################
 def reportPageView(request):
     global loggedIn
@@ -379,9 +402,7 @@ def reportPageView(request):
         if request.method == 'GET':
 
             #####################################FOOD CONSUMED GRAPHS############################################
-            #Get the date selected  from the calendar
-            #selectedDate = request.GET['selected_date']
-
+     
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0

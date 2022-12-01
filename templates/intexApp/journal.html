@@ -10,17 +10,10 @@
 <body class="form">
   {% include 'partials/header.html' %}
   {% include 'partials/nav.html' %}
-
-
-
-
-
   <br>
-
   <div class="row">
     <div class="column">
       <p id="demo"></p>
-      
 
       <form action="{% url 'journal' %}" method='GET' id='form_submit'>
         <input type="date" id="theDate" name="selected_date" onchange='change()'>
@@ -30,7 +23,7 @@
     </div>
     
     <div class="column">
-      <h3 id = 'middleDate'style='border-style: ridge; border-radius: 5px;color:black;'>{{selected_date}}</h3>
+      <h3>{{selected_date | date:'M d, Y'}}</h3>
 
       {% comment %} Results Table {% endcomment %}
       <table>
