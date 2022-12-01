@@ -10,87 +10,78 @@
 </head>
 <body>
   {% include 'partials/header.html'%}
-
-    <div class="row">
-      <div class="column1">
-        <h2></h2>
-      </div>
-
-      <div class="column2">
-        <h2 style= 'text-align: center;'>Welcome to Kidney Konnect +</h2>
-        <h3>Please enter your information below</h3>
+  <h2 style= 'text-align: center;'>Welcome to Kidney Konnect +</h2>
+  <h3>Please enter your information below</h3>
 
       <form action="{%url 'savesignup'%}" method="POST" name="signup_form" id="signup_form">
         {% csrf_token %}
-        <div class="column4">
-          <label for="username">Create Username:</label><br>
-          <input type="text" id="username" name="username" placeholder="Enter username" required><br>
-          <label for="password">Create Password:</label><br>
-          <input type="password" id="password" name="password" placeholder="Enter password" required><br>
-          <label for="confirmpw">Confirm Password:</label><br>
-          <input type="password" id="confirmpw" name="confirmpw" placeholder="Confirm password" required> <br><br>
-          <button class='button' action="{%url 'savesignup'%}">Sign Up</button>
-          <div style="color:red;font-weight:bold;"><h3>{{message}}</h3></div>
-        </div>
-        <div class="column4">
-          <label for="fname">First Name:</label><br>
-          <input type="text" id="fname" name="fname" placeholder="Enter your first name" required><br>
-          <label for="lname">Last Name:</label><br>
-          <input type="text" id="lname" name="lname" placeholder="Enter your last name" required><br>
-          <label for="dob">Date of Birth</label><br>
-          <input type="date" id="dob" name="dob" placeholder="Enter date of birth" required><br>
-          <label for="gender">Gender:</label><br>
-          <select id="gender" name="gender" placeholder="Enter a Gender" required><br>
-            <option value="F">Female</option>
-            <option value="M">Male</option>
-            <option value="O">Other</option>
-          </select>
-          <label for="weight">Weight (in lbs):</label><br>
-          <input type="number" id="weight" name="weight" placeholder="Enter your weight" step=".1" required><br>
-          <label for="height">Height (in feet):</label><br>
-          <input type="number" id="height" name="height" placeholder="Enter your height" step=".1" required><br><br>
-          <label for="stage">Kidney Disease Stage:</label><br>
-          <select id="stage" name="stage" required><br>
-            <option value="none" selected disabled hidden>Select a kidney disease stage</option>
-            <option value="1">Stage 1</option>
-            <option value="2">Stage 2</option>
-            <option value="3">Stage 3</option>
-            <option value="4">Stage 4</option>
-            <option value="5">Stage 5</option>
-          </select>
-          <label for="comorbidity1">Comorbidity 1:</label><br>
+        <div class='grid-container'>
+          <div>
+            <label for="fname">First Name:</label><br>
+            <input type="text" id="fname" name="fname" placeholder="Enter your first name" required><br>
+            <label for="lname">Last Name:</label><br>
+            <input type="text" id="lname" name="lname" placeholder="Enter your last name" required><br>
+            <label for="dob">Date of Birth</label><br>
+            <input type="date" id="dob" name="dob" placeholder="Enter date of birth" required><br>
+            <label for="gender">Gender:</label><br>
+            <select id="gender" name="gender" placeholder="Enter a Gender" required><br>
+              <option value="F">Female</option>
+              <option value="M">Male</option>
+              <option value="O">Other</option>
+            </select>
+            <label for="weight">Weight (in lbs):</label><br>
+            <input type="number" id="weight" name="weight" placeholder="Enter your weight" step=".1" required><br>
+            <label for="height">Height (in feet):</label><br>
+            <input type="number" id="height" name="height" placeholder="Enter your height" step=".1" required>
+          </div>
+          <div>
+            <label for="stage">Kidney Disease Stage:</label><br>
+            <select id="stage" name="stage" required><br>
+              <option value="none" selected disabled hidden>Select a kidney disease stage</option>
+              <option value="1">Stage 1</option>
+              <option value="2">Stage 2</option>
+              <option value="3">Stage 3</option>
+              <option value="4">Stage 4</option>
+              <option value="5">Stage 5</option>
+            </select>
+            <label for="comorbidity1">Comorbidity 1:</label><br>
               <select id='comorbidity1' name="comorbidity1">
                   <option value="none" selected disabled hidden>Select a comorbidity</option>
                 {% for comorbidity in comorbidityList  %}
                   <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
                 {% endfor %}
               </select>
+            <label for="comorbidity2">Comorbidity 2:</label><br>
+            <select id='comorbidity2' name="comorbidity2">
+                <option value="none" selected disabled hidden>Select a comorbidity</option>
+              {% for comorbidity in comorbidityList  %}
+                <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
+              {% endfor %}
+            </select>
 
-          <label for="comorbidity2">Comorbidity 2:</label><br>
-          <select id='comorbidity2' name="comorbidity2">
-              <option value="none" selected disabled hidden>Select a comorbidity</option>
-            {% for comorbidity in comorbidityList  %}
-              <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
-            {% endfor %}
-          </select>
-
-          <label for="comorbidity3">Comorbidity 3:</label><br>
-          <select id='comorbidity3' name="comorbidity2">
-              <option value="none" selected disabled hidden>Select a comorbidity</option>
-            {% for comorbidity in comorbidityList  %}
-              <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
-            {% endfor %}
-          </select>
-
+            <label for="comorbidity3">Comorbidity 3:</label><br>
+            <select id='comorbidity3' name="comorbidity2">
+                <option value="none" selected disabled hidden>Select a comorbidity</option>
+              {% for comorbidity in comorbidityList  %}
+                <option value="{{comorbidity.id}}">{{comorbidity.comorbidity_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="username">Create Username:</label><br>
+            <input type="text" id="username" name="username" placeholder="Enter username" required><br>
+            <label for="password">Create Password:</label><br>
+            <input type="password" id="password" name="password" placeholder="Enter password" required><br>
+            <label for="confirmpw">Confirm Password:</label><br>
+            <input type="password" id="confirmpw" name="confirmpw" placeholder="Confirm password" required> <br><br>
+            <button class='button' action="{%url 'savesignup'%}">Sign Up</button>
+            <div style="color:red;font-weight:bold;"><h3>{{message}}</h3></div>
+          </div>
         </div>
       </div>
+    </form>
+    
 
-      <div class="column3">
-        <h2></h2>
-      </div>
-    </div>
-      </form>
-        
 <script>
   var password = document.getElementById("password")
   , confirm_password = document.getElementById("confirmpw");
@@ -109,3 +100,20 @@
 
 </body>
 </html>
+
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+  }
+  {% comment %} .column {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+  } {% endcomment %}
+  </style>

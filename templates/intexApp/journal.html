@@ -16,7 +16,7 @@
       <h3 style='text-align: center'>Select Date:</h3>
       <form action="{% url 'journal' %}" method='GET' id='form_submit' class="report-date">
         <input type="date" id="selected_date" name="selected_date" onchange='change()'>
-        <input type='hidden' value="{{selected_date}}" id="submitDate"  name=''>
+        <input type='submit' value="{{selected_date}}" id="submitDate"  name=''>
       </form>
     </div>
     
