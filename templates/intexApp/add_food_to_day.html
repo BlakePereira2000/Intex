@@ -2,6 +2,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block content %}
+{% block title %}Add Food to Day{% endblock title %}
 <br>
 <div class="other-guy">
     <div style='width:50%'>
@@ -19,7 +20,7 @@
                     <input type="radio" class="radio" value="{{food.id}}" name="chosenFood" id="{{food.food_name}}" checked/>
                 {% endfor %}
                 <label for="grams">How many grams?</label>
-                <input type="number" name='grams' step='.1' >
+                <input type="number" name='grams' step='.1' required>
                 <input type="hidden" name="journalID_in_use" value="{{journalID_in_use}}">
                 <button type="submit">Add food to day</button>
             </form>
