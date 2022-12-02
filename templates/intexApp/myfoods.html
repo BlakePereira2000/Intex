@@ -4,7 +4,7 @@
 {% block content %}
 <br><br>
 <div class="report-date" style='padding-left: 15%; padding-right: 15%;'>
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for foods..">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for foods.." style="height: 2rem; width: 45%">
 
 <table id="myTable">
     <tr class="header">
@@ -68,7 +68,7 @@
 
     <form name="form" method="get" action="{% url 'apisearch' %}">
         <label for="search_string"></label>
-        <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' placeholder="Search for new foods.." required>
+        <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' placeholder="Search for new foods.." style="height: 2rem;" required>
         <button type="submit">Search</button>
     </form>
 </div>
