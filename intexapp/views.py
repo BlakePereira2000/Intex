@@ -170,13 +170,13 @@ def todayGraphInfo():
         proteinCount += protein
         potassiumCount += potassium
         phosphorusCount += phosphorus
-        waterCount += water
+        waterCount = float(waterCount) + float(water)
     if journal.water_intake is not None:
         waterL = journal.water_intake / 1000
-        waterCount += waterL
+        waterCount = float(waterCount) + float(waterL)
     else:
         waterL = 0
-    waterCount += waterL
+    waterCount += float(waterCount) + float(waterL)
     
 
     ############################################ RECCOMMENDED VALUES GRAPH #############################################
@@ -812,8 +812,8 @@ def reportPageView(request):
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
             journal = {}
-
-            #for every object in dail journals check if the selected date is equal to the
+            print(selectedDate)
+            #for every object in daily journals check if the selected date is equal to the
             #date the journal was written, if it is save that journal id
             for dailyJournal in dailyJournals:
                 if str(dailyJournal.date) == selectedDate:
@@ -871,10 +871,10 @@ def reportPageView(request):
                 proteinCount += protein
                 potassiumCount += potassium
                 phosphorusCount += phosphorus
-                waterCount += water
+                waterCount = float(waterCount) + float(water)
             if journal.water_intake is not None:
                 waterL = journal.water_intake / 1000
-                waterCount += waterL
+                waterCount = float(waterCount) + float(waterL)
             else:
                 waterL = 0
             
