@@ -824,7 +824,6 @@ def reportPageView(request):
                 if str(dailyJournal.date) == selectedDate:
                     journalId = dailyJournal.id
                     journal = dailyJournal
-                    journalBlood = dailyJournal #this is only the object for the selected date
 
             #gather all of the objects from the food in day table, create an empty food in days list
             foodInDays = Food_in_Day.objects.all()
@@ -1122,58 +1121,7 @@ def reportPageView(request):
 
     
 
-            #################################### Blood Sugar Graph ##########################################
             
-            #initialize the list with the dates from the past week
-            pastWeek = []
-            bloodSugar = []
-
-            #go through and grab the dates of the past week from selected date and add to the list
-            for step in range (0,7):
-                dates = journalBlood.date - timedelta(days = step)
-                pastWeek.append(dates)
-
-                #for manyObjects in dailyJournals:
-                    #if (manyObjects.date == dates):
-                    #    print('yes')
-                    #    pastDay = manyObjects
-                    #    pastWeek.append(pastDay)
-                   # else:
-                    #    pastWeek.append(dates)
-                
-
-            #flip list to get it in the right order
-            pastWeek.reverse()
-
-            journalsWithInfo = []
-            dailyJournalDateList = []
-
-            for instance in dailyJournals:
-                datesInJournal = instance.date
-                #journalsWithInfo.append(instance)
-                dailyJournalDateList.append(datesInJournal)
-
-            for dateNew in pastWeek:
-                if dateNew in dailyJournalDateList:
-                    jbla =  Daily_Journal.objects.get(date = dateNew)
-                    if jbla.avg_blood_sugar is None:
-                        whatIWant = 0
-                    else:
-                        whatIWant = jbla.avg_blood_sugar
-    
-                    bloodSugar.append(whatIWant)
-                    
-                else:
-                    whatIWant = 0
-                    bloodSugar.append(whatIWant)
-
-                pastWeekOutput = ''
-
-                for items in pastWeek:
-                    pastWeekOutput = str(items) + ' '
-                    pastWeekOutput += pastWeekOutput
-
-                print(pastWeekOutput)
 
 
             
@@ -1208,10 +1156,6 @@ def reportPageView(request):
             'phosphorusRecommendation': phosphorusRecommendation,
             'proteinRecommendation': proteinRecommendation,
             'waterRecommendation': waterRecommendation,
-
-            #BloodPressureGraph
-            'pastWeek': pastWeek,
-            'bloodSugar': bloodSugar,
 
             }
 
