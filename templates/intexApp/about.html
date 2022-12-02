@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block title %}About{% endblock title %}
+<link rel="icon" type="image/x-icon" href="{% static "img/favicon.ico" %}">
 {% block content %}
 <h2>About</h2>
 <div class="interrupt">
@@ -32,5 +33,19 @@
             of the problem across the U.S., it can take up to 6 months to see a renal specialist 
             and get the needed help.  CKD can be reversed with a change of attitudes and behaviors 
             in regard to what we take into our bodies.</p>
+</div>
+<div class="interrupt">
+    <p><strong>What are the main causes of chronic kidney disease?</strong></p> 
+        <p>
+            Diabetes and high blood pressure, or hypertension, are responsible for two-thirds of chronic kidney disease cases.
+            <ul>
+                <li><strong>Diabetes: </strong>Diabetes occurs when your blood sugar remains too high. Over time, unmanaged blood sugar can 
+                    cause damage to many organs in your body, 
+                    including the kidneys and heart and blood vessels, nerves, and eyes. </li>
+                <li><strong>High blood pressure: </strong>High blood pressure occurs when your blood pressure against the walls of your blood 
+                    vessels increases. If uncontrolled or poorly controlled, high blood pressure can be a leading cause of heart attacks, 
+                    strokes, and chronic kidney disease. Also, chronic kidney disease can cause high blood pressure.</li>
+            </ul>
+        </p>
 </div>
 {% endblock %}

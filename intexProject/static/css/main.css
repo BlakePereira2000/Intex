@@ -275,11 +275,18 @@ nav a[href]:hover {
   color: var(--zesty-orange);
 }
 
+nav a[href]:hover {
+  color: var(--zesty-orange);
+}
 
 .panel {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+nav li.active a{
+  color: var(--zesty-orange);
 }
 
 
@@ -358,7 +365,8 @@ select,
 textarea,
 fieldset,
 button {
-  margin-bottom: 1rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }
 
 form button {

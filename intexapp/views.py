@@ -111,6 +111,7 @@ def todayGraphInfo():
     dailyJournals = Daily_Journal.objects.all()
     journalId = 0
     journal = 'empty'
+    journalBlood = {}
 
     #for every object in daily journals check if the selected date is equal to the
     #date the journal was written, if it is save that journal id
@@ -118,6 +119,7 @@ def todayGraphInfo():
         if str(dailyJournal.date) == selectedDate:
             journalId = dailyJournal.id
             journal = dailyJournal
+            journalBlood = dailyJournal #this is only the object for the selected date
 
     #gather all of the objects from the food in day table, create an empty food in days list
     foodInDays = Food_in_Day.objects.all()
@@ -170,14 +172,21 @@ def todayGraphInfo():
         proteinCount += protein
         potassiumCount += potassium
         phosphorusCount += phosphorus
+        
         waterCount = float(waterCount) + float(water)
+
+        sodiumCount = math.floor(sodiumCount)
+        proteinCount = math.floor(proteinCount)
+        potassiumCount = math.floor(potassiumCount)
+        phosphorusCount = math.floor(phosphorusCount)
+        waterCount = math.floor(waterCount)
+
     if journal is not 'empty':
         if journal.water_intake is not None:
             waterL = journal.water_intake / 1000
             waterCount = float(waterCount) + float(waterL)
         else:
             waterL = 0
-    
 
     ############################################ RECCOMMENDED VALUES GRAPH #############################################
     #Grab all user objects and select just the first one haha
@@ -269,16 +278,15 @@ def todayGraphInfo():
                 diff = 2.5 - waterCount
                 waterAlert = '-Alert: Your water level is ' + str(diff) + 'L below the daily recommended allowance!'
                 waterRecommendation = '-Try drinking more water'
-
-
-
-
     
     #if they have stage 3/4 of kidney disease
     if ((firstUser.stage < 5) and (firstUser.stage > 2)):
         sodiumRDA = 2300
         if (sodiumCount > sodiumRDA):
+
             diff = sodiumCount - sodiumRDA
+            diff = math.floor(diff)
+
             sodiumAlert = '-Alert: Your sodium level is ' + str(diff) + 'mg above range of the daily recommended allowance!'
             sodiumRecommendation = '-Avoid eating too much of these common sodium rich foods: Bread, Chicken, Cheese'
         elif (sodiumCount < 1495):
@@ -402,7 +410,61 @@ def todayGraphInfo():
 
 
 
+    #################################### Blood Sugar Graph ##########################################
+    
+    #initialize the list with the dates from the past week
+    pastWeek = []
+    bloodSugar = []
 
+    #go through and grab the dates of the past week from selected date and add to the list
+    for step in range (0,7):
+        dates = journalBlood.date - timedelta(days = step)
+        pastWeek.append(dates)
+
+        #for manyObjects in dailyJournals:
+            #if (manyObjects.date == dates):
+            #    print('yes')
+            #    pastDay = manyObjects
+            #    pastWeek.append(pastDay)
+            # else:
+            #    pastWeek.append(dates)
+        
+
+    #flip list to get it in the right order
+    pastWeek.reverse()
+
+    journalsWithInfo = []
+    dailyJournalDateList = []
+
+    for instance in dailyJournals:
+        datesInJournal = instance.date
+        #journalsWithInfo.append(instance)
+        dailyJournalDateList.append(datesInJournal)
+
+    for dateNew in pastWeek:
+        if dateNew in dailyJournalDateList:
+            jbla =  Daily_Journal.objects.get(date = dateNew)
+            if jbla.avg_blood_sugar is None:
+                whatIWant = 0
+            else:
+                whatIWant = jbla.avg_blood_sugar
+
+            bloodSugar.append(whatIWant)
+            
+        else:
+            whatIWant = 0
+            bloodSugar.append(whatIWant)
+
+        pastWeekOutput = ''
+
+        for items in pastWeek:
+            pastWeekOutput = str(items) + ' '
+            pastWeekOutput += pastWeekOutput
+
+        print(pastWeekOutput)
+
+
+    
     
     context = {
     #Counsumed Values
@@ -434,6 +496,10 @@ def todayGraphInfo():
     'phosphorusRecommendation': phosphorusRecommendation,
     'proteinRecommendation': proteinRecommendation,
     'waterRecommendation': waterRecommendation,
+
+    #BloodPressureGraph
+    'pastWeek': pastWeek,
+    'bloodSugar': bloodSugar,
 
     }
 
@@ -802,13 +868,8 @@ def reportPageView(request):
         else:
             selectedDate = str(request.POST.get('selected_date'))
 
-        formatDate = date.today()
-        formatDate = formatDate.strftime("%d %B %Y")
-
-
-        #print(selectedDate)
-
         if request.method == 'POST' or request.method == 'GET':
+
 
             #####################################FOOD CONSUMED GRAPHS############################################
      
@@ -1229,12 +1290,12 @@ def reportPageView(request):
 
             }
 
+            # Gets today's nutrient graph info
+            context = todayGraphInfo()
         else:
             context = {
                 'selectedDate': selectedDate
             }
-
-
         
         return render(request, 'intexApp/report.html', context)
     else:
