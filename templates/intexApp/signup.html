@@ -32,17 +32,26 @@
             </select>
             <label for="weight">Weight (in lbs):</label><br>
             <input type="number" id="weight" name="weight" placeholder="Enter your weight" step=".1" required><br>
-            <label for="height">Height (in feet):</label><br>
-            <input type="number" id="height" name="height" placeholder="Enter your height" step=".1" required>
+            <label for="height">Height (in inches):</label><br>
+            <input type="number" id="height" name="height" placeholder="Enter your height" required>
           </div>
           <div>
-          <label for="stage">Comorbidities:</label><br>
+          <label for="como">Comorbidities:</label><br>
           <select name="como" id="como" required>
             <option value="none" selected>None</option>
             <option value="diabetes">Diabetes</option>
             <option value="high_blood_pressure">High Blood Pressure</option>
             <option value="cardiovascular_disease">Cardiovascular Disease</option>
             <option value="lung_disease">Lung Disease</option>
+          </select><br>
+          <label for="stage">Kidney Disease Stage:</label><br>
+          <select id="stage" name="stage" required>
+            <option value="none" selected disabled hidden>Select a kidney disease stage</option>
+            <option value="1">Stage 1</option>
+            <option value="2">Stage 2</option>
+            <option value="3">Stage 3</option>
+            <option value="4">Stage 4</option>
+            <option value="5">Stage 5</option>
           </select>
         </div>
           <div>
