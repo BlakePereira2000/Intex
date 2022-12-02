@@ -10,8 +10,6 @@
         <input type="date" value ={{selectedDate}} name="selected_date" id="selected_date">
         <button type = 'submit'>Select Date</button>
     </form>
-    This is the selected date: <b>{{selectedDate}}</b>. Default should be today's date. 
-
 
     <!--Micronutrients chart-->
     <section>
@@ -70,23 +68,23 @@
           </script>
       </div>
       <div class="text-wrapper">
+      
         <div style="height:500px;width:300px;overflow:auto;background-color:white;color:black;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
           
-          <p></p>
-          <h2>Alerts</h2>
-          <p>{{sodiumAlert}}</p>
-          <p>{{potassiumAlert}}</p>
-          <p>{{phosphorusAlert}}</p>
-          <p>{{proteinAlert}}</p>
-          <p>{{waterAlert}}</p>
-          
-          <h4>Recommendations:</h4>
-          <p>{{sodiumRecommendation}}</p>
-          <p>{{potassiumRecommendation}}</p>
-          <p>{{phosphorusRecommendation}}</p>
-          <p>{{proteinRecommendation}}</p>
-          <p>{{waterRecommendation}}</p>
-        </div>
+
+        <h2>Alerts</h2>
+        <p class="alert">{{sodiumAlert}}</p>
+        <p class="alert">{{potassiumAlert}}</p>
+        <p class="alert">{{phosphorusAlert}}</p>
+        <p class="alert">{{proteinAlert}}</p>
+        <p class="alert">{{waterAlert}}</p>
+        <br><br>
+        <h4>Recommendations:</h4>
+        <p>{{sodiumRecommendation}}</p>
+        <p>{{potassiumRecommendation}}</p>
+        <p>{{phosphorusRecommendation}}</p>
+        <p>{{proteinRecommendation}}</p>
+        <p>{{waterRecommendation}}</p>
       </div>
     </article>
   </section>

@@ -36,3 +36,14 @@ function closeLab() {
 document.getElementById("lab").style.height = "";
 document.getElementById("lab").style.right = "";
 }
+
+/*search food overlay*/
+function openFood() {
+  document.getElementById("food").style.height = "100%";
+  document.getElementById("food").style.right = "33%";
+}
+
+function closeFood() {
+  document.getElementById("food").style.height = "";
+  document.getElementById("food").style.right = "";
+}
