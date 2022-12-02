@@ -13,12 +13,12 @@
     <nav>
         <h2 class="hidden">Main Menu</h2>
         <ul>
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
-            <li><a href="{% url 'journal' %}">Journal</a></li>
-            <li><a href="{% url 'report' %}">Reports</a></li>
-            <li><a href="{% url 'foods' %}">My Foods</a></li>
-            <li><a href="{% url 'user' %}">User</a></li>
+            <li {% if request.resolver_match.url_name == 'index' %}class="active"{% endif %}><a href="{% url 'index' %}">Home</a></li>
+            <li {% if request.resolver_match.url_name == 'about' %}class="active"{% endif %}><a href="{% url 'about' %}">About</a></li>
+            <li {% if request.resolver_match.url_name == 'journal' %}class="active"{% endif %}><a href="{% url 'journal' %}">Journal</a></li>
+            <li {% if request.resolver_match.url_name == 'report' %}class="active"{% endif %}><a href="{% url 'report' %}">Reports</a></li>
+            <li {% if request.resolver_match.url_name == 'foods' %}class="active"{% endif %}><a href="{% url 'foods' %}">My Foods</a></li>
+            <li {% if request.resolver_match.url_name == 'user' %}class="active"{% endif %}><a href="{% url 'user' %}">User</a></li>
         </ul>
     </nav>
 </div>
