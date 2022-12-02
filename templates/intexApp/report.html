@@ -70,19 +70,23 @@
           </script>
       </div>
       <div class="text-wrapper">
-        <h2>Alerts</h2>
-        <p>{{sodiumAlert}}</p>
-        <p>{{potassiumAlert}}</p>
-        <p>{{phosphorusAlert}}</p>
-        <p>{{proteinAlert}}</p>
-        <p>{{waterAlert}}</p>
-        <br><br>
-        <h4>Recommendations:</h4>
-        <p>{{sodiumRecommendation}}</p>
-        <p>{{potassiumRecommendation}}</p>
-        <p>{{phosphorusRecommendation}}</p>
-        <p>{{proteinRecommendation}}</p>
-        <p>{{waterRecommendation}}</p>
+        <div style="height:500px;width:300px;overflow:auto;background-color:white;color:black;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
+          
+          <p></p>
+          <h2>Alerts</h2>
+          <p>{{sodiumAlert}}</p>
+          <p>{{potassiumAlert}}</p>
+          <p>{{phosphorusAlert}}</p>
+          <p>{{proteinAlert}}</p>
+          <p>{{waterAlert}}</p>
+          
+          <h4>Recommendations:</h4>
+          <p>{{sodiumRecommendation}}</p>
+          <p>{{potassiumRecommendation}}</p>
+          <p>{{phosphorusRecommendation}}</p>
+          <p>{{proteinRecommendation}}</p>
+          <p>{{waterRecommendation}}</p>
+        </div>
       </div>
     </article>
   </section>
@@ -91,7 +95,7 @@
     <article class="panel">
       <!--Protein Chart -->
     <div class="image-wrapper">
-        <canvas id="proteinChart" width="600" height="200"></canvas>
+        <canvas id="proteinChart" width="300" height="400"></canvas>
         <script>
         const different = document.getElementById('proteinChart').getContext('2d');
         const proteinChart = new Chart(different, {
@@ -118,7 +122,7 @@
                 ]
               },
               options: {
-                  responsive: true,
+                  responsive: false,
                   scales: {
                       x: {
                         stacked: true,
@@ -145,7 +149,7 @@
       <article class="panel">
         <div class="image-wrapper">
       <!--Water Chart -->
-          <canvas id="waterChart" width="600" height="200"></canvas>
+          <canvas id="waterChart" width="300" height="400"></canvas>
           <script>
           const different2 = document.getElementById('waterChart').getContext('2d');
           const waterChart = new Chart(different2, {
@@ -172,7 +176,7 @@
                   ]
               },
               options: {
-                  responsive: true,
+                  responsive: false,
                   scales: {
                       x: {
                         stacked: true,
@@ -193,5 +197,45 @@
         </div>
       </article>
     </section>
+    
+    <section>
+      <article class="panel">
+        <div class="image-wrapper">
+          <div>
+            <canvas id="barChart" width = "400" height  = "300"></canvas>
+          </div>
+          
+          
+          <script>
+            const barChart = document.getElementById('barChart');
+          
+            new Chart(barChart, {
+              type: 'line',
+              data: {
+                labels: {{pastWeek}},
+                datasets: [{
+
+                  label: 'mmHg',
+                  data: {{bloodSugar}}
+                  borderColor: '#36A2EB',
+                }]
+              },
+              options: {
+                responsive: false,
+                scales: {
+                  
+                  },
+                plugins: {
+                  title: {
+                    display: true,
+                    text: 'BLOOD PRESSURE OVER PAST 7 DAYS',
+                  }
+                }
+              }
+        });
+        </script>
+      </div>
+    </article>
+  </section>
 
 {% endblock %}

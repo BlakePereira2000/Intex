@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from .models import User, Food, Food_in_Day, Daily_Journal, Comorbidity
 import requests
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import math
 
 # For embedding SQL queries in python
@@ -602,6 +602,7 @@ def reportPageView(request):
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
             journal = {}
+            journalBlood = {}
 
             #for every object in dail journals check if the selected date is equal to the
             #date the journal was written, if it is save that journal id
@@ -609,6 +610,7 @@ def reportPageView(request):
                 if str(dailyJournal.date) == selectedDate:
                     journalId = dailyJournal.id
                     journal = dailyJournal
+                    journalBlood = dailyJournal #this is only the object for the selected date
 
             #gather all of the objects from the food in day table, create an empty food in days list
             foodInDays = Food_in_Day.objects.all()
@@ -662,9 +664,18 @@ def reportPageView(request):
                 potassiumCount += potassium
                 phosphorusCount += phosphorus
                 waterCount += water
+
+                sodiumCount = math.floor(sodiumCount)
+                proteinCount = math.floor(proteinCount)
+                potassiumCount = math.floor(potassiumCount)
+                phosphorusCount = math.floor(phosphorusCount)
+                waterCount = math.floor(waterCount)
             
-            waterL = journal.water_intake / 1000
-            waterCount += waterL
+            if journal.water_intake is not None:
+                waterL = journal.water_intake / 1000
+                waterCount += waterL
+            else:
+                waterL = 0
 
             
 
@@ -767,7 +778,10 @@ def reportPageView(request):
             if ((firstUser.stage < 5) and (firstUser.stage > 2)):
                 sodiumRDA = 2300
                 if (sodiumCount > sodiumRDA):
+
                     diff = sodiumCount - sodiumRDA
+                    diff = math.floor(diff)
+
                     sodiumAlert = '-Alert: Your sodium level is ' + str(diff) + 'mg above range of the daily recommended allowance!'
                     sodiumRecommendation = '-Avoid eating too much of these common sodium rich foods: Bread, Chicken, Cheese'
                 elif (sodiumCount < 1495):
@@ -891,7 +905,61 @@ def reportPageView(request):
 
     
 
+            #################################### Blood Sugar Graph ##########################################
+            
+            #initialize the list with the dates from the past week
+            pastWeek = []
+            bloodSugar = []
 
+            #go through and grab the dates of the past week from selected date and add to the list
+            for step in range (0,7):
+                dates = journalBlood.date - timedelta(days = step)
+                pastWeek.append(dates)
+
+                #for manyObjects in dailyJournals:
+                    #if (manyObjects.date == dates):
+                    #    print('yes')
+                    #    pastDay = manyObjects
+                    #    pastWeek.append(pastDay)
+                   # else:
+                    #    pastWeek.append(dates)
+                
+
+            #flip list to get it in the right order
+            pastWeek.reverse()
+
+            journalsWithInfo = []
+            dailyJournalDateList = []
+
+            for instance in dailyJournals:
+                datesInJournal = instance.date
+                #journalsWithInfo.append(instance)
+                dailyJournalDateList.append(datesInJournal)
+
+            for dateNew in pastWeek:
+                if dateNew in dailyJournalDateList:
+                    jbla =  Daily_Journal.objects.get(date = dateNew)
+                    if jbla.avg_blood_sugar is None:
+                        whatIWant = 0
+                    else:
+                        whatIWant = jbla.avg_blood_sugar
+    
+                    bloodSugar.append(whatIWant)
+                    
+                else:
+                    whatIWant = 0
+                    bloodSugar.append(whatIWant)
+
+                pastWeekOutput = ''
+
+                for items in pastWeek:
+                    pastWeekOutput = str(items) + ' '
+                    pastWeekOutput += pastWeekOutput
+
+                print(pastWeekOutput)
+
+
+            
             
             context = {
             #Counsumed Values
@@ -922,6 +990,10 @@ def reportPageView(request):
             'phosphorusRecommendation': phosphorusRecommendation,
             'proteinRecommendation': proteinRecommendation,
             'waterRecommendation': waterRecommendation,
+
+            #BloodPressureGraph
+            'pastWeek': pastWeek,
+            'bloodSugar': bloodSugar,
 
             }
 
