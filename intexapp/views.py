@@ -1324,7 +1324,8 @@ def apiSearchPageView(request):
         apiParameters = {
             'api_key': 'TDwP6ToHXnd2lb2a9AroNzd9562GkXW3f63SXuKr',
             'query': searchString,
-            'dataType': ['Survey (FNDDS)', 'Foundation', 'SR Legacy']
+            'dataType': ['Survey (FNDDS)', 'Foundation', 'SR Legacy'],
+            'pageSize': 10,
         }
 
         # Calls the API and saves the response
@@ -1450,6 +1451,8 @@ def deleteFoodPageView(request):
             chosenDbItem= str(request.POST.get('chosenDbItem'))
 
             foodInDays = Food_in_Day.objects.all()
+            if len(foodInDays) == 0:
+                print(foodInDays)
             usedInJournal = 'No'
 
             for food in data:
