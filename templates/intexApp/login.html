@@ -3,6 +3,12 @@
   box-sizing: border-box;
 }
 
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body {
   margin: 0;
   background-color: white;
@@ -30,13 +36,14 @@ p {text-align: center;}
   display: table;
   clear: both;
 }
-
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 @media screen and (max-width:600px) {
   .column {
     width: 100%;
   }
   .center {
+    border-radius:20%;
+    width:500px;
+    height:600px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -89,12 +96,13 @@ p {text-align: center;}
   <div class="column">
     <p>Kidney Konnect + allows people with Chronic Kidney Disease (CKD) to track their daily food intake, be aware of their daily nutrients, and receive recommendations about how to better care for their body.
     </p>
-    {% load static %} <img class ='center' src="{% static "img/cartoon_kidney.png" %}"> 
+    {% load static %} <img style='border-radius:20%;width:500px;height:600px;' src="{% static "img/cartoon_kidney.png" %}"> 
   </div>
   
   <div class="column">
     <div class="grid-container">
-      <div class="item1">Login or visit <a style='color:blue;' href="{%url 'about'%}">our About Page!</a> 
+      <br>
+      <div style='text-align: center'>Login or visit <a style='color:blue' href="{%url 'about'%}">our About Page!</a> 
           <br><br>
           <div style="color:red;font-weight:bold;"><h3>{{message}}</h3></div>
           <form action="{% url 'authenticate' %}" method='POST'> <!-- enter the page for login stuff-->
@@ -105,13 +113,11 @@ p {text-align: center;}
               <input type="submit" value="Login" class= 'button'>
           </form> 
       </div>
-      <div class="item2">
-          <br><br>
-          <h4 class="report-date">First Time User?</h4>
-          <form action="{% url 'signup'%}" class="report-date">
-            
-            <button>Sign Up</button>
-          </form>
+      <div style='text-align: center'>
+        <h4 class="report-date" style='font-size: 26px'>First Time User?</h4>
+        <form action="{% url 'signup'%}">
+          <button>Sign Up</button>
+        </form>
       </div>
     </div>
   </div>
