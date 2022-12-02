@@ -2,7 +2,8 @@
 {% load static %}
 {% block title %}My Foods{% endblock title %}
 {% block content %}
-<div>
+<br><br>
+<div class="report-date">
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for foods..">
 
 <table id="myTable">
@@ -17,7 +18,7 @@
             <td style= 'border-bottom: 1px solid black; text-align: left; padding: 12px'>
                 <div class="row">
                     <div style='float: left; width: 10%;'>
-                        <input type="radio" class="radio" value="{{foodItem}}" name="chosenDbItem" id="{{foodItem.food_name}}"/>
+                        <input type="radio" class="radio" value="{{foodItem}}" name="chosenDbItem" id="{{foodItem.food_name}}" checked/>
                     </div>
                     <div style='float: left; width: 90%;'>
                         <label for="chosenDbItem">{{foodItem.food_name}}</label>
@@ -32,28 +33,28 @@
 
 </table>
 
-<script>
-    function myFunction() {
-      // Declare variables
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("myInput");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-    
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
+    <script>
+        function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            }
         }
-      }
-    }
+        }
     </script>
 </div>
 {% if usedInJournal == 'Yes' %}
@@ -62,38 +63,39 @@
 {% if usedInJournal == 'No' %}
 <div style='color: green;'><b>{{foodName}}</b> was successfully deleted!</div>
 {% endif %}
+<div class="report-date">
+    <div style='padding-top: 50px; padding-left: 20%'><b>Search for new foods to add:</b></div>
 
-<div style='padding-top: 50px;'><b>Search for new foods to add:</b></div>
-
-<form name="form" method="get" action="{% url 'apisearch' %}">
-    <label for="search_string"></label>
-    <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' placeholder="Search for new foods.." required>
-    <button type="submit">Search</button>
-</form>
-
-{% if saved == True %}
-<b>{{foodName}}</b> has been added to your foods!
-{% endif %}
-
-{% if originalSearchString != null %}
-
-    Your search: <b>{{originalSearchString}}</b>.  
-    Modified search string: <b>{{searchString}}</b>.  
-    Number of results: <b>{{ResultCount}}</b>.  
-
-    
-    <form name="form" method="post" action="{% url 'addNewFood' %}">
-    {% csrf_token %}
-    {% for item in validItemList %}
-        <label for="chosenItem">{{item.name}}</label>
-        <input type="radio" class="radio" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>
-    {% endfor %}
-    <button type="submit">Add food</button>
+    <form name="form" method="get" action="{% url 'apisearch' %}">
+        <label for="search_string"></label>
+        <input type="text" value="{{originalSearchString}}" name='search_string' id='search_string' placeholder="Search for new foods.." required>
+        <button type="submit">Search</button>
     </form>
+</div>
+<div class="report-date">
+    {% if saved == True %}
+    <b>{{foodName}}</b> has been added to your foods!
+    {% endif %}
 
-{% endif %}
+    {% if originalSearchString != null %}
 
+        Your search: <b>{{originalSearchString}}</b>.  
+        Modified search string: <b>{{searchString}}</b>.  
+        Number of results: <b>{{ResultCount}}</b>.  
 
+        
+        <form name="form" method="post" action="{% url 'addNewFood' %}">
+        {% csrf_token %}
+        {% for item in validItemList %}
+            <input type="radio" class="radio-small" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>
+            <label for="chosenItem" style="justify-self: start; font-size: 18px">{{item.name}}</label>
+        {% endfor %}
+        <button type="submit">Add food</button>
+        </form>
+
+    {% endif %}
+
+    </div>
 
 
 {% endblock %}

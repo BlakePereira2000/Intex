@@ -2,13 +2,14 @@
 {% load static %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-
-<div style='padding-top: 10px;'class="header">Today's Overview</div>
-<p>This is the landing page, lemon crust. Date: <b>{{selectedDate}}</b></p>
+<br>
+<div style='padding-top: 10px;'class="header">Today's Overview - {{formatDate}}</div>
 
 <!-- Daily Foods Column -->
 <div style='float: left; width: 50%; padding: 20px;'>
-    
+    <form action="{% url 'journal' %}" method="get">
+        <button type="submit">Edit today's foods</button>
+    </form>
     <div style='float: left; width: 80%;border-bottom: 1px solid black; padding: 5px;'>
         Today's foods:
     </div>
@@ -30,8 +31,12 @@
     </div>
 </div>
 
+
 <!--Chart Column -->
-<div style='float: left; width: 50%;'>    
+<div style='float: left; width: 50%; padding: 20px;'>    
+    <form action="{% url 'report' %}" method="get">
+        <button type="submit">See reports</button>
+    </form>
     <!--Micronutrients chart-->
     <div class = "col-md-8">
     <canvas id="myChart" width="600" height="200"></canvas>
