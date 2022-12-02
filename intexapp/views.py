@@ -1302,9 +1302,16 @@ def savesignupView(request):
 
             # Gets today's journal food items
             newList = todayFoodList()
+            
 
             # Adds query result to context (currently a list of tuples)
             context["foodsList"] = newList
+
+            print('save signup')
+            auth_user = User.objects.get(username=new_user.username,password=new_user.password)
+            global auth_user_id
+            auth_user_id = auth_user.id
+            print('sign in? auth_user_id value: ' + str(auth_user_id))
 
             return render(request, 'intexApp/index.html', context)
 
