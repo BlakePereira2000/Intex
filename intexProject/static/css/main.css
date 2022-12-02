@@ -275,6 +275,9 @@ nav a[href]:hover {
   color: var(--zesty-orange);
 }
 
+nav a[href]:hover {
+  color: var(--zesty-orange);
+}
 
 .panel {
   display: flex;
@@ -282,6 +285,9 @@ nav a[href]:hover {
   gap: 2rem;
 }
 
+nav li.active a{
+  color: var(--zesty-orange);
+}
 
 /* button */
 
