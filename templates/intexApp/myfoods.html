@@ -3,7 +3,7 @@
 {% block title %}My Foods{% endblock title %}
 {% block content %}
 <br><br>
-<div class="report-date">
+<div class="report-date" style='padding-left: 15%; padding-right: 15%;'>
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for foods..">
 
 <table id="myTable">
@@ -63,7 +63,7 @@
 {% if usedInJournal == 'No' %}
 <div style='color: green;'><b>{{foodName}}</b> was successfully deleted!</div>
 {% endif %}
-<div class="report-date">
+<div class="report-date" style='padding-left: 15%; padding-right: 15%;'>
     <div style='padding-top: 50px; padding-left: 20%'><b>Search for new foods to add:</b></div>
 
     <form name="form" method="get" action="{% url 'apisearch' %}">
@@ -72,7 +72,7 @@
         <button type="submit">Search</button>
     </form>
 </div>
-<div class="report-date">
+<div class="report-date" style='padding-left: 15%; padding-right: 15%;'>
     {% if saved == True %}
     <b>{{foodName}}</b> has been added to your foods!
     {% endif %}
@@ -85,6 +85,7 @@
 
         
         <form name="form" method="post" action="{% url 'addNewFood' %}">
+        <button type="submit">Add food</button>
         {% csrf_token %}
         {% for item in validItemList %}
             <input type="radio" class="radio-small" value="{{item}}" name="chosenItem" id="{{item.name}}" checked/>

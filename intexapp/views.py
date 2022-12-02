@@ -110,9 +110,9 @@ def todayGraphInfo():
     #Gather all of the records in Daily Journal
     dailyJournals = Daily_Journal.objects.all()
     journalId = 0
-    journal = {}
+    journal = 'empty'
 
-    #for every object in dail journals check if the selected date is equal to the
+    #for every object in daily journals check if the selected date is equal to the
     #date the journal was written, if it is save that journal id
     for dailyJournal in dailyJournals:
         if str(dailyJournal.date) == selectedDate:
@@ -171,12 +171,12 @@ def todayGraphInfo():
         potassiumCount += potassium
         phosphorusCount += phosphorus
         waterCount = float(waterCount) + float(water)
-    if journal.water_intake is not None:
-        waterL = journal.water_intake / 1000
-        waterCount = float(waterCount) + float(waterL)
-    else:
-        waterL = 0
-    waterCount += float(waterCount) + float(waterL)
+    if journal is not 'empty':
+        if journal.water_intake is not None:
+            waterL = journal.water_intake / 1000
+            waterCount = float(waterCount) + float(waterL)
+        else:
+            waterL = 0
     
 
     ############################################ RECCOMMENDED VALUES GRAPH #############################################
@@ -802,6 +802,10 @@ def reportPageView(request):
         else:
             selectedDate = str(request.POST.get('selected_date'))
 
+        formatDate = date.today()
+        formatDate = formatDate.strftime("%d %B %Y")
+
+
         #print(selectedDate)
 
         if request.method == 'POST' or request.method == 'GET':
@@ -811,8 +815,8 @@ def reportPageView(request):
             #Gather all of the records in Daily Journal
             dailyJournals = Daily_Journal.objects.all()
             journalId = 0
-            journal = {}
-            print(selectedDate)
+            journal = 'empty'
+
             #for every object in daily journals check if the selected date is equal to the
             #date the journal was written, if it is save that journal id
             for dailyJournal in dailyJournals:
@@ -872,11 +876,13 @@ def reportPageView(request):
                 potassiumCount += potassium
                 phosphorusCount += phosphorus
                 waterCount = float(waterCount) + float(water)
-            if journal.water_intake is not None:
-                waterL = journal.water_intake / 1000
-                waterCount = float(waterCount) + float(waterL)
-            else:
-                waterL = 0
+
+            if journal is not 'empty':
+                if journal.water_intake is not None:
+                    waterL = journal.water_intake / 1000
+                    waterCount = float(waterCount) + float(waterL)
+                else:
+                    waterL = 0
             
 
             ############################################ RECCOMMENDED VALUES GRAPH #############################################
@@ -1112,6 +1118,7 @@ def reportPageView(request):
             'phosphorusCount': phosphorusCount,
             'waterCount': waterCount,
             'selectedDate': selectedDate,
+            'formatDate': formatDate,
             
             #RDA Values
             'sodiumRDA': sodiumRDA,
