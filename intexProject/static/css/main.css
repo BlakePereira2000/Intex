@@ -398,6 +398,11 @@ form button:hover {
   cursor: pointer;
 }
 
+.signup-grid {
+  display: grid;
+  grid-template-columns: auto, auto, auto;
+}
+
 .alert {
   color: var(--alerts);
 }
@@ -537,6 +542,11 @@ input#selected_date::-webkit-calendar-picker-indicator{
 .report-date {
   padding-left: 35%;
   padding-right: 35%;
+}
+
+.other-guy {
+  padding-left: 25%;
+  padding-right: 25%;
 }
 
 .big-img {
